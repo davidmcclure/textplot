@@ -2,10 +2,8 @@
 
 from nltk.stem import PorterStemmer
 
-import numpy
 import re
 import intra.utils as utils
-import requests
 
 
 class Text(object):
