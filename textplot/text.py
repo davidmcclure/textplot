@@ -1,9 +1,13 @@
 
 
-from nltk.stem import PorterStemmer
-
 import re
-import intra.utils as utils
+import textplot.utils as utils
+import requests
+
+from nltk.stem import PorterStemmer
+from collections import OrderedDict
+from itertools import islice
+from random import shuffle
 
 
 class Text(object):
@@ -54,6 +58,7 @@ class Text(object):
         """
 
         self.tokens = []
+        self.terms = OrderedDict()
 
         # Strip tags and downcase.
         text = utils.strip_tags(self.text).lower()
@@ -61,6 +66,41 @@ class Text(object):
         pattern = re.compile('[a-z]+')
         porter = PorterStemmer()
 
-        # Index a list of stemmed tokens.
+        # Iterate over tokens in the text.
         for match in re.finditer(pattern, text):
-            self.tokens.append(porter.stem(match.group(0)))
+
+            # Stem the token.
+            stemmed = porter.stem(match.group(0))
+
+            # Index the token.
+            self.tokens.append(stemmed)
+            self.terms[stemmed] = True
+
+
+    def slide_window(self, width=100):
+
+        """
+        Yield a sliding window across the text.
+        """
+
+        iterator = iter(self.tokens)
+        result = tuple(islice(iterator, width))
+
+        if len(result) == width:
+            yield result
+
+        for word in iterator:
+            result = result[1:] + (word,)
+            yield result
+
+
+    def get_shuffled_terms(self):
+
+        """
+        Get a list of terms in randomized order.
+        """
+
+        terms = self.terms.keys()
+        shuffle(terms)
+
+        return terms
