@@ -6,9 +6,8 @@ import requests
 import numpy as np
 
 from nltk.stem import PorterStemmer
+from sklearn.neighbors import KernelDensity
 from collections import OrderedDict
-from random import shuffle, randint
-from itertools import islice
 
 
 class Text(object):
@@ -84,3 +83,22 @@ class Text(object):
             # Token -> offset:
             if stemmed in self.terms: self.terms[stemmed].append(i)
             else: self.terms[stemmed] = [i]
+
+
+    def kde(self, word, bandwidth, samples=1000, kernel='epanechnikov'):
+
+        """
+        Estimate the kernel density of the instances of word in the text.
+
+        :param word: The word to query for.
+        """
+
+        # Term offsets and density sample axis:
+        offsets = np.array(self.terms[self.stem(word)])[:, np.newaxis]
+        samples = np.linspace(0, len(self.tokens), samples)[:, np.newaxis]
+
+        # Density estimator:
+        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(offsets)
+
+        # Estimate the kernel density.
+        return np.exp(kde.score_samples(samples))
