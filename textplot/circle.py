@@ -35,7 +35,7 @@ class Circle(object):
         x = self.radius * math.cos(angle)
         y = self.radius * math.sin(angle)
 
-        return (x, y)
+        return np.array((x, y))
 
 
     def build_circle(self):
@@ -74,17 +74,20 @@ class Circle(object):
         return utils.centroid(points)
 
 
-    def slide_window(self, window_width=100, squeeze_ratio=0.9):
+    def model(self, samples, width=10, ratio=0.99):
 
         """
         Slide a rolling window across the text, squeezing the words in the
         window around the point on the circle nearest to the centroid.
 
-        :param window_width: The number of words in the window.
+        :param window_count: The number windows to sample.
+        :param window_width: The number of words in each window.
         :param squeeze_ratio: The scaling factor. Eg, 0.6 squeezes 10 -> 6.
         """
 
-        for window in self.text.slide_window(window_width):
+        for i, window in enumerate(self.text.random_window(samples, width)):
+
+            print i # TODO|dev
 
             # Geometric centroid.
             centroid = np.array(self.get_centroid(window))
@@ -95,8 +98,14 @@ class Circle(object):
             # Get the circle intersection.
             center = normalized * self.radius
 
-            # TODO: Squeeze the window around the center
-            for word in window: pass
+            for word in window:
+
+                # Squeeze the point towards the center.
+                delta = np.array(self.circle[word]) - center
+                squeezed = center + (delta * ratio)
+
+                # Set the new coordinates.
+                self.circle[word] = squeezed
 
 
     def plot(self):

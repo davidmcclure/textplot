@@ -6,8 +6,8 @@ import requests
 
 from nltk.stem import PorterStemmer
 from collections import OrderedDict
+from random import shuffle, randint
 from itertools import islice
-from random import shuffle
 
 
 class Text(object):
@@ -67,20 +67,25 @@ class Text(object):
         porter = PorterStemmer()
 
         # Iterate over tokens in the text.
-        for match in re.finditer(pattern, text):
+        for i, match in enumerate(re.finditer(pattern, text)):
 
             # Stem the token.
             stemmed = porter.stem(match.group(0))
 
             # Index the token.
             self.tokens.append(stemmed)
-            self.terms[stemmed] = True
+
+            # Index the term instance.
+            if stemmed in self.terms: self.terms[stemmed].append(i)
+            else: self.terms[stemmed] = [i]
 
 
     def slide_window(self, width=100):
 
         """
         Yield a sliding window across the text.
+
+        :param width: The number of words in the window.
         """
 
         iterator = iter(self.tokens)
@@ -92,6 +97,20 @@ class Text(object):
         for word in iterator:
             result = result[1:] + (word,)
             yield result
+
+
+    def random_window(self, count, width=100):
+
+        """
+        Yield a random window.
+
+        :param count: The number of windows to yield.
+        :param width: The number of words in the window.
+        """
+
+        for i in xrange(count):
+            start = randint(0, len(self.tokens) - count)
+            yield self.tokens[start : start+count]
 
 
     def get_shuffled_terms(self):
