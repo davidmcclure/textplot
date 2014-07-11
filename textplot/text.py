@@ -1,8 +1,9 @@
 
 
+import requests
 import re
 import textplot.utils as utils
-import requests
+import matplotlib.pyplot as plt
 import numpy as np
 
 from nltk.stem import PorterStemmer
@@ -102,3 +103,15 @@ class Text(object):
 
         # Estimate the kernel density.
         return np.exp(kde.score_samples(samples))
+
+
+    def plot_kde(self, *args, **kwargs):
+
+        """
+        Plot a kernel density estimate.
+        """
+
+        kde = self.kde(*args, **kwargs)
+
+        plt.plot(kde)
+        plt.show()
