@@ -3,6 +3,7 @@
 import re
 import textplot.utils as utils
 import requests
+import numpy as np
 
 from nltk.stem import PorterStemmer
 from collections import OrderedDict
@@ -48,6 +49,7 @@ class Text(object):
         """
 
         self.text = text
+        self.stem = PorterStemmer().stem
         self.tokenize()
 
 
@@ -63,63 +65,80 @@ class Text(object):
         # Strip tags and downcase.
         text = utils.strip_tags(self.text).lower()
 
+        # Walk words in the text.
         pattern = re.compile('[a-z]+')
-        porter = PorterStemmer()
-
-        # Iterate over tokens in the text.
         for i, match in enumerate(re.finditer(pattern, text)):
 
             # Stem the token.
-            stemmed = porter.stem(match.group(0))
+            token = match.group(0)
+            stemmed = self.stem(token)
 
-            # Index the token.
-            self.tokens.append(stemmed)
+            # Token:
+            self.tokens.append({
+                'token':    token,
+                'stemmed':  stemmed,
+                'left':     match.start(),
+                'right':    match.end()
+            })
 
-            # Index the term instance.
+            # Token -> offset:
             if stemmed in self.terms: self.terms[stemmed].append(i)
             else: self.terms[stemmed] = [i]
 
 
-    def slide_window(self, width=100):
+    def get_count_difference(self, word1, word2):
 
         """
-        Yield a sliding window across the text.
+        What is the difference between the number of instances of two words?
 
-        :param width: The number of words in the window.
+        :param word1: The first word.
+        :param word2: The other word.
         """
 
-        iterator = iter(self.tokens)
-        result = tuple(islice(iterator, width))
-
-        if len(result) == width:
-            yield result
-
-        for word in iterator:
-            result = result[1:] + (word,)
-            yield result
+        return abs(len(self.terms[word1]) - len(self.terms[word2]))
 
 
-    def random_window(self, count, width=100):
+    def get_similarity(self, anchor, sample):
 
         """
-        Yield a random window.
+        Given an "anchor" word, compute a similarity metric for another word.
 
-        :param count: The number of windows to yield.
-        :param width: The number of words in the window.
+        :param anchor: The word to compare against.
+        :param sample: The word being compared.
         """
 
-        for i in xrange(count):
-            start = randint(0, len(self.tokens) - count)
-            yield self.tokens[start : start+count]
+        distances = []
+
+        anchor_offsets = np.array(self.terms[anchor])
+        sample_offsets = np.array(self.terms[sample])
+
+        for offset in anchor_offsets:
+
+            # Get the closest instance of the sample.
+            cidx = np.abs(sample_offsets - offset).argmin()
+
+            # Get the distance between the two.
+            distance = abs(sample_offsets[cidx] - offset)
+            distances.append(distance)
+
+        return np.mean(np.array(distances))
 
 
-    def get_shuffled_terms(self):
+    def get_similarities(self, anchor):
 
         """
-        Get a list of terms in randomized order.
+        Given an "anchor" word, compute a sorted list of similarities for all
+        other terms in the text.
+
+        :param anchor: The word to compare against.
         """
 
-        terms = self.terms.keys()
-        shuffle(terms)
+        sims = []
+        anchor = self.stem(anchor)
 
-        return terms
+        for term in self.terms:
+            if self.get_count_difference(anchor, term) < 500:
+                sims.append((term, self.get_similarity(term, anchor)))
+
+        sims.sort(key=lambda s: s[1])
+        return sims

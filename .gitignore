@@ -1,3 +1,3 @@
 *.pyc
-env/
-test.py
+env
+dev
