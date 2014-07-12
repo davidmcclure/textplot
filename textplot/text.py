@@ -92,6 +92,9 @@ class Text(object):
         Estimate the kernel density of the instances of word in the text.
 
         :param word: The word to query for.
+        :param bandwidth: The width of the kernel function.
+        :param samples: The number of equally-spaced points to sample.
+        :param kernel: The kernel function.
         """
 
         # Term offsets and density sample axis:
@@ -105,13 +108,17 @@ class Text(object):
         return np.exp(kde.score_samples(samples))
 
 
-    def plot_kde(self, *args, **kwargs):
+    def plot(self, words, bandwidth, **kwargs):
 
         """
-        Plot a kernel density estimate.
+        Plot muliple kernel density estimate.
+
+        :param words: The words to query.
+        :param bandwidth: The width of the kernel function.
         """
 
-        kde = self.kde(*args, **kwargs)
+        for word in words:
+            kde = self.kde(word, bandwidth, **kwargs)
+            plt.plot(kde)
 
-        plt.plot(kde)
         plt.show()
