@@ -86,19 +86,19 @@ class Text(object):
             else: self.terms[stemmed] = [i]
 
 
-    def kde(self, word, bandwidth, samples=1000, kernel='epanechnikov'):
+    def kde(self, word, bandwidth=5000, samples=1000, kernel='epanechnikov'):
 
         """
         Estimate the kernel density of the instances of word in the text.
 
-        :param word: The word to query for.
-        :param bandwidth: The width of the kernel function.
-        :param samples: The number of equally-spaced points to sample.
+        :param word:        The word to query for.
+        :param bandwidth:   The kernel width.
+        :param samples: The number points to sample.
         :param kernel: The kernel function.
         """
 
         # Term offsets and density sample axis:
-        offsets = np.array(self.terms[self.stem(word)])[:, np.newaxis]
+        offsets = np.array(self.terms[word])[:, np.newaxis]
         samples = np.linspace(0, len(self.tokens), samples)[:, np.newaxis]
 
         # Density estimator:
@@ -108,17 +108,89 @@ class Text(object):
         return np.exp(kde.score_samples(samples))
 
 
-    def plot(self, words, bandwidth, **kwargs):
+    def get_pair_similarity(self, anchor, sample, **kwargs):
 
         """
-        Plot muliple kernel density estimate.
+        How similar is the distribution of a sample word to the distribution
+        of an anchor word?
+
+        :param anchor: The base word.
+        :param sample: The query word.
+        """
+
+        a_kde = self.kde(anchor, **kwargs)
+        s_kde = self.kde(sample, **kwargs)
+
+        # Get the overlap between the two.
+        overlap = [min(a_kde[i], s_kde[i]) for i in xrange(a_kde.size)]
+        return np.trapz(overlap)
+
+
+    def get_all_similarities(self, anchor, **kwargs):
+
+        """
+        Given an anchor word, compute the similarities for all other words in
+        the text.
+
+        :param anchor: The anchor word.
+        """
+
+        anchor = self.stem(anchor)
+
+        sims = []
+        for term in self.terms:
+            sim = self.get_pair_similarity(anchor, term, **kwargs)
+            sims.append((term, sim))
+
+        sims.sort(key=lambda s: s[1], reverse=True)
+        return sims
+
+
+    def query(self, query, **kwargs):
+
+        """
+        Given a query text as a raw string, sum the kernel density estimates
+        of each of the tokens in the query.
+
+        :param query: The query string.
+        """
+
+        query_text = Text(query)
+        signals = []
+
+        for term in query_text.terms:
+            signals.append(self.kde(term, **kwargs))
+
+        result = np.zeros(signals[0].size)
+        for signal in signals: result += signal
+
+        return result
+
+
+    def plot_term_kdes(self, words, **kwargs):
+
+        """
+        Plot kernel density estimates for multiple words.
 
         :param words: The words to query.
-        :param bandwidth: The width of the kernel function.
+        :param bandwidth: The kernel width.
         """
 
         for word in words:
-            kde = self.kde(word, bandwidth, **kwargs)
+            kde = self.kde(self.stem(word), **kwargs)
             plt.plot(kde)
 
+        plt.show()
+
+
+    def plot_query(self, query, **kwargs):
+
+        """
+        Plot a query result.
+
+        :param query: The query string.
+        """
+
+        result = self.query(query, **kwargs)
+        plt.plot(result)
         plt.show()
