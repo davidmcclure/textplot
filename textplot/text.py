@@ -86,6 +86,7 @@ class Text(object):
             else: self.terms[stemmed] = [i]
 
 
+    @utils.memoize
     def kde(self, word, bandwidth=5000, samples=1000, kernel='epanechnikov'):
 
         """
@@ -108,6 +109,7 @@ class Text(object):
         return np.exp(kde.score_samples(samples))
 
 
+    @utils.memoize
     def get_pair_similarity(self, anchor, sample, **kwargs):
 
         """
@@ -126,6 +128,7 @@ class Text(object):
         return np.trapz(overlap)
 
 
+    @utils.memoize
     def get_all_similarities(self, anchor, **kwargs):
 
         """
@@ -146,6 +149,7 @@ class Text(object):
         return sims
 
 
+    @utils.memoize
     def query(self, query, **kwargs):
 
         """
