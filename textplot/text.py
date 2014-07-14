@@ -91,8 +91,8 @@ class Text(object):
         """
         Estimate the kernel density of the instances of word in the text.
 
-        :param word:        The word to query for.
-        :param bandwidth:   The kernel width.
+        :param word: The word to query for.
+        :param bandwidth: The kernel width.
         :param samples: The number points to sample.
         :param kernel: The kernel function.
         """
