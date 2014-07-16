@@ -162,7 +162,8 @@ class Text(object):
         signals = []
 
         for term in query_text.terms:
-            signals.append(self.kde(term, **kwargs))
+            if term in self.terms:
+                signals.append(self.kde(term, **kwargs))
 
         result = np.zeros(signals[0].size)
         for signal in signals: result += signal
