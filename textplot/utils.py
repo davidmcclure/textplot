@@ -36,3 +36,15 @@ def memoize(obj):
         return cache[key]
 
     return memoizer
+
+
+def sort_dict(dictionary):
+
+    """
+    Sort an ordered dictionary by value, descending.
+
+    :param dictionary: The dictionary.
+    """
+
+    sort = sorted(dictionary.iteritems(), key=lambda x: x[1], reverse=True)
+    return OrderedDict(sort)
