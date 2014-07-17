@@ -8,7 +8,7 @@ import numpy as np
 
 from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 from scipy import stats
 
 
@@ -88,6 +88,23 @@ class Text(object):
 
 
     @utils.memoize
+    def unstem(self, term):
+
+        """
+        Given a stemmed word, get the most common unstemmed version.
+
+        :param term: A stemmed term.
+        """
+
+        originals = []
+        for i in self.terms[term]:
+            originals.append(self.tokens[i]['original'])
+
+        mode = Counter(originals).most_common(1)
+        return mode[0][0]
+
+
+    @utils.memoize
     def term_counts(self, sort=True):
 
         """
@@ -100,9 +117,7 @@ class Text(object):
         for term in self.terms:
             counts[term] = len(self.terms[term])
 
-        if sort:
-            counts = utils.sort_dict(counts)
-
+        if sort: counts = utils.sort_dict(counts)
         return counts
 
 
@@ -188,9 +203,7 @@ class Text(object):
         for term in self.terms:
             sims[term] = self.pair_similarity(anchor, term, **kwargs)
 
-        if sort:
-            sims = utils.sort_dict(sims)
-
+        if sort: sims = utils.sort_dict(sims)
         return sims
 
 
@@ -219,9 +232,7 @@ class Text(object):
         for term in self.terms:
             maxima[term] = self.kde_max(term, **kwargs)
 
-        if sort:
-            maxima = utils.sort_dict(maxima)
-
+        if sort: maxima = utils.sort_dict(maxima)
         return maxima
 
 
@@ -263,7 +274,7 @@ class Text(object):
         """
 
         term_count_ranks = self.term_count_ranks()
-        kde_maxima_ranks = self.kde_maxima_ranks(sort, **kwargs)
+        kde_maxima_ranks = self.kde_maxima_ranks(**kwargs)
 
         scores = OrderedDict()
         for term in self.terms:
@@ -271,9 +282,7 @@ class Text(object):
             kr = kde_maxima_ranks[term]
             scores[term] = tr + kr
 
-        if sort:
-            scores = utils.sort_dict(scores)
-
+        if sort: scores = utils.sort_dict(scores)
         return scores
 
 
