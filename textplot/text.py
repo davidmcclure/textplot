@@ -107,46 +107,24 @@ class Text(object):
 
 
     @utils.memoize
-    def term_counts_log10(self, sort=True):
+    def term_count_ranks(self, sort=True):
 
         """
-        Log transform the term counts dictionary.
+        Assign a instance count rank to each term.
 
         :param sort: If true, sort the dictionary by value.
         """
 
-        logs = OrderedDict()
-        for term, count in self.term_counts().iteritems():
-            logs[term] = np.log10(count)
+        # Compute ranks for the counts population.
+        term_counts = self.term_counts(sort)
+        ranks = stats.rankdata(term_counts.values())
 
-        if sort:
-            logs = utils.sort_dict(logs)
+        # Re-map the terms -> ranks.
+        term_ranks = OrderedDict()
+        for i, term in enumerate(term_counts):
+            term_ranks[term] = ranks[i]
 
-        return logs
-
-
-    @utils.memoize
-    def term_count_zscores(self, sort=True):
-
-        """
-        Map terms to instance count zscores.
-
-        :param sort: If true, sort the dictionary by value.
-        """
-
-        # Compute zscores for the counts population.
-        term_logs = self.term_counts_log10()
-        zscores = stats.zscore(term_logs.values())
-
-        # Re-map the terms -> zscores.
-        term_zscores = OrderedDict()
-        for i, term in enumerate(term_logs):
-            term_zscores[term] = zscores[i]
-
-        if sort:
-            term_zscores = utils.sort_dict(term_zscores)
-
-        return term_zscores
+        return term_ranks
 
 
     @utils.memoize
@@ -186,9 +164,12 @@ class Text(object):
         a_kde = self.kde(anchor, **kwargs)
         s_kde = self.kde(sample, **kwargs)
 
+        # Get the spacing between samples.
+        spacing = float(len(self.tokens)) / a_kde.size
+
         # Get the overlap between the two.
         overlap = [min(a_kde[i], s_kde[i]) for i in xrange(a_kde.size)]
-        return np.trapz(overlap)
+        return np.trapz(overlap, dx=spacing)
 
 
     @utils.memoize
@@ -196,8 +177,6 @@ class Text(object):
 
         """
         Given an anchor word, compute the similarities for all other words.
-        Returns an ordered dictionary, with the keys ordered in the same order
-        that the terms were originally encountered in the text.
 
         :param anchor: The anchor word.
         :param sort: If true, sort the dictionary by value.
@@ -247,55 +226,55 @@ class Text(object):
 
 
     @utils.memoize
-    def kde_maxima_zscores(self, sort=True, **kwargs):
+    def kde_maxima_ranks(self, sort=True, **kwargs):
 
         """
-        Map terms to KDE maxima zscores.
+        Map terms to KDE maxima ranks.
 
         :param sort: If true, sort the dictionary by value.
         """
 
-        # Compute zscores for the KDE maxima population.
-        kde_maxima = self.kde_maxima(**kwargs)
-        zscores = stats.zscore(kde_maxima.values())
+        # Compute zscores for the KDE maxima.
+        kde_maxima = self.kde_maxima(sort, **kwargs)
+        ranks = stats.rankdata(kde_maxima.values())
 
-        # Re-map the terms -> zscores.
-        term_zscores = OrderedDict()
+        # Re-map the terms -> ranks.
+        term_ranks = OrderedDict()
         for i, term in enumerate(kde_maxima):
-            term_zscores[term] = zscores[i]
+            term_ranks[term] = ranks[i]
 
-        if sort:
-            term_zscores = utils.sort_dict(term_zscores)
-
-        return term_zscores
+        return term_ranks
 
 
     @utils.memoize
-    def topic_typicalites(self, sort=True, **kwargs):
+    def clump_factors(self, sort=True, **kwargs):
 
         """
-        "Topic-typical" terms are terms that both:
+        "Clumpy" terms are terms that both:
 
         (a) Have high KDE maxima, meaning they're unevenly-distributed.
         (b) Occur frequently (not in the long tail of sparse words).
 
-        Compute a statistic for each term in the text that captures this
-        combination by adding the zscores for the term's frequency and KDE
-        maximum relative to all other terms in the text.
+        For each word, compute its "rank" relative to all other words in terms
+        of how many times it appears in the text and the maximum height of its
+        kernel density estimate. Then, just add these two scores together.
 
         :param sort: If true, sort the dictionary by value.
         """
 
-        cz = self.term_count_zscores()
-        mz = self.kde_maxima_zscores(**kwargs)
+        term_count_ranks = self.term_count_ranks()
+        kde_maxima_ranks = self.kde_maxima_ranks(sort, **kwargs)
 
-        typs = OrderedDict()
+        scores = OrderedDict()
         for term in self.terms:
-            typs[term] = (cz[term] + mz[term], cz[term], mz[term])
+            tr = term_count_ranks[term]
+            kr = kde_maxima_ranks[term]
+            scores[term] = tr + kr
 
-        # TODO|dev
-        sort = sorted(typs.iteritems(), key=lambda x: x[1][0], reverse=True)
-        return OrderedDict(sort)
+        if sort:
+            scores = utils.sort_dict(scores)
+
+        return scores
 
 
     @utils.memoize
