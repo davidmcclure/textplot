@@ -3,6 +3,8 @@
 import re
 import functools
 
+from collections import OrderedDict
+
 
 def strip_tags(text):
 

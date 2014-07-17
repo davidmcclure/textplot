@@ -9,6 +9,7 @@ import numpy as np
 from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
 from collections import OrderedDict
+from scipy import stats
 
 
 class Text(object):
@@ -87,18 +88,65 @@ class Text(object):
 
 
     @utils.memoize
-    def term_counts(self):
+    def term_counts(self, sort=True):
 
         """
         Map terms to instance counts.
+
+        :param sort: If true, sort the dictionary by value.
         """
 
         counts = OrderedDict()
         for term in self.terms:
-            count = len(self.terms[term])
-            counts[term] = count
+            counts[term] = len(self.terms[term])
+
+        if sort:
+            counts = utils.sort_dict(counts)
 
         return counts
+
+
+    @utils.memoize
+    def term_counts_log10(self, sort=True):
+
+        """
+        Log transform the term counts dictionary.
+
+        :param sort: If true, sort the dictionary by value.
+        """
+
+        logs = OrderedDict()
+        for term, count in self.term_counts().iteritems():
+            logs[term] = np.log10(count)
+
+        if sort:
+            logs = utils.sort_dict(logs)
+
+        return logs
+
+
+    @utils.memoize
+    def term_count_zscores(self, sort=True):
+
+        """
+        Map terms to instance count zscores.
+
+        :param sort: If true, sort the dictionary by value.
+        """
+
+        # Compute zscores for the counts population.
+        term_logs = self.term_counts_log10()
+        zscores = stats.zscore(term_logs.values())
+
+        # Re-map the terms -> zscores.
+        term_zscores = OrderedDict()
+        for i, term in enumerate(term_logs):
+            term_zscores[term] = zscores[i]
+
+        if sort:
+            term_zscores = utils.sort_dict(term_zscores)
+
+        return term_zscores
 
 
     @utils.memoize
@@ -159,8 +207,7 @@ class Text(object):
 
         sims = OrderedDict()
         for term in self.terms:
-            sim = self.pair_similarity(anchor, term, **kwargs)
-            sims[term] = sim
+            sims[term] = self.pair_similarity(anchor, term, **kwargs)
 
         if sort:
             sims = utils.sort_dict(sims)
@@ -191,13 +238,64 @@ class Text(object):
 
         maxima = OrderedDict()
         for term in self.terms:
-            max = self.kde_max(term, **kwargs)
-            maxima[term] = max
+            maxima[term] = self.kde_max(term, **kwargs)
 
         if sort:
             maxima = utils.sort_dict(maxima)
 
         return maxima
+
+
+    @utils.memoize
+    def kde_maxima_zscores(self, sort=True, **kwargs):
+
+        """
+        Map terms to KDE maxima zscores.
+
+        :param sort: If true, sort the dictionary by value.
+        """
+
+        # Compute zscores for the KDE maxima population.
+        kde_maxima = self.kde_maxima(**kwargs)
+        zscores = stats.zscore(kde_maxima.values())
+
+        # Re-map the terms -> zscores.
+        term_zscores = OrderedDict()
+        for i, term in enumerate(kde_maxima):
+            term_zscores[term] = zscores[i]
+
+        if sort:
+            term_zscores = utils.sort_dict(term_zscores)
+
+        return term_zscores
+
+
+    @utils.memoize
+    def topic_typicalites(self, sort=True, **kwargs):
+
+        """
+        "Topic-typical" terms are terms that both:
+
+        (a) Have high KDE maxima, meaning they're unevenly-distributed.
+        (b) Occur frequently (not in the long tail of sparse words).
+
+        Compute a statistic for each term in the text that captures this
+        combination by adding the zscores for the term's frequency and KDE
+        maximum relative to all other terms in the text.
+
+        :param sort: If true, sort the dictionary by value.
+        """
+
+        cz = self.term_count_zscores()
+        mz = self.kde_maxima_zscores(**kwargs)
+
+        typs = OrderedDict()
+        for term in self.terms:
+            typs[term] = (cz[term] + mz[term], cz[term], mz[term])
+
+        # TODO|dev
+        sort = sorted(typs.iteritems(), key=lambda x: x[1][0], reverse=True)
+        return OrderedDict(sort)
 
 
     @utils.memoize
