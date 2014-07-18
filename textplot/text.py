@@ -1,6 +1,7 @@
 
 
 import requests
+import datetime
 import re
 import textplot.utils as utils
 import matplotlib.pyplot as plt
@@ -132,7 +133,7 @@ class Text(object):
 
         # Compute ranks for the counts population.
         term_counts = self.term_counts(sort)
-        ranks = stats.rankdata(term_counts.values())
+        ranks = stats.rankdata(term_counts.values(), method='dense')
 
         # Re-map the terms -> ranks.
         term_ranks = OrderedDict()
@@ -182,8 +183,8 @@ class Text(object):
         # Get the spacing between samples.
         spacing = float(len(self.tokens)) / a_kde.size
 
-        # Get the overlap between the two.
-        overlap = [min(a_kde[i], s_kde[i]) for i in xrange(a_kde.size)]
+        # Integrate overlap between the two.
+        overlap = np.minimum(a_kde, s_kde)
         return np.trapz(overlap, dx=spacing)
 
 
