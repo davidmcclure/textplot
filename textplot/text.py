@@ -8,9 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from nltk.stem import PorterStemmer
-from sklearn.neighbors import KernelDensity
 from collections import OrderedDict, Counter
-from scipy import stats
+from sklearn.neighbors import KernelDensity
 
 
 class Text(object):
@@ -89,23 +88,6 @@ class Text(object):
 
 
     @utils.memoize
-    def unstem(self, term):
-
-        """
-        Given a stemmed word, get the most common unstemmed version.
-
-        :param term: A stemmed term.
-        """
-
-        originals = []
-        for i in self.terms[term]:
-            originals.append(self.tokens[i]['original'])
-
-        mode = Counter(originals).most_common(1)
-        return mode[0][0]
-
-
-    @utils.memoize
     def term_counts(self, sort=True):
 
         """
@@ -123,24 +105,20 @@ class Text(object):
 
 
     @utils.memoize
-    def term_count_ranks(self, sort=True):
+    def unstem(self, term):
 
         """
-        Assign a instance count rank to each term.
+        Given a stemmed word, get the most common unstemmed version.
 
-        :param sort: If true, sort the dictionary by value.
+        :param term: A stemmed term.
         """
 
-        # Compute ranks for the counts population.
-        term_counts = self.term_counts(sort)
-        ranks = stats.rankdata(term_counts.values(), method='dense')
+        originals = []
+        for i in self.terms[term]:
+            originals.append(self.tokens[i]['original'])
 
-        # Re-map the terms -> ranks.
-        term_ranks = OrderedDict()
-        for i, term in enumerate(term_counts):
-            term_ranks[term] = ranks[i]
-
-        return term_ranks
+        mode = Counter(originals).most_common(1)
+        return mode[0][0]
 
 
     @utils.memoize
@@ -167,124 +145,42 @@ class Text(object):
 
 
     @utils.memoize
-    def pair_similarity(self, anchor, sample, **kwargs):
+    def distance_between_terms(self, term1, term2, **kwargs):
 
         """
-        How similar is the distribution of a sample word to the distribution
-        of an anchor word?
+        How much do the kernel density estimates of two terms overlap?
 
-        :param anchor: The base term.
-        :param sample: The query term.
+        :param term1: The first term.
+        :param term2: The second term.
         """
 
-        a_kde = self.kde(anchor, **kwargs)
-        s_kde = self.kde(sample, **kwargs)
+        t1_kde = self.kde(term1, **kwargs)
+        t2_kde = self.kde(term2, **kwargs)
 
         # Get the spacing between samples.
-        spacing = float(len(self.tokens)) / a_kde.size
+        spacing = float(len(self.tokens)) / t1_kde.size
 
         # Integrate overlap between the two.
-        overlap = np.minimum(a_kde, s_kde)
+        overlap = np.minimum(t1_kde, t2_kde)
         return np.trapz(overlap, dx=spacing)
 
 
     @utils.memoize
-    def pair_similarities(self, anchor, sort=True, **kwargs):
+    def all_distances_from_term(self, anchor, sort=True, **kwargs):
 
         """
-        Given an anchor word, compute the similarities for all other words.
+        Given an anchor word, compute the distances for all other words.
 
-        :param anchor: The anchor word.
+        :param anchor: The anchor term.
         :param sort: If true, sort the dictionary by value.
         """
-
-        anchor = self.stem(anchor)
 
         sims = OrderedDict()
         for term in self.terms:
-            sims[term] = self.pair_similarity(anchor, term, **kwargs)
+            sims[term] = self.distance_between_terms(anchor, term, **kwargs)
 
         if sort: sims = utils.sort_dict(sims)
         return sims
-
-
-    @utils.memoize
-    def kde_max(self, term, **kwargs):
-
-        """
-        What is the largest value that appears in a word's KDE?
-
-        :param term: The term.
-        """
-
-        return self.kde(term, **kwargs).max()
-
-
-    @utils.memoize
-    def kde_maxima(self, sort=True, **kwargs):
-
-        """
-        Get the KDE maximum for all terms in the text.
-
-        :param sort: If true, sort the dictionary by value.
-        """
-
-        maxima = OrderedDict()
-        for term in self.terms:
-            maxima[term] = self.kde_max(term, **kwargs)
-
-        if sort: maxima = utils.sort_dict(maxima)
-        return maxima
-
-
-    @utils.memoize
-    def kde_maxima_ranks(self, sort=True, **kwargs):
-
-        """
-        Map terms to KDE maxima ranks.
-
-        :param sort: If true, sort the dictionary by value.
-        """
-
-        # Compute zscores for the KDE maxima.
-        kde_maxima = self.kde_maxima(sort, **kwargs)
-        ranks = stats.rankdata(kde_maxima.values())
-
-        # Re-map the terms -> ranks.
-        term_ranks = OrderedDict()
-        for i, term in enumerate(kde_maxima):
-            term_ranks[term] = ranks[i]
-
-        return term_ranks
-
-
-    @utils.memoize
-    def clump_factors(self, sort=True, **kwargs):
-
-        """
-        "Clumpy" terms are terms that both:
-
-        (a) Have high KDE maxima, meaning they're unevenly-distributed.
-        (b) Occur frequently (not in the long tail of sparse words).
-
-        For each word, compute its "rank" relative to all other words in terms
-        of how many times it appears in the text and the maximum height of its
-        kernel density estimate. Then, just add these two scores together.
-
-        :param sort: If true, sort the dictionary by value.
-        """
-
-        term_count_ranks = self.term_count_ranks()
-        kde_maxima_ranks = self.kde_maxima_ranks(**kwargs)
-
-        scores = OrderedDict()
-        for term in self.terms:
-            tr = term_count_ranks[term]
-            kr = kde_maxima_ranks[term]
-            scores[term] = tr + kr
-
-        if sort: scores = utils.sort_dict(scores)
-        return scores
 
 
     @utils.memoize
