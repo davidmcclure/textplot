@@ -60,7 +60,7 @@ class Text(object):
         self.redis.set(self.slug+':text', text)
 
         # Strip tags and downcase.
-        text = utils.strip_tags(self.text).lower()
+        text = utils.strip_tags(text).lower()
 
         # Walk words in the text.
         pattern = re.compile('[a-z]+')
@@ -71,7 +71,7 @@ class Text(object):
             stemmed = self.stem(original)
 
             # Token as `<slug>:token:<offset>`:
-            self.redis.hmset(self.slug+':token:'+i, {
+            self.redis.hmset(self.slug+':token:'+str(i), {
                 'original': original,
                 'stemmed':  stemmed,
                 'left':     match.start(),
@@ -83,6 +83,48 @@ class Text(object):
 
             # Offset in `<slug>:offsets:<term>`:
             self.redis.rpush(self.slug+':offsets:'+stemmed, i)
+
+
+    def text(self):
+
+        """
+        Get the original text string.
+        """
+
+        # `<slug>:text`
+        return self.redis.get(self.slug+':text')
+
+
+    def token_at_offset(self, offset):
+
+        """
+        Get the token at a given offset.
+
+        :param offset: The integer offset of the token.
+        """
+
+        # `<slug>:token:<offset>`
+        return self.redis.hgetall(self.slug+':token:'+str(offset))
+
+
+    def terms(self):
+
+        """
+        Get the instance offsets for a term.
+        """
+
+        # `<slug>:terms>`
+        return self.redis.lrange(self.slug+':terms', 0, -1)
+
+
+    def term_offsets(self, term):
+
+        """
+        Get the instance offsets for a term.
+        """
+
+        # `<slug>:offsets:<term>`
+        return self.redis.lrange(self.slug+':offsets:'+term, 0, -1)
 
 
     #@utils.memoize
