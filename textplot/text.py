@@ -3,13 +3,14 @@
 import requests
 import datetime
 import re
-import textplot.utils as utils
 import matplotlib.pyplot as plt
 import numpy as np
+import utils
 
 from nltk.stem import PorterStemmer
 from collections import OrderedDict, Counter
 from sklearn.neighbors import KernelDensity
+from itertools import combinations
 
 
 class Text(object):
