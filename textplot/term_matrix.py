@@ -1,5 +1,7 @@
 
 
+import json
+
 from scipy.misc import comb
 from collections import OrderedDict
 from clint.textui import progress
@@ -19,7 +21,7 @@ class TermMatrix(object):
         :param path: The text.
         """
 
-        matrix = cls()
+        matrix = cls(text.terms.keys())
         number = comb(len(text.terms), 2)
 
         # Get a progress bar.
@@ -39,7 +41,21 @@ class TermMatrix(object):
         return matrix
 
 
-    def __init__(self, terms=None, pairs=None):
+    @classmethod
+    def from_json(cls, path):
+
+        """
+        Unmarshall a JSON file.
+
+        :param cls: TermMatrix.
+        :param path: The JSON file.
+        """
+
+        serialized = json.load(open(path, 'r'))
+        return cls(serialized['terms'], serialized['pairs'])
+
+
+    def __init__(self, terms, pairs=None):
 
         """
         Set or initialize the term set and pairs dictionary.
@@ -48,8 +64,8 @@ class TermMatrix(object):
         :param pairs: A dict of pair-key -> value.
         """
 
-        self.pairs = pairs or OrderedDict()
-        self.terms = terms or set()
+        self.terms = terms
+        self.pairs = pairs or {}
 
 
     def key_from_terms(self, term1, term2):
@@ -74,13 +90,8 @@ class TermMatrix(object):
         :param value: The value.
         """
 
-        # Set the value.
         key = self.key_from_terms(term1, term2)
         self.pairs[key] = value
-
-        # Track the terms.
-        self.terms.add(term1)
-        self.terms.add(term2)
 
 
     def get_pair(self, term1, term2):
@@ -94,3 +105,20 @@ class TermMatrix(object):
 
         key = self.key_from_terms(term1, term2)
         return self.pairs[key]
+
+
+    def marshall(self, path):
+
+        """
+        Save the matrix as JSON.
+
+        :param path: The file location.
+        """
+
+        matrix = {
+            'terms': self.terms,
+            'pairs': self.pairs
+        }
+
+        with open(fpath, 'w') as out:
+            json.dump(matrix, out)
