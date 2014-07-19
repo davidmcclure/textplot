@@ -22,7 +22,7 @@ class Text(object):
         """
         Create a text from a filepath.
 
-        :param cls: The Text class.
+        :param cls: Text.
         :param path: The filepath.
         """
 
@@ -35,7 +35,7 @@ class Text(object):
         """
         Create a text from a URL.
 
-        :param cls: The Text class.
+        :param cls: Text.
         :param path: The URL.
         """
 
