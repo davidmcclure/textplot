@@ -12,9 +12,32 @@ This is an easy and effective solution to the problem - Solr's hit-highlighting 
 
 A document is basically a little packet of information that might contain some kind of information that you care about, mixed in with a collection of other similarly-structured packets - a corpus, a card catalog, a database, a library, the internet, etc. This idea is so ubiquitous - and, in most cases, so obviously useful - that it barely needs to be rehearsed. Almost every digital object that we interact with on a computer is modeled as a document at some level or another. Web pages are documents. This blog post is a document. Tweets, product listings on Amazon, user profiles on Facebook, Omeka items, Neatline records, Drupal nodes, emails - all documents. A key feature of documents, defined in this way, is that they're generally thought of as being discrete, self-sufficient units of information. A document contains inside itself all the information that it needs to be a useful. For example, if a doctor opens an electronic medical record for a patient, she doesn't care about any of the other records in the database - she just wants _the_ record for _this_ patient. Thought of this way, the task of searching becomes conceptually simple. Given some query, just find a subset of documents that are relevant to the query, and then rank the matching documents by the relevance scores, so that the best match sits at the top of the stack.
 
-This makes sense, because most information just does, in fact, take the form of a big collection of documents. If I go to the digital catalog search interface in a library - Virgo at UVa, SearchWorks at Stanford - and type in "War and Peace," I want to find, well - _War and Peace_, one particular document in the library. In the simplest case, it's basically a hash lookup. More likely, though, you probably don't know exactly which document you want, but instead know the _type_ of document that you're looking for. For example, if I'm working on a piece of software and run into an error message that I can't make sense of, I usually just paste the entire output into Google. I don't know which exact page I want - it could be a StackOverflow answer, or a thread on a Google group, a blog post - but I do know that I want just one page that tells me exactly what's wrong an exactly how to fix it - the _best_ answer to the question, if not the only one. Search is a filtering process, a winnowing-down, a reduction from many to one - information is a file cabinet, and information retrieval is a matter of finding the right file in the cabinet.
+This makes sense, because most information just does, in fact, take the form of a big collection of documents. If I go to the digital catalog search interface in a library - Virgo at UVa, SearchWorks at Stanford - and type in "War and Peace," I want to find, well - _War and Peace_, one particular document in the library. In the simplest case, it's basically a hash lookup. More likely, though, you probably don't know exactly which document you want, but instead know the _type_ of document that you're looking for. For example, if I'm working on a piece of software and run into an error message that I can't make sense of, I usually just paste the entire output into Google. I don't know which exact page I want - it could be a StackOverflow answer, or a thread on a Google group, a blog post - but I do know that I want just one page that tells me exactly what's wrong an exactly how to fix it - the _best_ answer to the question, if not the only one. Search is a filtering process, a winnowing-down, a reduction from many to one, a fundemtanlly _comparaive_ process in which a set of documents are ranked against one another. For a given query X, for each document, the question is: "Does the document contain X, and if so, to what extent?" Usually, if some sort of vector space model is being used, this question can be boiled down to a single statistic between 0 and 1, where 0 is "not at all relevant" and 1 would basically mean that the query _is_ document.
 
-But this analogy breaks down in some really interesting and dramatic ways when applied to individual literary texts.
+But this breaks down in interesting and dramatic ways when applied to literary texts. The question of whether something is contained in the text becomes much less interesting. By the point you're critically interested in some combination of a text and an idea (a "query"), you already know that the idea has some kind of salience in the text. The question, instead, is _where_ or _when_ - texts are fundamentally dimensional in a way that "documents" aren't. In geometric terms, if a Solr document is a point with a single value, a text is a line, a progression, an X-axis along which things are positioned - words, narratives, plots, characters, themes, motifs. Reading takes place over time - literature is traversed, it exists as an experience within and across a textual interval. Texts unfold, arc, and progress. And far from being just a practical necessity - or even an annoyance, something to be "fixed" with technology - this experience of narrative-in-time is arguably fundamental to and even constitutative of literature. Peter Brooks, writing in the Freud-preoccupied 70s, argued that texts are powerful because they operate like little bite-sized fractals of human lives. The beginning is a birth, a coming into being, the initiation of a narrative tension that pushes forward into the middle of the text and strives towards a dischard and dissolution at the end, the narrative "death" that allows the reader to rehearse her own death.
+
+Theory aside, though, the point is that we care much more about _where_, _when_, and _how_ things exist inside of texts, not just _if_ and _to what extent_. And the "things" tend to be more diffuse and composite than the things you'd search for in a commercial information system. In _War and Peace_, how does the distribution of "france" and "french" compare to the distribution of "russia" and "russian"? Where do Natasha, Pierre, and Andrei all show up in the same places? Where do particular motifs appear - Napoleon's white hands, Andrei finding spiritual transcendence in the sky, the Russian bear, etc.? What parts of the text lean masculine ("man," "boy," "he," "his") and which lean feminine ("woman", "girl," "she," "her")? In _Leaves of Grass_, where do "myself"-ish terms cluster in the text - things like "me," "my," "mine," "myself," and "I"? Whitman has a habit of addressing the reader directly - is there any pattern in the distribution of "you" and "your"? And beyond that, there's a whole class of comparative questions that arise constantly during interpretation. Where does _Leaves of Grass_ "sound like" this Yeats poem? Where does _Leaves of Grass_ sound like _Moby Dick_, or _Walden_, or Tennyson? Generally speaking, how does the "mass" of a word, a set of words, or a concept distribute across the width of the document? How do they slosh around and clump together?
+
+# Segment length whack-a-mole
+
+The common solution to this problem is to chop up the text into little evenly-spaced bits and shovel them all into a conventional document index like Solr.
+
+
+the problem with this, though, is that it always prioritizes one particular class of query at the expense of others.
+
+
+really, the "documents" in a literary text are _all continuous sequences of words, of all lengths_. The thing you're "looking for" could be a single word, a phrase, a sentence, a paragraph, a section, a chapter, a group of chapters, or any segement of any length that spans across the borders delineated by the obvious "section" taxononomies.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -33,24 +56,18 @@ around and air drop us back into the literary topography of the document.
 Or, put differently, computational approaches to just literature, as it differs from literary history (and I think it does, although the difference has been eroded in unsustainable ways in recent years). Thus far, the digital humanities have been dominated by a blend of neo-New-Historicists (what _did_ this text mean, and what does it tell us about _then_?) and neo-Russian-Formalists (what do these texts tell us about literature in general?). What would the New Critics have done with computers?
 
 
-to be reluctant to map its activities back onto the intellectual history 20th century literary theory and interpretive practice, 
+to be reluctant to map its activities back onto the intellectual history 20th century literary theory and interpretive practice,
 
 
 
 
 
-it would be literally impossible for me to chew through a corpus at the scale of hundreds of thousands or millions of texts, in the way that a computer can in a matter of seconds or minutes. People have been computing texts at a "close" level for thousands of years, 
+it would be literally impossible for me to chew through a corpus at the scale of hundreds of thousands or millions of texts, in the way that a computer can in a matter of seconds or minutes. People have been computing texts at a "close" level for thousands of years,
 
 
-read the hundreds of thousands of millions of documents that computers can chew through 
+read the hundreds of thousands of millions of documents that computers can chew through
 
-and you want some kind of formal way to reason about what kinds of _things_ are contained inside of the plays.
-
-
-to ask questions about what kinds of _things_ are contained inside of Shakespeare - words, motifs, themes, plots, 
-
-
-. Where do the "documents" start and stop? In a simplistic sense, we could just say that each individual play is a separate document, and shovel all 39 of them into a document index like Solr or Elasticsearch. 
+. Where do the "documents" start and stop? In a simplistic sense, we could just say that each individual play is a separate document, and shovel all 39 of them into a document index like Solr or Elasticsearch.
 
 - or, for that matter, any kind of long document that's "about" lots of different things. Say you're interested in Whitman. Where do the "documents" start and stop? You could say that each literary "work," defined in some kind of chronological sense, is a document - but, Whitman only really wrote one thing. So, we could treat the two main versions of the text as separate documents
 
@@ -78,6 +95,3 @@ texts have a _dimensionality_ that documents don't - if a document is a point, t
 
 
 ## Segment length whack-a-mole
-
-
-it's almost more of a spatial question -
