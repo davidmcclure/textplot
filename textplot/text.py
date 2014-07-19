@@ -1,10 +1,10 @@
 
 
 import requests
-import datetime
 import re
 import matplotlib.pyplot as plt
 import numpy as np
+import redis
 import utils
 
 from nltk.stem import PorterStemmer
@@ -17,52 +17,47 @@ class Text(object):
 
 
     @classmethod
-    def from_file(cls, path):
+    def from_file(cls, path, slug, **kwargs):
 
         """
         Create a text from a filepath.
 
-        :param cls: Text.
         :param path: The filepath.
+        :param slug: A Redis key prefix.
         """
 
-        return cls(open(path, 'r').read())
+        text = cls(slug, **kwargs)
+        text.index(open(path, 'r').read())
+        return text
 
 
-    @classmethod
-    def from_url(cls, url):
-
-        """
-        Create a text from a URL.
-
-        :param cls: Text.
-        :param path: The URL.
-        """
-
-        return cls(requests.get(url).text)
-
-
-    def __init__(self, text):
+    def __init__(self, slug, **kwargs):
 
         """
-        Store and tokenize the text.
+        Set the key prefix, connect to Redis.
 
-        :param text: The text as a raw string.
+        :param slug: A Redis key prefix.
         """
 
-        self.text = text
+        self.slug = slug
+
+        # Redis connection.
+        self.redis = redis.StrictRedis(**kwargs)
+
+        # Porter stemmer.
         self.stem = PorterStemmer().stem
-        self.tokenize()
 
 
-    def tokenize(self):
+    def index(self, text):
 
         """
         Tokenize the text.
+
+        :param text: The text, as a raw string.
         """
 
-        self.tokens = []
-        self.terms = OrderedDict()
+        # Store the text as `<slug>:text`
+        self.redis.set(self.slug+':text', text)
 
         # Strip tags and downcase.
         text = utils.strip_tags(self.text).lower()
@@ -75,144 +70,146 @@ class Text(object):
             original = match.group(0)
             stemmed = self.stem(original)
 
-            # Token:
-            self.tokens.append({
+            # Token as `<slug>:token:<offset>`:
+            self.redis.hmset(self.slug+':token:'+i, {
                 'original': original,
                 'stemmed':  stemmed,
                 'left':     match.start(),
                 'right':    match.end()
             })
 
-            # Token -> offset:
-            if stemmed in self.terms: self.terms[stemmed].append(i)
-            else: self.terms[stemmed] = [i]
+            # Term in `<slug>:terms` set:
+            self.redis.sadd(self.slug+':terms', stemmed)
+
+            # Offset in `<slug>:offsets:<term>`:
+            self.redis.rpush(self.slug+':offsets:'+stemmed, i)
 
 
-    @utils.memoize
-    def term_counts(self, sort=True):
+    #@utils.memoize
+    #def term_counts(self, sort=True):
 
-        """
-        Map terms to instance counts.
+        #"""
+        #Map terms to instance counts.
 
-        :param sort: If true, sort the dictionary by value.
-        """
+        #:param sort: If true, sort the dictionary by value.
+        #"""
 
-        counts = OrderedDict()
-        for term in self.terms:
-            counts[term] = len(self.terms[term])
+        #counts = OrderedDict()
+        #for term in self.terms:
+            #counts[term] = len(self.terms[term])
 
-        if sort: counts = utils.sort_dict(counts)
-        return counts
-
-
-    @utils.memoize
-    def unstem(self, term):
-
-        """
-        Given a stemmed word, get the most common unstemmed version.
-
-        :param term: A stemmed term.
-        """
-
-        originals = []
-        for i in self.terms[term]:
-            originals.append(self.tokens[i]['original'])
-
-        mode = Counter(originals).most_common(1)
-        return mode[0][0]
+        #if sort: counts = utils.sort_dict(counts)
+        #return counts
 
 
-    @utils.memoize
-    def kde(self, term, bandwidth=5000, samples=1000, kernel='epanechnikov'):
+    #@utils.memoize
+    #def unstem(self, term):
 
-        """
-        Estimate the kernel density of the instances of term in the text.
+        #"""
+        #Given a stemmed word, get the most common unstemmed version.
 
-        :param term: The term to estimate.
-        :param bandwidth: The kernel width.
-        :param samples: The number points to sample.
-        :param kernel: The kernel function.
-        """
+        #:param term: A stemmed term.
+        #"""
 
-        # Term offsets and density sample axis:
-        offsets = np.array(self.terms[term])[:, np.newaxis]
-        samples = np.linspace(0, len(self.tokens), samples)[:, np.newaxis]
+        #originals = []
+        #for i in self.terms[term]:
+            #originals.append(self.tokens[i]['original'])
 
-        # Density estimator:
-        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(offsets)
-
-        # Estimate the kernel density.
-        return np.exp(kde.score_samples(samples))
+        #mode = Counter(originals).most_common(1)
+        #return mode[0][0]
 
 
-    @utils.memoize
-    def distance_between_terms(self, term1, term2, **kwargs):
+    #@utils.memoize
+    #def kde(self, term, bandwidth=5000, samples=1000, kernel='epanechnikov'):
 
-        """
-        How much do the kernel density estimates of two terms overlap?
+        #"""
+        #Estimate the kernel density of the instances of term in the text.
 
-        :param term1: The first term.
-        :param term2: The second term.
-        """
+        #:param term: The term to estimate.
+        #:param bandwidth: The kernel width.
+        #:param samples: The number points to sample.
+        #:param kernel: The kernel function.
+        #"""
 
-        t1_kde = self.kde(term1, **kwargs)
-        t2_kde = self.kde(term2, **kwargs)
+        ## Term offsets and density sample axis:
+        #offsets = np.array(self.terms[term])[:, np.newaxis]
+        #samples = np.linspace(0, len(self.tokens), samples)[:, np.newaxis]
 
-        # Get the spacing between samples.
-        spacing = float(len(self.tokens)) / t1_kde.size
+        ## Density estimator:
+        #kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(offsets)
 
-        # Integrate overlap between the two.
-        overlap = np.minimum(t1_kde, t2_kde)
-        return np.trapz(overlap, dx=spacing)
-
-
-    @utils.memoize
-    def query(self, query, **kwargs):
-
-        """
-        Given a query text as a raw string, sum the kernel density estimates
-        of each of the tokens in the query.
-
-        :param query: The query string.
-        """
-
-        query_text = Text(query)
-        signals = []
-
-        for term in query_text.terms:
-            if term in self.terms:
-                signals.append(self.kde(term, **kwargs))
-
-        result = np.zeros(signals[0].size)
-        for signal in signals: result += signal
-
-        return result
+        ## Estimate the kernel density.
+        #return np.exp(kde.score_samples(samples))
 
 
-    def plot_term_kdes(self, words, **kwargs):
+    #@utils.memoize
+    #def distance_between_terms(self, term1, term2, **kwargs):
 
-        """
-        Plot kernel density estimates for multiple words.
+        #"""
+        #How much do the kernel density estimates of two terms overlap?
 
-        :param words: The words to query.
-        :param bandwidth: The kernel width.
-        """
+        #:param term1: The first term.
+        #:param term2: The second term.
+        #"""
 
-        for word in words:
-            kde = self.kde(self.stem(word), **kwargs)
-            plt.plot(kde)
+        #t1_kde = self.kde(term1, **kwargs)
+        #t2_kde = self.kde(term2, **kwargs)
 
-        plt.show()
+        ## Get the spacing between samples.
+        #spacing = float(len(self.tokens)) / t1_kde.size
+
+        ## Integrate overlap between the two.
+        #overlap = np.minimum(t1_kde, t2_kde)
+        #return np.trapz(overlap, dx=spacing)
 
 
-    def plot_query(self, query, **kwargs):
+    #@utils.memoize
+    #def query(self, query, **kwargs):
 
-        """
-        Plot a query result.
+        #"""
+        #Given a query text as a raw string, sum the kernel density estimates
+        #of each of the tokens in the query.
 
-        :param query: The query string.
-        """
+        #:param query: The query string.
+        #"""
 
-        result = self.query(query, **kwargs)
-        plt.plot(result)
-        plt.show()
+        #query_text = Text(query)
+        #signals = []
+
+        #for term in query_text.terms:
+            #if term in self.terms:
+                #signals.append(self.kde(term, **kwargs))
+
+        #result = np.zeros(signals[0].size)
+        #for signal in signals: result += signal
+
+        #return result
+
+
+    #def plot_term_kdes(self, words, **kwargs):
+
+        #"""
+        #Plot kernel density estimates for multiple words.
+
+        #:param words: The words to query.
+        #:param bandwidth: The kernel width.
+        #"""
+
+        #for word in words:
+            #kde = self.kde(self.stem(word), **kwargs)
+            #plt.plot(kde)
+
+        #plt.show()
+
+
+    #def plot_query(self, query, **kwargs):
+
+        #"""
+        #Plot a query result.
+
+        #:param query: The query string.
+        #"""
+
+        #result = self.query(query, **kwargs)
+        #plt.plot(result)
+        #plt.show()
