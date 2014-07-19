@@ -167,24 +167,6 @@ class Text(object):
 
 
     @utils.memoize
-    def all_distances_from_term(self, anchor, sort=True, **kwargs):
-
-        """
-        Given an anchor word, compute the distances for all other words.
-
-        :param anchor: The anchor term.
-        :param sort: If true, sort the dictionary by value.
-        """
-
-        sims = OrderedDict()
-        for term in self.terms:
-            sims[term] = self.distance_between_terms(anchor, term, **kwargs)
-
-        if sort: sims = utils.sort_dict(sims)
-        return sims
-
-
-    @utils.memoize
     def query(self, query, **kwargs):
 
         """

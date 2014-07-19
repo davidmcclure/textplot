@@ -1,6 +1,7 @@
 
 
 import json
+import utils
 
 from scipy.misc import comb
 from collections import OrderedDict
@@ -34,7 +35,7 @@ class TermMatrix(object):
                 distance = text.distance_between_terms(t1, t2, **kwargs)
                 matrix.set_pair(t1, t2, distance)
 
-                # Update bar
+                # Update bar.
                 i += 1
                 if i % 1000 == 0: bar.show(i)
 
@@ -52,20 +53,20 @@ class TermMatrix(object):
         """
 
         serialized = json.load(open(path, 'r'))
-        return cls(serialized['terms'], serialized['pairs'])
+        return cls(serialized['terms'], serialized['distances'])
 
 
-    def __init__(self, terms, pairs=None):
+    def __init__(self, terms, distances=None):
 
         """
-        Set or initialize the term set and pairs dictionary.
+        Set or initialize the term set and distances dictionary.
 
         :param terms: A set of terms.
-        :param pairs: A dict of pair-key -> value.
+        :param distances: A dict of pair-key -> distance.
         """
 
+        self.distances = distances or {}
         self.terms = terms
-        self.pairs = pairs or {}
 
 
     def key_from_terms(self, term1, term2):
@@ -91,7 +92,7 @@ class TermMatrix(object):
         """
 
         key = self.key_from_terms(term1, term2)
-        self.pairs[key] = value
+        self.distances[key] = value
 
 
     def get_pair(self, term1, term2):
@@ -104,7 +105,7 @@ class TermMatrix(object):
         """
 
         key = self.key_from_terms(term1, term2)
-        return self.pairs[key]
+        return self.distances[key]
 
 
     def marshall(self, path):
@@ -117,8 +118,40 @@ class TermMatrix(object):
 
         matrix = {
             'terms': self.terms,
-            'pairs': self.pairs
+            'distances': self.distances
         }
 
-        with open(fpath, 'w') as out:
+        with open(path, 'w') as out:
             json.dump(matrix, out)
+
+
+    @utils.memoize
+    def all_distances_from_term(self, anchor, sort=True):
+
+        """
+        Given a term, get the distances for all other words.
+
+        :param anchor: The anchor term.
+        :param sort: If true, sort the dictionary by value.
+        """
+
+        distances = OrderedDict()
+        for term in self.terms:
+            distances[term] = self.get_pair(anchor, term)
+
+        if sort: distances = utils.sort_dict(distances)
+        return distances
+
+
+    def top_distances_per_term(self, depth=20):
+
+        """
+        For each term, yield the X "nearest" edges as 3-tuples.
+
+        :param depth: The number of edges to skim.
+        """
+
+        for term in terms:
+            top = self.all_distances_from_term(term).items()[:depth]
+            for edge in top:
+                yield (term, edge[0], edge[1])
