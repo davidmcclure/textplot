@@ -95,7 +95,7 @@ class Text(object):
         return self.redis.get(self.slug+':text')
 
 
-    def token_at_offset(self, offset):
+    def token(self, offset):
 
         """
         Get the token at a given offset.
@@ -114,10 +114,10 @@ class Text(object):
         """
 
         # `<slug>:terms>`
-        return self.redis.lrange(self.slug+':terms', 0, -1)
+        return self.redis.smembers(self.slug+':terms')
 
 
-    def term_offsets(self, term):
+    def offsets(self, term):
 
         """
         Get the instance offsets for a term.
