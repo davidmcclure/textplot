@@ -26,7 +26,11 @@ class Text(object):
         :param slug: A Redis key prefix.
         """
 
+        # Clear the namespace.
         text = cls(slug, **kwargs)
+        text.clear()
+
+        # Index the text.
         text.index(open(path, 'r').read())
         return text
 
@@ -50,48 +54,46 @@ class Text(object):
 
     @property
     def text_key(self):
-
-        """
-        Redis key for the original text string.
-        """
-
-        # `<slug>:text`
+        """ Redis key for the raw text string. """
         return self.slug+':text'
 
 
-    def token_key(self, offset):
-
-        """
-        Redis key for an individual token.
-
-        :param offset: The interger offset of the instance.
-        """
-
-        # `<slug>:token:<offset>`
-        return self.slug+':token:'+str(offset)
+    @property
+    def text(self):
+        """ Get the raw text string. """
+        return self.redis.get(self.text_key)
 
 
     @property
     def terms_key(self):
-
-        """
-        Redis key for the set of unique terms.
-        """
-
-        # `<slug>:terms`
+        """ Redis key for the set of unique terms. """
         return self.slug+':terms'
 
 
+    @property
+    def terms(self):
+        """ Get the set of unique terms. """
+        return self.redis.smembers(self.terms_key)
+
+
+    def token_key(self, offset):
+        """ Redis key for a token at a given offset. """
+        return self.slug+':token:'+str(offset)
+
+
+    def token(self, offset):
+        """ Get the token at a given offset. """
+        return self.redis.hgetall(self.token_key(offset))
+
+
     def offsets_key(self, term):
-
-        """
-        Redis key for a list of instance offsets for a term.
-
-        :param term: The stemmed term.
-        """
-
-        # `<slug>:offsets:<term>`
+        """ Redis key for the set of term offsets. """
         return self.slug+':offsets:'+term
+
+
+    def offsets(self, term):
+        """ Get the set offsets for a term. """
+        return self.redis.smembers(self.offsets_key(term))
 
 
     def index(self, text):
@@ -102,8 +104,10 @@ class Text(object):
         :param text: The text, as a raw string.
         """
 
+        pipe = self.redis.pipeline()
+
         # Store the text as `<slug>:text`
-        self.redis.set(self.text_key, text)
+        pipe.set(self.text_key, text)
 
         # Strip tags and downcase.
         text = utils.strip_tags(text).lower()
@@ -117,7 +121,7 @@ class Text(object):
             stemmed = self.stem(unstemmed)
 
             # Token as `<slug>:token:<offset>`:
-            self.redis.hmset(self.token_key(i), {
+            pipe.hmset(self.token_key(i), {
                 'stemmed':      stemmed,
                 'unstemmed':    unstemmed,
                 'left':         match.start(),
@@ -125,90 +129,67 @@ class Text(object):
             })
 
             # Term in `<slug>:terms` set:
-            self.redis.sadd(self.terms_key, stemmed)
+            pipe.sadd(self.terms_key, stemmed)
 
             # Offset in `<slug>:offsets:<term>`:
-            self.redis.sadd(self.offsets_key(stemmed), i)
+            pipe.sadd(self.offsets_key(stemmed), i)
+
+        pipe.execute()
 
 
-    @property
-    def text(self):
-
-        """
-        Get the original text string.
-        """
-
-        # `<slug>:text`
-        return self.redis.get(self.text_key)
-
-
-    def token(self, offset):
+    def clear(self):
 
         """
-        Get the token at a given offset.
-
-        :param offset: The integer offset of the token.
+        Clear the key namespaces for the text.
         """
 
-        # `<slug>:token:<offset>`
-        return self.redis.hgetall(self.token_key(offset))
+        keys = self.redis.keys(self.slug+':*')
+        self.redis.delete(keys)
 
 
-    @property
-    def terms(self):
-
-        """
-        Get the instance offsets for a term.
-        """
-
-        # `<slug>:terms>`
-        return self.redis.smembers(self.terms_key)
-
-
-    def offsets(self, term):
+    def instance_count(self, term):
 
         """
-        Get the instance offsets for a term.
+        How many times does a given term appear in the text?
 
         :param term: A stemmed term.
         """
 
-        # `<slug>:offsets:<term>`
-        return self.redis.smembers(self.offsets_key(term))
+        return len(self.offsets(term))
 
 
-    #@utils.memoize
-    #def term_counts(self, sort=True):
+    @utils.memoize
+    def term_counts(self, sort=True):
 
-        #"""
-        #Map terms to instance counts.
+        """
+        Map terms to instance counts.
 
-        #:param sort: If true, sort the dictionary by value.
-        #"""
+        :param sort: If true, sort the dictionary by value.
+        """
 
-        #counts = OrderedDict()
-        #for term in self.terms:
-            #counts[term] = len(self.terms[term])
+        counts = OrderedDict()
+        for term in self.terms:
+            counts[term] = self.instance_count(term)
 
-        #if sort: counts = utils.sort_dict(counts)
-        #return counts
+        if sort: counts = utils.sort_dict(counts)
+        return counts
 
 
-    #@utils.memoize
-    #def unstem(self, term):
+    @utils.memoize
+    def unstem(self, term):
 
-        #"""
-        #Given a stemmed word, get the most common unstemmed version.
+        """
+        Given a stemmed term, get the most common unstemmed variant.
 
-        #:param term: A stemmed term.
-        #"""
+        :param term: A stemmed term.
+        """
 
-        #originals = []
-        #for i in self.terms[term]:
-            #originals.append(self.tokens[i]['original'])
+        originals = []
+        for i in self.offsets(term):
+            originals.append(self.token(i)['unstemmed'])
 
-        #mode = Counter(originals).most_common(1)
-        #return mode[0][0]
+        mode = Counter(originals).most_common(1)
+        return mode[0][0]
 
 
     #@utils.memoize
