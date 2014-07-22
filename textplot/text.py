@@ -133,7 +133,7 @@ class Text(object):
         """
 
         token = self.redis.hgetall(self.token_key(offset))
-        return utils.int_dict(token)
+        return utils.numberify_dict(token)
 
 
     def offsets_key(self, term):
@@ -169,35 +169,19 @@ class Text(object):
 
         pipe = self.redis.pipeline()
 
-        # Store the text as `<slug>:text`
+        # Store the original text
         pipe.set(self.text_key, text)
 
-        # Strip tags and downcase.
-        text = utils.strip_tags(text).lower()
+        # Generate and index tokens.
+        for i, token in enumerate(utils.tokenize(text)):
 
-        # Walk words in the text.
-        pattern = re.compile('[a-z]+')
-        for i, match in enumerate(re.finditer(pattern, text)):
+            # Get the term.
+            term = token['stemmed']
 
-            # Stem the token.
-            unstemmed = match.group(0)
-            stemmed = self.stem(unstemmed)
-
-            # Token as `<slug>:token:<offset>`:
-            pipe.hmset(self.token_key(i), {
-                'stemmed':      stemmed,
-                'unstemmed':    unstemmed,
-                'left':         match.start(),
-                'right':        match.end()
-            })
-
-            # Term in `<slug>:terms` set:
-            pipe.sadd(self.terms_key, stemmed)
-
-            # Offset in `<slug>:offsets:<term>`:
-            pipe.sadd(self.offsets_key(stemmed), i)
-
-            # Increment the wordcount.
+            # Index the token.
+            pipe.hmset(self.token_key(i), token)
+            pipe.sadd(self.terms_key, term)
+            pipe.sadd(self.offsets_key(term), i)
             pipe.incr(self.wordcount_key)
 
         pipe.execute()

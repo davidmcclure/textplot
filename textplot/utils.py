@@ -4,6 +4,7 @@ import re
 import functools
 
 from collections import OrderedDict
+from nltk.stem import PorterStemmer
 
 
 def memoize(obj):
@@ -46,6 +47,33 @@ def strip_tags(text):
     return pattern.sub(lambda x: len(x.group()) * ' ', text)
 
 
+def tokenize(text):
+
+    """
+    Yield tokens.
+
+    :param text: The original text.
+    """
+
+    # Strip tags and downcase.
+    text = strip_tags(text).lower()
+    stem = PorterStemmer().stem
+
+    # Walk words in the text.
+    pattern = re.compile('[a-z]+')
+    for match in re.finditer(pattern, text):
+
+        # Get the raw token.
+        unstemmed = match.group(0)
+
+        yield { # Emit the token.
+            'stemmed':      stem(unstemmed),
+            'unstemmed':    unstemmed,
+            'left':         match.start(),
+            'right':        match.end()
+        }
+
+
 def sort_dict(d):
 
     """
@@ -58,18 +86,27 @@ def sort_dict(d):
     return OrderedDict(sort)
 
 
-def int_dict(d):
+def numberify_dict(d):
 
     """
-    Cast all integer-y values in a dictionary to integers.
+    Convert numberic values in a dictionary into ints / floats.
 
     :param d: A dictionary.
     """
 
-    for key in d:
-        try:
-            d[key] = int(d[key])
-        except ValueError:
-            continue
+    for k in d:
+        v = d[k]
+        if type(v) == str:
+
+            # Try to cast to an integer first.
+            try:
+                d[k] = int(v)
+            except ValueError:
+
+                # Then, see if it's a float.
+                try:
+                    d[k] = float(v)
+                except ValueError:
+                    continue
 
     return d
