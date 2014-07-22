@@ -175,13 +175,18 @@ class Text(object):
         # Generate and index tokens.
         for i, token in enumerate(utils.tokenize(text)):
 
-            # Get the term.
             term = token['stemmed']
 
-            # Index the token.
+            # Token
             pipe.hmset(self.token_key(i), token)
+
+            # Term
             pipe.sadd(self.terms_key, term)
+
+            # Term -> offset
             pipe.sadd(self.offsets_key(term), i)
+
+            # Wordcount++
             pipe.incr(self.wordcount_key)
 
         pipe.execute()
