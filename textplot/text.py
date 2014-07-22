@@ -48,6 +48,52 @@ class Text(object):
         self.stem = PorterStemmer().stem
 
 
+    @property
+    def text_key(self):
+
+        """
+        Redis key for the original text string.
+        """
+
+        # `<slug>:text`
+        return self.slug+':text'
+
+
+    def token_key(self, offset):
+
+        """
+        Redis key for an individual token.
+
+        :param offset: The interger offset of the instance.
+        """
+
+        # `<slug>:token:<offset>`
+        return self.slug+':token:'+str(offset)
+
+
+    @property
+    def terms_key(self):
+
+        """
+        Redis key for the set of unique terms.
+        """
+
+        # `<slug>:terms`
+        return self.slug+':terms'
+
+
+    def offsets_key(self, term):
+
+        """
+        Redis key for a list of instance offsets for a term.
+
+        :param term: The stemmed term.
+        """
+
+        # `<slug>:offsets:<term>`
+        return self.slug+':offsets:'+term
+
+
     def index(self, text):
 
         """
@@ -57,7 +103,7 @@ class Text(object):
         """
 
         # Store the text as `<slug>:text`
-        self.redis.set(self.slug+':text', text)
+        self.redis.set(self.text_key, text)
 
         # Strip tags and downcase.
         text = utils.strip_tags(text).lower()
@@ -67,24 +113,25 @@ class Text(object):
         for i, match in enumerate(re.finditer(pattern, text)):
 
             # Stem the token.
-            original = match.group(0)
-            stemmed = self.stem(original)
+            unstemmed = match.group(0)
+            stemmed = self.stem(unstemmed)
 
             # Token as `<slug>:token:<offset>`:
-            self.redis.hmset(self.slug+':token:'+str(i), {
-                'original': original,
-                'stemmed':  stemmed,
-                'left':     match.start(),
-                'right':    match.end()
+            self.redis.hmset(self.token_key(i), {
+                'stemmed':      stemmed,
+                'unstemmed':    unstemmed,
+                'left':         match.start(),
+                'right':        match.end()
             })
 
             # Term in `<slug>:terms` set:
-            self.redis.sadd(self.slug+':terms', stemmed)
+            self.redis.sadd(self.terms_key, stemmed)
 
             # Offset in `<slug>:offsets:<term>`:
-            self.redis.rpush(self.slug+':offsets:'+stemmed, i)
+            self.redis.sadd(self.offsets_key(stemmed), i)
 
 
+    @property
     def text(self):
 
         """
@@ -92,7 +139,7 @@ class Text(object):
         """
 
         # `<slug>:text`
-        return self.redis.get(self.slug+':text')
+        return self.redis.get(self.text_key)
 
 
     def token(self, offset):
@@ -104,9 +151,10 @@ class Text(object):
         """
 
         # `<slug>:token:<offset>`
-        return self.redis.hgetall(self.slug+':token:'+str(offset))
+        return self.redis.hgetall(self.token_key(offset))
 
 
+    @property
     def terms(self):
 
         """
@@ -114,17 +162,19 @@ class Text(object):
         """
 
         # `<slug>:terms>`
-        return self.redis.smembers(self.slug+':terms')
+        return self.redis.smembers(self.terms_key)
 
 
     def offsets(self, term):
 
         """
         Get the instance offsets for a term.
+
+        :param term: A stemmed term.
         """
 
         # `<slug>:offsets:<term>`
-        return self.redis.lrange(self.slug+':offsets:'+term, 0, -1)
+        return self.redis.smembers(self.offsets_key(term))
 
 
     #@utils.memoize
