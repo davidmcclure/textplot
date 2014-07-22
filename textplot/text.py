@@ -210,7 +210,7 @@ class Text(object):
         """
 
         keys = self.redis.keys(self.slug+':*')
-        self.redis.delete(keys)
+        if keys: self.redis.delete(*keys)
 
 
     def instance_count(self, term):
