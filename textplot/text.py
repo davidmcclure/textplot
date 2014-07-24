@@ -183,22 +183,14 @@ class Text(object):
         # Store the original text
         pipe.set(self.text_key, text)
 
-        # Walk strings of continuous letters.
         for i, token in enumerate(utils.tokenize(text)):
 
             term = token['stemmed']
 
-            # Token
-            pipe.hmset(self.token_key(i), token)
-
-            # Term
-            pipe.sadd(self.terms_key, term)
-
-            # Term -> offset
-            pipe.sadd(self.offsets_key(term), i)
-
-            # Wordcount + 1
-            pipe.incr(self.wordcount_key)
+            pipe.hmset(self.token_key(i), token)    # Token
+            pipe.sadd(self.terms_key, term)         # Term
+            pipe.sadd(self.offsets_key(term), i)    # Term -> offset
+            pipe.incr(self.wordcount_key)           # Wordcount + 1
 
         pipe.execute()
 
@@ -268,7 +260,7 @@ class Text(object):
         :param kernel: The kernel function.
         """
 
-        # Get the term offsets.
+        # Get the offsets of the term instances.
         offsets = np.array(self.offsets(term))[:, np.newaxis]
 
         # If no instances, return an array of 0's.
@@ -295,7 +287,7 @@ class Text(object):
         t1_kde = self.kde(term1, **kwargs)
         t2_kde = self.kde(term2, **kwargs)
 
-        # Get the spacing between samples.
+        # How much space between samples?.
         spacing = float(self.wordcount) / t1_kde.size
 
         # Integrate overlap between the two.
