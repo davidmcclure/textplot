@@ -10,7 +10,9 @@ import utils
 from nltk.stem import PorterStemmer
 from collections import OrderedDict, Counter
 from sklearn.neighbors import KernelDensity
+from scipy.misc import comb
 from itertools import combinations
+from clint.textui import progress
 
 
 class Text(object):
@@ -72,6 +74,7 @@ class Text(object):
         self.pipeline.incr(self.wordcount_key)
 
 
+    @utils.memoize
     @property
     def wordcount(self):
 
@@ -92,6 +95,7 @@ class Text(object):
         return self.slug+':text'
 
 
+    @utils.memoize
     @property
     def text(self):
 
@@ -123,6 +127,7 @@ class Text(object):
         self.pipeline.sadd(self.terms_key, term)
 
 
+    @utils.memoize
     @property
     def terms(self):
 
@@ -133,6 +138,7 @@ class Text(object):
         return self.redis.smembers(self.terms_key)
 
 
+    @utils.memoize
     def has_term(self, term):
 
         """
@@ -167,6 +173,7 @@ class Text(object):
         self.pipeline.hmset(self.token_key(offset), token)
 
 
+    @utils.memoize
     def token(self, offset):
 
         """
@@ -203,6 +210,7 @@ class Text(object):
         self.pipeline.sadd(self.offsets_key(term), offset)
 
 
+    @utils.memoize
     def offsets(self, term):
 
         """
@@ -228,6 +236,34 @@ class Text(object):
         return self.slug+':distance:'+terms
 
 
+    def set_distance(self, term1, term2):
+
+        """
+        Set the density distance between tero terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        k = self.distance_key(term1, term2)
+        d = self.distance_between_terms(term1, term2)
+        self.pipeline.set(k, d)
+
+
+    @utils.memoize
+    def distance(self, term1, term2):
+
+        """
+        Get the density distance between tero terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        k = self.distance_key(term1, term2)
+        return float(self.redis.get(k))
+
+
     def index(self, text):
 
         """
@@ -250,6 +286,29 @@ class Text(object):
         self.pipeline.execute()
 
 
+    def index_distances(self, batch_size=10000, **kwargs):
+
+        """
+        Index all pair distances.
+
+        :param batch_size: Number of values to push to Redis at once.
+        """
+
+        expected = comb(len(self.terms), 2)
+        with progress.Bar(expected_size=expected) as bar:
+
+            i = 0
+            for t1, t2 in combinations(self.terms, 2):
+
+                self.set_distance(t1, t2)
+
+                # Sync Redis.
+                i += 1
+                if i % batch_size == 0:
+                    self.pipeline.execute()
+                    bar.show(i)
+
+
     def clear(self):
 
         """
@@ -260,6 +319,7 @@ class Text(object):
         if keys: self.redis.delete(*keys)
 
 
+    @utils.memoize
     def instance_count(self, term):
 
         """
@@ -271,6 +331,7 @@ class Text(object):
         return len(self.offsets(term))
 
 
+    @utils.memoize
     def term_counts(self, sort=True):
 
         """
@@ -287,6 +348,7 @@ class Text(object):
         return counts
 
 
+    @utils.memoize
     def unstem(self, term):
 
         """
