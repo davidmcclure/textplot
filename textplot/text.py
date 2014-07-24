@@ -45,8 +45,9 @@ class Text(object):
 
         self.slug = slug
 
-        # Redis connection.
+        # Redis connection and pipeline.
         self.redis = redis.StrictRedis(**kwargs)
+        self.pipeline = self.redis.pipeline()
 
         # Porter stemmer.
         self.stem = PorterStemmer().stem
@@ -60,6 +61,15 @@ class Text(object):
         """
 
         return self.slug+':wordcount'
+
+
+    def inc_wordcount(self):
+
+        """
+        Increment the wordcount.
+        """
+
+        self.pipeline.incr(self.wordcount_key)
 
 
     @property
@@ -102,6 +112,17 @@ class Text(object):
         return self.slug+':terms'
 
 
+    def set_term(self, term):
+
+        """
+        Register the existence of a term.
+
+        :param term: A stemmed term.
+        """
+
+        self.pipeline.sadd(self.terms_key, term)
+
+
     @property
     def terms(self):
 
@@ -134,6 +155,18 @@ class Text(object):
         return self.slug+':token:'+str(offset)
 
 
+    def set_token(self, offset, token):
+
+        """
+        Index a token.
+
+        :param offset: The integer offset of the token.
+        :param token: The token dictionary.
+        """
+
+        self.pipeline.hmset(self.token_key(offset), token)
+
+
     def token(self, offset):
 
         """
@@ -158,6 +191,18 @@ class Text(object):
         return self.slug+':offsets:'+term
 
 
+    def set_offset(self, offset, term):
+
+        """
+        Register a term instance offset.
+
+        :param offset: The integer offset of the instance.
+        :param term: The stemmed term.
+        """
+
+        self.pipeline.sadd(self.offsets_key(term), offset)
+
+
     def offsets(self, term):
 
         """
@@ -170,6 +215,19 @@ class Text(object):
         return sorted(list(map(int, offsets)))
 
 
+    def distance_key(self, term1, term2):
+
+        """
+        Redis key for the density distance between tero terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        terms = '_'.join(sorted((term1, term2)))
+        return self.slug+':distance:'+terms
+
+
     def index(self, text):
 
         """
@@ -178,21 +236,18 @@ class Text(object):
         :param text: The text, as a raw string.
         """
 
-        pipe = self.redis.pipeline()
-
         # Store the original text
-        pipe.set(self.text_key, text)
+        self.pipeline.set(self.text_key, text)
 
+        # Index tokens, terms, and wordcount.
         for i, token in enumerate(utils.tokenize(text)):
-
             term = token['stemmed']
+            self.set_token(i, token)
+            self.set_term(term)
+            self.set_offset(i, term)
+            self.inc_wordcount()
 
-            pipe.hmset(self.token_key(i), token)    # Token
-            pipe.sadd(self.terms_key, term)         # Term
-            pipe.sadd(self.offsets_key(term), i)    # Term -> offset
-            pipe.incr(self.wordcount_key)           # Wordcount + 1
-
-        pipe.execute()
+        self.pipeline.execute()
 
 
     def clear(self):
