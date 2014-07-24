@@ -112,6 +112,17 @@ class Text(object):
         return self.redis.smembers(self.terms_key)
 
 
+    def has_term(self, term):
+
+        """
+        Does the text contain a term?
+
+        :param term: A stemmed term.
+        """
+
+        return self.redis.sismember(self.terms_key, term)
+
+
     def token_key(self, offset):
 
         """
@@ -172,7 +183,7 @@ class Text(object):
         # Store the original text
         pipe.set(self.text_key, text)
 
-        # Generate and index tokens.
+        # Walk strings of continuous letters.
         for i, token in enumerate(utils.tokenize(text)):
 
             term = token['stemmed']
@@ -186,7 +197,7 @@ class Text(object):
             # Term -> offset
             pipe.sadd(self.offsets_key(term), i)
 
-            # Wordcount++
+            # Wordcount + 1
             pipe.incr(self.wordcount_key)
 
         pipe.execute()
@@ -257,14 +268,17 @@ class Text(object):
         :param kernel: The kernel function.
         """
 
-        # Term offsets and density sample axis:
+        # Get the term offsets.
         offsets = np.array(self.offsets(term))[:, np.newaxis]
-        samples = np.linspace(0, self.wordcount, samples)[:, np.newaxis]
 
-        # Density estimator:
+        # If no instances, return an array of 0's.
+        if offsets.size == 0: return np.zeros(samples)
+
+        # Fit the density estimator on the offsets.
         kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(offsets)
 
-        # Estimate the kernel density.
+        # Estimate the density.
+        samples = np.linspace(0, self.wordcount, samples)[:, np.newaxis]
         return np.exp(kde.score_samples(samples))
 
 
@@ -289,27 +303,25 @@ class Text(object):
         return np.trapz(overlap, dx=spacing)
 
 
-    #@utils.memoize
-    #def query(self, query, **kwargs):
+    @utils.memoize
+    def query(self, query, **kwargs):
 
-        #"""
-        #Given a query text as a raw string, sum the kernel density estimates
-        #of each of the tokens in the query.
+        """
+        Given a query text as a raw string, sum the kernel density estimates
+        of each of the tokens in the query.
 
-        #:param query: The query string.
-        #"""
+        :param query: The query string.
+        """
 
-        #query_text = Text(query)
-        #signals = []
+        signals = []
 
-        #for term in query_text.terms:
-            #if term in self.terms:
-                #signals.append(self.kde(term, **kwargs))
+        for t in utils.tokenize(query):
+            signals.append(self.kde(t['stemmed'], **kwargs))
 
-        #result = np.zeros(signals[0].size)
-        #for signal in signals: result += signal
+        result = np.zeros(signals[0].size)
+        for signal in signals: result += signal
 
-        #return result
+        return result
 
 
     def plot_term_kdes(self, words, **kwargs):
@@ -328,14 +340,14 @@ class Text(object):
         plt.show()
 
 
-    #def plot_query(self, query, **kwargs):
+    def plot_query(self, query, **kwargs):
 
-        #"""
-        #Plot a query result.
+        """
+        Plot a query result.
 
-        #:param query: The query string.
-        #"""
+        :param query: The query string.
+        """
 
-        #result = self.query(query, **kwargs)
-        #plt.plot(result)
-        #plt.show()
+        result = self.query(query, **kwargs)
+        plt.plot(result)
+        plt.show()
