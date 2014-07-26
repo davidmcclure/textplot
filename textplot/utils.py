@@ -84,29 +84,3 @@ def sort_dict(d):
 
     sort = sorted(d.iteritems(), key=lambda x: x[1], reverse=True)
     return OrderedDict(sort)
-
-
-def numberify_dict(d):
-
-    """
-    Convert numberic values in a dictionary into ints / floats.
-
-    :param d: A dictionary.
-    """
-
-    for k in d:
-        v = d[k]
-        if type(v) == str:
-
-            # Try to cast to an integer first.
-            try:
-                d[k] = int(v)
-            except ValueError:
-
-                # Then, see if it's a float.
-                try:
-                    d[k] = float(v)
-                except ValueError:
-                    continue
-
-    return d
