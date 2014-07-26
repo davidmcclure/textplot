@@ -1,15 +1,22 @@
 
 
+import os
 import requests
 import re
+import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 import redis
 import utils
+import json
 
 from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
 from collections import OrderedDict, Counter
 from sklearn.neighbors import KernelDensity
+from scipy.misc import comb
+from itertools import combinations
+from clint.textui import progress
 
 
 class Text(object):
@@ -40,6 +47,19 @@ class Text(object):
         self.tokenize()
 
 
+    def stopwords(self, path='stopwords.txt'):
+
+        """
+        Load a set of stopwords.
+        """
+
+        # Get an absolute path for the file.
+        path = os.path.join(os.path.dirname(__file__), path)
+
+        with open(path) as f:
+            return set(f.read().splitlines())
+
+
     def tokenize(self):
 
         """
@@ -49,8 +69,15 @@ class Text(object):
         self.tokens = []
         self.terms = OrderedDict()
 
+        # Cache stopwords.
+        stopwords = self.stopwords()
+
         # Get tokens.
         for i, token in enumerate(utils.tokenize(self.text)):
+
+            # Don't index stopwords.
+            if token['unstemmed'] in stopwords:
+                continue
 
             # Token:
             self.tokens.append(token)
@@ -88,7 +115,7 @@ class Text(object):
         """
 
         originals = []
-        for i in self.offsets(term):
+        for i in self.terms[term]:
             originals.append(self.tokens[i]['unstemmed'])
 
         mode = Counter(originals).most_common(1)
@@ -197,4 +224,126 @@ class Text(object):
         Index all word pair distances.
         """
 
-        pass
+        self.distances = {}
+
+        expected = comb(len(self.terms), 2)
+        with progress.Bar(expected_size=expected) as bar:
+
+            i = 0
+            for t1, t2 in combinations(self.terms.keys(), 2):
+
+                self.set_distance(t1, t2, **kwargs)
+
+                # Update progress.
+                i += 1
+                if i % 1000 == 0:
+                    bar.show(i)
+
+
+    def distance_key(self, term1, term2):
+
+        """
+        Get a unique key for a term pair.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        return '_'.join(sorted((term1, term2)))
+
+
+    def set_distance(self, term1, term2, **kwargs):
+
+        """
+        Set the value for a pair of terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        k = self.distance_key(term1, term2)
+        d = self.distance_between_terms(term1, term2, **kwargs)
+        self.distances[k] = d
+
+
+    def distance(self, term1, term2):
+
+        """
+        Get the value for a pair of terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        k = self.distance_key(term1, term2)
+        return self.distances[k]
+
+
+    def save_distances(self, path):
+
+        """
+        Save the distances as JSON.
+
+        :param path: The file path.
+        """
+
+        with open(path, 'w') as out:
+            json.dump(self.distances, out)
+
+
+    def load_distances(self, path):
+
+        """
+        Load saved term distances JSON.
+
+        :param path: The file path.
+        """
+
+        self.distances = json.load(open(path, 'r'))
+
+
+    @utils.memoize
+    def all_distances_from_term(self, anchor, sort=True):
+
+        """
+        Given a term, get the distances for all other words.
+
+        :param anchor: The anchor term.
+        :param sort: If true, sort the dictionary by value.
+        """
+
+        distances = OrderedDict()
+
+        # Remove the anchor.
+        terms = self.terms.keys()
+        terms.remove(anchor)
+
+        for term in terms:
+            distances[term] = self.distance(anchor, term)
+
+        if sort: distances = utils.sort_dict(distances)
+        return distances
+
+
+    def graph(self, depth=20):
+
+        """
+        For each term, use the liks with the nearest X terms as graph edges.
+
+        :param depth: The number of edges to skim.
+        """
+
+        graph = nx.Graph()
+
+        for term in self.terms:
+
+            # Skim off the top X distances.
+            top = self.all_distances_from_term(term).items()[:depth]
+
+            # Unstem the terms and register the distances as edges.
+            for edge in top:
+                n1 = self.unstem(term)
+                n2 = self.unstem(edge[0])
+                graph.add_edge(n1, n2, weight=edge[1])
+
+        return graph
