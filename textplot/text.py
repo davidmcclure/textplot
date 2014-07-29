@@ -96,7 +96,6 @@ class Text(object):
         self.filter_terms();
 
 
-    @utils.memoize
     def filter_terms(self, min=5):
 
         """
@@ -111,7 +110,6 @@ class Text(object):
             if count >= min: self.terms.add(term)
 
 
-    @utils.memoize
     def term_counts(self, sort=True):
 
         """
@@ -128,7 +126,6 @@ class Text(object):
         return counts
 
 
-    @utils.memoize
     def unstem(self, term):
 
         """
@@ -171,7 +168,6 @@ class Text(object):
         return np.exp(scores) * (len(self.tokens) / samples)
 
 
-    @utils.memoize
     def query(self, query, **kwargs):
 
         """
@@ -223,7 +219,6 @@ class Text(object):
         plt.show()
 
 
-    @utils.memoize
     def distance_between_terms(self, term1, term2, **kwargs):
 
         """
@@ -262,7 +257,6 @@ class Text(object):
                 if i % 1000 == 0: bar.show(i)
 
 
-    @utils.memoize
     def distance_key(self, term1, term2):
 
         """
@@ -289,7 +283,6 @@ class Text(object):
         self.distances[k] = d
 
 
-    @utils.memoize
     def distance(self, term1, term2):
 
         """
@@ -327,7 +320,6 @@ class Text(object):
         self.distances = json.load(open(path, 'r'))
 
 
-    @utils.memoize
     def all_distances_from_term(self, anchor, sort=True):
 
         """
