@@ -45,7 +45,9 @@ class Text(object):
 
         self.text = text
         self.stem = PorterStemmer().stem
+
         self.tokenize()
+        self.filter_terms()
 
 
     def stopwords(self, path='stopwords.txt'):
@@ -68,12 +70,12 @@ class Text(object):
         """
 
         self.tokens = []
-        self.terms = OrderedDict()
+        self.offsets = OrderedDict()
 
         # Cache stopwords.
         stopwords = self.stopwords()
 
-        # Get tokens.
+        # Generate tokens.
         i = 0
         for token in utils.tokenize(self.text):
 
@@ -86,10 +88,27 @@ class Text(object):
 
             # Term:
             stemmed = token['stemmed']
-            if stemmed in self.terms: self.terms[stemmed].append(i)
-            else: self.terms[stemmed] = [i]
+            if stemmed in self.offsets: self.offsets[stemmed].append(i)
+            else: self.offsets[stemmed] = [i]
 
             i += 1
+
+        self.filter_terms();
+
+
+    @utils.memoize
+    def filter_terms(self, min=5):
+
+        """
+        Set a list of terms that appear more than X times.
+
+        :param min: The minimum number of occurrences.
+        """
+
+        self.terms = set()
+
+        for term, count in self.term_counts().items():
+            if count >= min: self.terms.add(term)
 
 
     @utils.memoize
@@ -102,8 +121,8 @@ class Text(object):
         """
 
         counts = OrderedDict()
-        for term in self.terms:
-            counts[term] = len(self.terms[term])
+        for term in self.offsets:
+            counts[term] = len(self.offsets[term])
 
         if sort: counts = utils.sort_dict(counts)
         return counts
@@ -119,7 +138,7 @@ class Text(object):
         """
 
         originals = []
-        for i in self.terms[term]:
+        for i in self.offsets[term]:
             originals.append(self.tokens[i]['unstemmed'])
 
         mode = Counter(originals).most_common(1)
@@ -139,14 +158,17 @@ class Text(object):
         """
 
         # Get the offsets of the term instances.
-        offsets = np.array(self.terms[term])[:, np.newaxis]
+        offsets = np.array(self.offsets[term])[:, np.newaxis]
 
         # Fit the density estimator on the offsets.
         kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(offsets)
 
-        # Estimate the density.
-        samples = np.linspace(0, len(self.tokens), samples)[:, np.newaxis]
-        return np.exp(kde.score_samples(samples))
+        # Score an evely-spaced array of samples.
+        x_axis = np.linspace(0, len(self.tokens), samples)[:, np.newaxis]
+        scores = kde.score_samples(x_axis)
+
+        # Scale the scores to integrate to 1.
+        return np.exp(scores) * (len(self.tokens) / samples)
 
 
     @utils.memoize
@@ -163,7 +185,7 @@ class Text(object):
         signals = []
 
         for term in query_text.terms:
-            if term in self.terms:
+            if term in self.offsets:
                 signals.append(self.kde(term, **kwargs))
 
         result = np.zeros(signals[0].size)
@@ -214,12 +236,9 @@ class Text(object):
         t1_kde = self.kde(term1, **kwargs)
         t2_kde = self.kde(term2, **kwargs)
 
-        # How much space between samples?.
-        spacing = float(len(self.tokens)) / t1_kde.size
-
-        # Integrate overlap between the two.
+        # Integrate the overlap.
         overlap = np.minimum(t1_kde, t2_kde)
-        return np.trapz(overlap, dx=spacing)
+        return np.trapz(overlap)
 
 
     def index_distances(self, **kwargs):
@@ -230,11 +249,11 @@ class Text(object):
 
         self.distances = {}
 
-        expected = comb(len(self.terms), 2)
-        with progress.Bar(expected_size=expected) as bar:
+        pairs = comb(len(self.terms), 2)
+        with progress.Bar(expected_size=pairs) as bar:
 
             i = 0
-            for t1, t2 in combinations(self.terms.keys(), 2):
+            for t1, t2 in combinations(self.terms, 2):
 
                 self.set_distance(t1, t2, **kwargs)
 
@@ -338,16 +357,19 @@ class Text(object):
 
         with progress.Bar(expected_size=len(self.terms)) as bar:
 
-            for i, term in enumerate(self.terms):
+            for i, anchor in enumerate(self.terms):
 
                 # Skim off the top X distances.
-                top = self.all_distances_from_term(term).items()[:depth]
+                distances = self.all_distances_from_term(anchor).items()
 
-                # Unstem the terms and register the distances as edges.
-                for edge in top:
-                    n1 = self.unstem(term)
-                    n2 = self.unstem(edge[0])
-                    graph.add_edge(n1, n2, weight=edge[1])
+                for term, distance in distances[:depth]:
+
+                    # Unstem the nodes.
+                    n1 = self.unstem(anchor)
+                    n2 = self.unstem(term)
+
+                    # Register the edge.
+                    graph.add_edge(n1, n2, weight=distance)
 
                 bar.show(i)
 
