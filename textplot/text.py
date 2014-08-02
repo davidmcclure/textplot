@@ -45,9 +45,7 @@ class Text(object):
 
         self.text = text
         self.stem = PorterStemmer().stem
-
         self.tokenize()
-        self.filter_terms()
 
 
     def stopwords(self, path='stopwords.txt'):
@@ -70,7 +68,7 @@ class Text(object):
         """
 
         self.tokens = []
-        self.offsets = OrderedDict()
+        self.terms = OrderedDict()
 
         # Cache stopwords.
         stopwords = self.stopwords()
@@ -88,12 +86,10 @@ class Text(object):
 
             # Term:
             stemmed = token['stemmed']
-            if stemmed in self.offsets: self.offsets[stemmed].append(i)
-            else: self.offsets[stemmed] = [i]
+            if stemmed in self.terms: self.terms[stemmed].append(i)
+            else: self.terms[stemmed] = [i]
 
             i += 1
-
-        self.filter_terms();
 
 
     def term_counts(self, sort=True):
@@ -105,8 +101,8 @@ class Text(object):
         """
 
         counts = OrderedDict()
-        for term in self.offsets:
-            counts[term] = len(self.offsets[term])
+        for term in self.terms:
+            counts[term] = len(self.terms[term])
 
         if sort: counts = utils.sort_dict(counts)
         return counts
@@ -121,7 +117,7 @@ class Text(object):
         """
 
         originals = []
-        for i in self.offsets[term]:
+        for i in self.terms[term]:
             originals.append(self.tokens[i]['unstemmed'])
 
         mode = Counter(originals).most_common(1)
@@ -140,11 +136,11 @@ class Text(object):
         :param kernel: The kernel function.
         """
 
-        # Get the offsets of the term instances.
-        offsets = np.array(self.offsets[term])[:, np.newaxis]
+        # Get the terms of the term instances.
+        terms = np.array(self.terms[term])[:, np.newaxis]
 
-        # Fit the density estimator on the offsets.
-        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(offsets)
+        # Fit the density estimator on the terms.
+        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(terms)
 
         # Score an evely-spaced array of samples.
         x_axis = np.linspace(0, len(self.tokens), samples)[:, np.newaxis]
@@ -154,7 +150,7 @@ class Text(object):
         return np.exp(scores) * (len(self.tokens) / samples)
 
 
-    def distance_between_terms(self, term1, term2, **kwargs):
+    def kde_overlap(self, term1, term2, **kwargs):
 
         """
         How much do the kernel density estimates of two terms overlap?
@@ -184,7 +180,7 @@ class Text(object):
         signals = []
 
         for term in query_text.terms:
-            if term in self.offsets:
+            if term in self.terms:
                 signals.append(self.kde(term, **kwargs))
 
         result = np.zeros(signals[0].size)
