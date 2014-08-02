@@ -18,6 +18,7 @@ from sklearn.neighbors import KernelDensity
 from scipy.misc import comb
 from itertools import combinations
 from clint.textui import progress
+from pyemd import emd
 
 
 class Text(object):
@@ -165,6 +166,40 @@ class Text(object):
         # Integrate the overlap.
         overlap = np.minimum(t1_kde, t2_kde)
         return np.trapz(overlap)
+
+
+    def emd(self, term1, term2, **kwargs):
+
+        """
+        Compute the "earth mover's distance" between two terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        :param distances: A distance matrix.
+        """
+
+        t1_kde = self.kde(term1, **kwargs)
+        t2_kde = self.kde(term2, **kwargs)
+
+        dm = utils.offset_matrix(t1_kde.size)
+        return emd(t1_kde, t2_kde, dm)
+
+
+    def all_kde_overlaps(self, anchor, sort=True, **kwargs):
+
+        """
+        Compute the KDE overlaps between an anchor terms and all other terms.
+
+        :param anchor: The anchor term.
+        :param sort: If true, sort the dictionary by value.
+        """
+
+        overlaps = OrderedDict()
+        for term in self.terms:
+            overlaps[term] = self.kde_overlap(anchor, term, **kwargs)
+
+        if sort: overlaps = utils.sort_dict(overlaps)
+        return overlaps
 
 
     def query(self, query, **kwargs):

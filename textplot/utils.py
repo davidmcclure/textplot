@@ -1,6 +1,7 @@
 
 
 import re
+import numpy as np
 import functools
 
 from collections import OrderedDict
@@ -84,3 +85,22 @@ def sort_dict(d):
 
     sort = sorted(d.iteritems(), key=lambda x: x[1], reverse=True)
     return OrderedDict(sort)
+
+
+@memoize
+def offset_matrix(size):
+
+    """
+    Build a symmetric 2D matrix where m[i, j] is the absolute value of the
+    difference between the word offsets i and j - the "word distance".
+
+    :param size: The term count.
+    """
+
+    m = np.zeros(shape=(size,size))
+
+    for i in xrange(size):
+        for j in xrange(size):
+            m[i][j] = abs(i-j)
+
+    return m
