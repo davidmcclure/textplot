@@ -71,14 +71,13 @@ class Text(object):
         self.tokens = []
         self.terms = OrderedDict()
 
-        # Cache stopwords.
+        # Load stopwords.
         stopwords = self.stopwords()
 
         # Generate tokens.
-        i = 0
-        for token in utils.tokenize(self.text):
+        for i, token in enumerate(utils.tokenize(self.text)):
 
-            # Don't index stopwords.
+            # Ignore stopwords.
             if token['unstemmed'] in stopwords:
                 continue
 
@@ -89,8 +88,6 @@ class Text(object):
             stemmed = token['stemmed']
             if stemmed in self.terms: self.terms[stemmed].append(i)
             else: self.terms[stemmed] = [i]
-
-            i += 1
 
 
     def term_counts(self, sort=True):
