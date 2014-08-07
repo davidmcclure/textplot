@@ -1,10 +1,12 @@
 
 
 import numpy as np
+import utils
 
-from scipy.misc import comb
-from itertools import combinations
 from clint.textui import progress
+from itertools import combinations
+from collections import OrderedDict
+from scipy.misc import comb
 
 
 class Matrix(object):
@@ -33,7 +35,35 @@ class Matrix(object):
         return '_'.join(sorted((term1, term2)))
 
 
-    def distance(self, term1, term2, **kwargs):
+    def set_pair(self, term1, term2, **kwargs):
+
+        """
+        Set the value for a pair of terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        k = self.key(term1, term2)
+        d = self.score(term1, term2, **kwargs)
+        self.distances[k] = d
+
+
+    def get_pair(self, term1, term2):
+
+        """
+        Get the value for a pair of terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        k = self.key(term1, term2)
+        if k in self.pairs: return self.pair[k]
+        else: return None
+
+
+    def score(self, term1, term2, **kwargs):
 
         """
         How much do the kernel density estimates of two terms overlap?
@@ -50,32 +80,21 @@ class Matrix(object):
         return np.trapz(overlap)
 
 
-    def set_distance(self, term1, term2, **kwargs):
+    def all_pairs(self, anchor, sort=True):
 
         """
-        Set the value for a pair of terms.
+        Compute the pairs between an anchor terms and all other terms.
 
-        :param term1: The first term.
-        :param term2: The second term.
+        :param anchor: The anchor term.
+        :param sort: If true, sort the dictionary by value.
         """
 
-        k = self.key(term1, term2)
-        d = self.distance(term1, term2, **kwargs)
-        self.distances[k] = d
+        pairs = OrderedDict()
+        for term in self.terms:
+            pairs[term] = self.get_pair(anchor, term)
 
-
-    def get_distance(self, term1, term2):
-
-        """
-        Get the value for a pair of terms.
-
-        :param term1: The first term.
-        :param term2: The second term.
-        """
-
-        k = self.key(term1, term2)
-        if k in self.distances: return self.distances[k]
-        else: return None
+        if sort: pairs = utils.sort_dict(pairs)
+        return overlaps
 
 
     def index(self, terms=None, **kwargs):
@@ -86,7 +105,7 @@ class Matrix(object):
         :param terms: A list of terms to index.
         """
 
-        self.distances = {}
+        self.pairs = {}
 
         # Use all terms by default.
         self.terms = terms or self.text.terms.keys()
@@ -97,7 +116,7 @@ class Matrix(object):
             i = 0
             for t1, t2 in combinations(self.terms, 2):
 
-                self.set_distance(t1, t2, **kwargs)
+                self.set_pairs(t1, t2, **kwargs)
 
                 # Update progress.
                 i += 1
