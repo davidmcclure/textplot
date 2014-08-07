@@ -9,7 +9,6 @@ import numpy as np
 import redis
 import utils
 import json
-import datetime
 
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
@@ -75,7 +74,8 @@ class Text(object):
         stopwords = self.stopwords()
 
         # Generate tokens.
-        for i, token in enumerate(utils.tokenize(self.text)):
+        i = 0
+        for token in utils.tokenize(self.text):
 
             # Ignore stopwords.
             if token['unstemmed'] in stopwords:
@@ -88,6 +88,8 @@ class Text(object):
             stemmed = token['stemmed']
             if stemmed in self.terms: self.terms[stemmed].append(i)
             else: self.terms[stemmed] = [i]
+
+            i += 1
 
 
     def term_counts(self, sort=True):
@@ -104,41 +106,6 @@ class Text(object):
 
         if sort: counts = utils.sort_dict(counts)
         return counts
-
-
-    def count_buckets(self):
-
-        """
-        Build a dictionary that maps integers to the terms that appear that
-        many times in the text.
-        """
-
-        buckets = {}
-        for term, count in self.term_counts().items():
-
-            # Update or create the bucket.
-            if count in buckets: buckets[count].append(term)
-            else: buckets[count] = [term]
-
-        return buckets
-
-
-    def most_frequent_terms(self, count):
-
-        """
-        Get the X most frequent terms in the text, and then probe down to get
-        any other terms that have the same count as the last term.
-
-        :param count: The number of terms.
-        """
-
-        counts = self.term_counts()
-        top_terms = set(counts.keys()[:count])
-        end_count = counts.values()[:count][-1]
-
-        # Merge all words in the last bucket.
-        bucket = self.count_buckets()[end_count]
-        return top_terms.union(set(bucket))
 
 
     def unstem(self, term):
@@ -163,13 +130,13 @@ class Text(object):
         """
         Estimate the kernel density of the instances of term in the text.
 
-        :param term: The term to estimate.
+        :param term: A stememd term.
         :param bandwidth: The kernel width.
-        :param samples: The number points to sample.
+        :param samples: The number samples.
         :param kernel: The kernel function.
         """
 
-        # Get the terms of the term instances.
+        # Get the offsets of the term instances.
         terms = np.array(self.terms[term])[:, np.newaxis]
 
         # Fit the density estimator on the terms.
