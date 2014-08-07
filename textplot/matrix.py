@@ -35,34 +35,6 @@ class Matrix(object):
         return '_'.join(sorted((term1, term2)))
 
 
-    def set_pair(self, term1, term2, **kwargs):
-
-        """
-        Set the value for a pair of terms.
-
-        :param term1: The first term.
-        :param term2: The second term.
-        """
-
-        k = self.key(term1, term2)
-        d = self.score(term1, term2, **kwargs)
-        self.distances[k] = d
-
-
-    def get_pair(self, term1, term2):
-
-        """
-        Get the value for a pair of terms.
-
-        :param term1: The first term.
-        :param term2: The second term.
-        """
-
-        k = self.key(term1, term2)
-        if k in self.pairs: return self.pair[k]
-        else: return None
-
-
     def score(self, term1, term2, **kwargs):
 
         """
@@ -80,6 +52,34 @@ class Matrix(object):
         return np.trapz(overlap)
 
 
+    def set_pair(self, term1, term2, **kwargs):
+
+        """
+        Set the value for a pair of terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        k = self.key(term1, term2)
+        d = self.score(term1, term2, **kwargs)
+        self.pairs[k] = d
+
+
+    def get_pair(self, term1, term2):
+
+        """
+        Get the value for a pair of terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        k = self.key(term1, term2)
+        if k in self.pairs: return self.pairs[k]
+        else: return None
+
+
     def all_pairs(self, anchor, sort=True):
 
         """
@@ -94,7 +94,7 @@ class Matrix(object):
             pairs[term] = self.get_pair(anchor, term)
 
         if sort: pairs = utils.sort_dict(pairs)
-        return overlaps
+        return pairs
 
 
     def index(self, terms=None, **kwargs):
@@ -116,7 +116,7 @@ class Matrix(object):
             i = 0
             for t1, t2 in combinations(self.terms, 2):
 
-                self.set_pairs(t1, t2, **kwargs)
+                self.set_pair(t1, t2, **kwargs)
 
                 # Update progress.
                 i += 1

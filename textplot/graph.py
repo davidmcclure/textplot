@@ -1,6 +1,7 @@
 
 
 import networkx as nx
+import matplotlib.pyplot as plt
 
 from clint.textui import progress
 
@@ -33,7 +34,36 @@ class Graph(object):
 
             # Heaviest pair scores:
             pairs = matrix.all_pairs(anchor).items()
-            for term, weight in pairs[depth]:
+            for term, weight in pairs[:depth]:
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
+
+
+    def draw_spring(self, **kwargs):
+
+        """
+        Render a spring layout.
+        """
+
+        nx.draw_spring(
+            self.graph,
+            with_labels=True,
+            font_size=10,
+            edge_color='#dddddd',
+            node_size=0,
+            **kwargs
+        )
+
+        plt.show()
+
+
+    def write_gml(self, path):
+
+        """
+        Write a GML file.
+
+        :param path: The file path.
+        """
+
+        nx.readwrite.gml.write_gml(self.graph, path)
