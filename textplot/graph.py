@@ -33,7 +33,7 @@ class Graph(object):
             n1 = matrix.text.unstem(anchor)
 
             # Heaviest pair scores:
-            pairs = matrix.all_pairs(anchor).items()
+            pairs = matrix.anchored_pairs(anchor).items()
             for term, weight in pairs[:depth]:
 
                 n2 = matrix.text.unstem(term)
@@ -43,14 +43,14 @@ class Graph(object):
     def g2(self, matrix, depth):
 
         """
-        For each term, compute the pair score with all other terms. Then, skim
-        off the top X pairs and add them as edges.
+        Take the top X pairs by score and use them as edges.
 
         :param matrix: A term matrix.
         :param depth: The number of edges.
         """
 
-        pass
+        for pair in matrix.pairs:
+            print pair
 
 
     def draw_spring(self, **kwargs):

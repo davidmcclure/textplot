@@ -80,7 +80,7 @@ class Matrix(object):
         else: return None
 
 
-    def all_pairs(self, anchor, sort=True):
+    def anchored_pairs(self, anchor, sort=True):
 
         """
         Compute the pairs between an anchor terms and all other terms.
