@@ -80,21 +80,19 @@ class Matrix(object):
         else: return None
 
 
-    def anchored_pairs(self, anchor, sort=True):
+    def anchored_pairs(self, anchor):
 
         """
         Compute the pairs between an anchor terms and all other terms.
 
         :param anchor: The anchor term.
-        :param sort: If true, sort the dictionary by value.
         """
 
         pairs = OrderedDict()
         for term in self.terms:
             pairs[term] = self.get_pair(anchor, term)
 
-        if sort: pairs = utils.sort_dict(pairs)
-        return pairs
+        return urils.sort_dict(pairs)
 
 
     def index(self, terms=None, **kwargs):

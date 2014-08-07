@@ -21,7 +21,7 @@ class Graph(object):
     def g1(self, matrix, depth):
 
         """
-        For each term, compute the pair score with all other terms. Then, skim
+        For each term, compute its similarity with all other terms. Then, skim
         off the top X pairs and add them as edges.
 
         :param matrix: A term matrix.
@@ -43,14 +43,13 @@ class Graph(object):
     def g2(self, matrix, depth):
 
         """
-        Take the top X pairs by score and use them as edges.
+        Take the top X pairs by score and add them as edges.
 
         :param matrix: A term matrix.
         :param depth: The number of edges.
         """
 
-        for pair in matrix.pairs:
-            print pair
+        pass
 
 
     def draw_spring(self, **kwargs):

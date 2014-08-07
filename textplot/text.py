@@ -92,20 +92,17 @@ class Text(object):
             i += 1
 
 
-    def term_counts(self, sort=True):
+    def term_counts(self):
 
         """
         Map terms to instance counts.
-
-        :param sort: If true, sort the dictionary by value.
         """
 
         counts = OrderedDict()
         for term in self.terms:
             counts[term] = len(self.terms[term])
 
-        if sort: counts = utils.sort_dict(counts)
-        return counts
+        return utils.sort_dict(counts)
 
 
     def count_buckets(self):
@@ -222,21 +219,19 @@ class Text(object):
         return emd(t1_kde, t2_kde, dm)
 
 
-    def all_kde_overlaps(self, anchor, sort=True, **kwargs):
+    def all_kde_overlaps(self, anchor, **kwargs):
 
         """
         Compute the KDE overlaps between an anchor terms and all other terms.
 
         :param anchor: The anchor term.
-        :param sort: If true, sort the dictionary by value.
         """
 
         overlaps = OrderedDict()
         for term in self.terms:
             overlaps[term] = self.kde_overlap(anchor, term, **kwargs)
 
-        if sort: overlaps = utils.sort_dict(overlaps)
-        return overlaps
+        return utils.sort_dict(overlaps)
 
 
     def query(self, query, **kwargs):
