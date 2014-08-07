@@ -89,13 +89,13 @@ class Matrix(object):
         self.distances = {}
 
         # Use all terms by default.
-        terms = terms or self.text.terms.keys()
+        self.terms = terms or self.text.terms.keys()
         pairs = comb(len(terms), 2)
 
         with progress.Bar(expected_size=pairs) as bar:
 
             i = 0
-            for t1, t2 in combinations(terms, 2):
+            for t1, t2 in combinations(self.terms, 2):
 
                 self.set_distance(t1, t2, **kwargs)
 

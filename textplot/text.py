@@ -108,6 +108,44 @@ class Text(object):
         return counts
 
 
+    def count_buckets(self):
+
+        """
+        Build a dictionary that maps occurrence counts to the terms that
+        appear that many times in the text.
+        """
+
+        buckets = {}
+        for term, count in self.term_counts().items():
+            if count in buckets: buckets[count].append(term)
+            else: buckets[count] = [term]
+
+        return buckets
+
+
+    def most_frequent_terms(self, depth):
+
+        """
+        Get the X most frequent terms in the text, and then probe down to get
+        any other terms that have the same count as the last term.
+
+        :param count: The number of terms.
+        """
+
+        counts = self.term_counts()
+
+        # Get the top X terms and the instance count of the last word.
+        top_terms = set(counts.keys()[:depth])
+        end_count = counts.values()[:depth][-1]
+
+        # Merge in all other words with that appear that number of times, so
+        # that we don't truncate the last bucket - eg, half of the words that
+        # appear 5 times, but not the other half.
+
+        bucket = self.count_buckets()[end_count]
+        return top_terms.union(set(bucket))
+
+
     def unstem(self, term):
 
         """
