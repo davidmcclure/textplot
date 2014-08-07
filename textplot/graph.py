@@ -18,11 +18,11 @@ class Graph(object):
         self.graph = nx.Graph()
 
 
-    def top_pairs(self, matrix, depth):
+    def g1(self, matrix, depth):
 
         """
-        For each of the X most frequent words in the text, use the Y heaviest
-        pair scores as edges in a graph.
+        For each term, compute the pair score with all other terms. Then, skim
+        off the top X pairs and add them as edges.
 
         :param matrix: A term matrix.
         :param depth: Pairs per word.
@@ -38,6 +38,19 @@ class Graph(object):
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
+
+
+    def g2(self, matrix, depth):
+
+        """
+        For each term, compute the pair score with all other terms. Then, skim
+        off the top X pairs and add them as edges.
+
+        :param matrix: A term matrix.
+        :param depth: The number of edges.
+        """
+
+        pass
 
 
     def draw_spring(self, **kwargs):
