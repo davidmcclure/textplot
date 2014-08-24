@@ -18,7 +18,7 @@ class Graph(object):
         self.graph = nx.Graph()
 
 
-    def g1(self, matrix, depth):
+    def build(self, matrix, depth):
 
         """
         For each term, compute its similarity with all other terms. Then, skim
@@ -38,19 +38,6 @@ class Graph(object):
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
-
-
-    def g2(self, matrix, depth):
-
-        """
-        Take the top X pairs by score and add them as edges.
-
-        :param matrix: A term matrix.
-        :param depth: The number of edges.
-        """
-
-        for pair in matrix.all_pairs()[:depth]:
-            self.graph.add_edge(pair[0], pair[1], weight=pair[2])
 
 
     def draw_spring(self, **kwargs):
