@@ -62,8 +62,11 @@ class Skimmer(Graph):
     def build(self, matrix, depth):
 
         """
-        For each term, compute its similarity with all other terms. Then, skim
-        off the top X pairs and add them as edges.
+        1. For each term in the passed matrix, score its KDE similarity with
+        all other indexed terms.
+
+        2. With the ordered stack of similarities in hand, skim off the top X
+        pairs and add them as edges.
 
         :param matrix: A term matrix.
         :param depth: Pairs per word.
