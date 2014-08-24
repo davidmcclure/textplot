@@ -3,20 +3,13 @@
 import os
 import requests
 import re
-import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
-import redis
 import utils
-import json
 
 from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
 from collections import OrderedDict, Counter
 from sklearn.neighbors import KernelDensity
-from scipy.misc import comb
-from itertools import combinations
-from clint.textui import progress
 from pyemd import emd
 
 
@@ -38,7 +31,7 @@ class Text(object):
     def __init__(self, text):
 
         """
-        Set the key prefix, connect to Redis.
+        Store the raw text, tokenize.
 
         :param text: The text as a raw string.
         """
