@@ -2,16 +2,16 @@
 
 from text import Text
 from matrix import Matrix
-from graph import Graph
+from graphs import Skimmer
 
 
-def graph(path, w_depth, p_depth, **kwargs):
+def skimmer(path, w_depth, p_depth, **kwargs):
 
     t = Text.from_file(path)
     m = Matrix(t)
     m.index(t.most_frequent_terms(w_depth), **kwargs)
 
-    g = Graph()
+    g = Skimmer()
     g.build(m, p_depth)
 
     return g
