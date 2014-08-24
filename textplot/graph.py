@@ -49,7 +49,8 @@ class Graph(object):
         :param depth: The number of edges.
         """
 
-        pass
+        for pair in matrix.all_pairs()[:depth]:
+            self.graph.add_edge(pair[0], pair[1], weight=pair[2])
 
 
     def draw_spring(self, **kwargs):

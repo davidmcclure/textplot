@@ -92,7 +92,21 @@ class Matrix(object):
         for term in self.terms:
             pairs[term] = self.get_pair(anchor, term)
 
-        return urils.sort_dict(pairs)
+        return utils.sort_dict(pairs)
+
+
+    def all_pairs(self):
+
+        """
+        Get a sorted list of 3-tuples - (term1, term2, weight)
+        """
+
+        pairs = []
+        for key, weight in self.pairs.iteritems():
+            terms = key.split('_')
+            pairs.append((terms[0], terms[1], weight))
+
+        return sorted(pairs, key=lambda x: x[2], reverse=True)
 
 
     def index(self, terms=None, **kwargs):
