@@ -11,6 +11,7 @@ from nltk.stem import PorterStemmer
 from collections import OrderedDict, Counter
 from sklearn.neighbors import KernelDensity
 from pyemd import emd
+from itertools import islice
 
 
 class Text(object):
@@ -83,6 +84,25 @@ class Text(object):
             else: self.terms[stemmed] = [i]
 
             i += 1
+
+
+    def window(self, n=2):
+
+        """
+        Yield a sliding window of words.
+
+        :param n: The window width.
+        """
+
+        it = iter(self.tokens)
+        result = tuple(islice(it, n))
+
+        if len(result) == n:
+            yield result
+
+        for token in it:
+            result = result[1:] + (token,)
+            yield result
 
 
     def term_counts(self):
