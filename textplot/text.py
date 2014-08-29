@@ -98,7 +98,7 @@ class Text(object):
         return utils.sort_dict(counts)
 
 
-    def count_buckets(self):
+    def term_count_buckets(self):
 
         """
         Build a dictionary that maps occurrence counts to the terms that
@@ -132,7 +132,7 @@ class Text(object):
         # that we don't truncate the last bucket - eg, half of the words that
         # appear 5 times, but not the other half.
 
-        bucket = self.count_buckets()[end_count]
+        bucket = self.term_count_buckets()[end_count]
         return top_terms.union(set(bucket))
 
 
