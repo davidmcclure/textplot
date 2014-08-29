@@ -82,3 +82,42 @@ class Skimmer(Graph):
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
+
+
+class Texture(Graph):
+
+
+    def build(self, text):
+
+        """
+        An implementation of the Textexture algorithm described here:
+        noduslabs.com/publications/Pathways-Meaning-Text-Network-Analysis.pdf
+
+        :param text: The text.
+        """
+
+        # 2-word pass:
+        for w in text.window(2):
+
+            w1 = w[0]['stemmed']
+            w2 = w[1]['stemmed']
+
+            # Update an existing edge.
+            if self.graph.has_edge(w1, w2):
+                self.graph.edge[w1][w2]['weight'] += 1
+
+            # Or, create a new edge.
+            else: self.graph.add_edge(w1, w2, weight=1)
+
+        # 5-word pass:
+        for w in text.window(5):
+
+            w1 = w[0]['stemmed']
+            w2 = w[-1]['stemmed']
+
+            # Update an existing edge.
+            if self.graph.has_edge(w1, w2):
+                self.graph.edge[w1][w2]['weight'] += 1
+
+            # Or, create a new edge.
+            else: self.graph.add_edge(w1, w2, weight=1)

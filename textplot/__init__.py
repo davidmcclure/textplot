@@ -2,7 +2,7 @@
 
 from text import Text
 from matrix import Matrix
-from graphs import Skimmer
+from graphs import *
 
 
 def skimmer(path, word_depth, skim_depth, **kwargs):
@@ -19,11 +19,26 @@ def skimmer(path, word_depth, skim_depth, **kwargs):
     m = Matrix(t)
 
     print 'Indexing terms:'
-    m.index(t.most_frequent_terms(w_depth), **kwargs)
+    m.index(t.most_frequent_terms(word_depth), **kwargs)
 
     g = Skimmer()
 
     print 'Generating graph:'
-    g.build(m, p_depth)
+    g.build(m, skim_depth)
 
+    return g
+
+
+def texture(path, **kwargs):
+
+    """
+    Construct a "Texture" graph.
+
+    :param path: The file path.
+    """
+
+    t = Text.from_file(path)
+    g = Texture()
+
+    g.build(t)
     return g
