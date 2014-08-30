@@ -11,7 +11,6 @@ from nltk.stem import PorterStemmer
 from collections import OrderedDict, Counter
 from sklearn.neighbors import KernelDensity
 from pyemd import emd
-from itertools import islice
 
 
 class Text(object):
@@ -86,25 +85,6 @@ class Text(object):
             i += 1
 
 
-    def window(self, n=2):
-
-        """
-        Yield a sliding window of words.
-
-        :param n: The window width.
-        """
-
-        it = iter(self.tokens)
-        result = tuple(islice(it, n))
-
-        if len(result) == n:
-            yield result
-
-        for token in it:
-            result = result[1:] + (token,)
-            yield result
-
-
     def term_counts(self):
 
         """
@@ -139,7 +119,7 @@ class Text(object):
         Get the X most frequent terms in the text, and then probe down to get
         any other terms that have the same count as the last term.
 
-        :param count: The number of terms.
+        :param depth: The number of terms.
         """
 
         counts = self.term_counts()
@@ -154,6 +134,19 @@ class Text(object):
 
         bucket = self.term_count_buckets()[end_count]
         return top_terms.union(set(bucket))
+
+
+    def most_frequent_tokens(self, depth):
+
+        """
+        Get a filtered list of tokens that just includes terms that are among
+        the top X most frequent in the text.
+
+        :param depth: The number of terms.
+        """
+
+        terms = self.most_frequent_terms(depth)
+        return [t for t in self.tokens if t['stemmed'] in terms]
 
 
     def unstem(self, term):

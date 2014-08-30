@@ -2,6 +2,7 @@
 
 import networkx as nx
 import matplotlib.pyplot as plt
+import utils
 
 from abc import ABCMeta, abstractmethod
 from clint.textui import progress
@@ -59,7 +60,7 @@ class Graph(object):
 class Skimmer(Graph):
 
 
-    def build(self, matrix, depth):
+    def build(self, matrix, skim_depth):
 
         """
         1. For each term in the passed matrix, score its KDE similarity with
@@ -69,7 +70,7 @@ class Skimmer(Graph):
         pairs and add them as edges.
 
         :param matrix: A term matrix.
-        :param depth: Pairs per word.
+        :param skim_depth: Pairs per word.
         """
 
         for anchor in progress.bar(matrix.terms):
@@ -78,7 +79,7 @@ class Skimmer(Graph):
 
             # Heaviest pair scores:
             pairs = matrix.anchored_pairs(anchor).items()
-            for term, weight in pairs[:depth]:
+            for term, weight in pairs[:skim_depth]:
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)
@@ -87,17 +88,20 @@ class Skimmer(Graph):
 class Texture(Graph):
 
 
-    def build(self, text):
+    def build(self, text, term_depth=None):
 
         """
         An implementation of the Textexture algorithm described here:
         noduslabs.com/publications/Pathways-Meaning-Text-Network-Analysis.pdf
 
         :param text: The text.
+        :param term_depth: The number of terms.
         """
 
+        tokens = text.most_frequent_tokens(term_depth)
+
         # 2-word pass:
-        for w in text.window(2):
+        for w in utils.window(tokens, 2):
 
             w1 = w[0]['stemmed']
             w2 = w[1]['stemmed']
@@ -110,7 +114,7 @@ class Texture(Graph):
             else: self.graph.add_edge(w1, w2, weight=1)
 
         # 5-word pass:
-        for w in text.window(5):
+        for w in utils.window(tokens, 5):
 
             w1 = w[0]['stemmed']
             w2 = w[-1]['stemmed']

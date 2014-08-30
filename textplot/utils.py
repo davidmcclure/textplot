@@ -6,6 +6,7 @@ import functools
 
 from collections import OrderedDict
 from nltk.stem import PorterStemmer
+from itertools import islice
 
 
 def memoize(obj):
@@ -104,3 +105,23 @@ def offset_matrix(size):
             m[i][j] = abs(i-j)
 
     return m
+
+
+def window(seq, n=2):
+
+    """
+    Yield a sliding window over an iterable.
+
+    :param seq: The sequence.
+    :param n: The window width.
+    """
+
+    it = iter(seq)
+    result = tuple(islice(it, n))
+
+    if len(result) == n:
+        yield result
+
+    for token in it:
+        result = result[1:] + (token,)
+        yield result

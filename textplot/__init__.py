@@ -5,7 +5,7 @@ from matrix import Matrix
 from graphs import *
 
 
-def skimmer(path, word_depth, skim_depth, **kwargs):
+def skimmer(path, term_depth=500, skim_depth=10, **kwargs):
 
     """
     Construct a "Skimmer" graph.
@@ -19,7 +19,7 @@ def skimmer(path, word_depth, skim_depth, **kwargs):
     m = Matrix(t)
 
     print 'Indexing terms:'
-    m.index(t.most_frequent_terms(word_depth), **kwargs)
+    m.index(t.most_frequent_terms(term_depth), **kwargs)
 
     g = Skimmer()
 
@@ -29,7 +29,7 @@ def skimmer(path, word_depth, skim_depth, **kwargs):
     return g
 
 
-def texture(path, **kwargs):
+def texture(path, term_depth=None, **kwargs):
 
     """
     Construct a "Texture" graph.
@@ -40,5 +40,5 @@ def texture(path, **kwargs):
     t = Text.from_file(path)
     g = Texture()
 
-    g.build(t)
+    g.build(t, term_depth)
     return g
