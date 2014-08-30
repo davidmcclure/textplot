@@ -166,7 +166,7 @@ class Text(object):
 
 
     @utils.memoize
-    def kde(self, term, bandwidth=5000, samples=1000, kernel='epanechnikov'):
+    def kde(self, term, bandwidth=500, samples=1000, kernel='epanechnikov'):
 
         """
         Estimate the kernel density of the instances of term in the text.

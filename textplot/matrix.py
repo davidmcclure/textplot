@@ -107,7 +107,7 @@ class Matrix(object):
 
         # Use all terms by default.
         self.terms = terms or self.text.terms.keys()
-        pairs = comb(len(terms), 2)
+        pairs = comb(len(self.terms), 2)
 
         with progress.Bar(expected_size=pairs) as bar:
 

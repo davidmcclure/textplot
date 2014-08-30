@@ -1,4 +1,4 @@
-### Using kernel density estimation to "x-ray" texts
+### Using kernel density estimation to create network visualizations of texts
 
 Earlier in the summer, I was thinking about the distribution of words inside of long texts - the way they slosh around, ebb and flow, clump together in some parts but not others. Some words don't really do this at all - they're spaced evenly throughout the document, and their distribution doesn't say much about the overall structure of the text. This is certainly true for stopwords like "the" or "an," but it's also true for lots of words that carry more semantic information but aren't really associated with any particular content matter. For example, think of words like "quickly" or "never" - they're generic terms, free-agents that could be used in almost any context.
 
@@ -46,7 +46,7 @@ Which gives a score between 0 and 1, where 0 would mean that the two words appea
 
 [fig]
 
-The result is 1 (or, at least, it would be if we could compute a continuous integral), since, tautologially, a word occurs exactly where it does. And, for two words that clump in very different places, the result edges towards 0:
+The result is 1 (or, at least, it would be if we could compute a continuous integral), since, tautologically, a word occurs exactly where it does. And, for two words that clump in very different places, the result edges towards 0:
 
 [fig]
 
@@ -66,8 +66,6 @@ Or "Natasha":
 
 [fig]
 
-Which, intuitively, look right - the similarity metric surfaces a kind of bespoke "topic" for an individual word, a custom ordering of words from most similar to least similar.
+Which, intuitively, look right - the similarity metric surfaces a kind of bespoke "topic" for an individual word, a custom ordering from most similar to least similar.
 
-#### Using network analysis to surface the conceptual structure
-
-At this point, I started to think about how the different little "anchored" topics related to one another.
+#### Traversing the topic structure
