@@ -1,4 +1,4 @@
-### Mapping texts with kernel density estimation
+### (Mental) maps of texts with kernel density estimation
 
 Earlier in the summer, I was thinking about the way that words _distribute_ inside of long texts - the way they slosh around, ebb and flow, clump together in some parts but not others. Some words don't really do this at all - they're spaced evenly throughout the document, and their distribution doesn't say much about the overall structure of the text. This is certainly true for stopwords like "the" or "an," but it's also true for lots of words that carry more semantic information but aren't really associated with any particular content matter. For example, think of words like "quickly" or "never" - they're generic terms, free-agents that could be used in almost any context.
 
@@ -66,7 +66,7 @@ Which puts "horse" just a tad closer than "shout," which weighs in at 0.XX:
 
 [fig]
 
-This, then, points to a interesting next step - for any given word, you can just compute its similarity score with _every other word in the text_, and then sort the results in descending order to create a kind of "more-like-this" list. For example, here are the twenty words that distribute most closely with "horse," all clearly related to riding, firing, shouting, and other war-making activities:
+This, then, points to a interesting next step - for any given word, you can compute its similarity score with _every other word in the text_, and then sort the results in descending order to create a kind of "more-like-this" list. For example, here are the twenty words that distribute most closely with "horse," all clearly related to riding, firing, shouting, and other war-ish activities:
 
 [fig]
 
@@ -78,77 +78,19 @@ By skimming off the strongest links at the top of the stack, you end up with a l
 
 #### Twisty little passages
 
-the neat thing about this, though, is that this procedure creates a kind of implicit lattice of terms that binds the entire text together into a scrambled, dense network of relations. for example, once you've computed the sibling community for "horse," you can then do the same thing for any of the other words in the stack. if you take the second word, for example, and compute _its_ sibling community, you'll see many of the same words again, of course - by a kind of commutative property, words that were similar to "horse" will also be similar to "rode," since "rode" was similar to "horse" - but, since the distribution profile for "rode" is subtly different, other terms will start to creep into view. each time you do this, the semantic field will shift to center most closely on the anchoring word at the top of the stack. and as you do this again and again, you find that you start to traverse into completely different domains of meaning in the text. the war terms of the "horse" community can be followed into a cluster of terms about the body - no doubt, in the context of the war sections, related to _injury_ - which, in turn, can be used as a bridge to gain access to other body-related words like "face" and "lips," which finally give access to the prototypically peace-y threads in the text. each sibling community is like a room in a massive maze, and each of the words is like a door that leads into an adjacent room that occupies a very similar but slightly different place in the overall topic-blueprint of the text.
+The neat thing about this, though, is that this procedure creates a kind of implicit lattice of terms that binds the entire text together into a scrambled, dense network of relations. For example, once you've computed the sibling community for "horse," you can then do the same thing for any of the other words in the stack. If you take the second word, for example - "rode" - and compute _its_ sibling community, you'll see many of the same words again, of course - by a kind of commutative property, words that were similar to "horse" will also be similar to "rode," since "rode" was similar to "horse". But, since the distribution profile for "rode" is subtly different, other terms will start to creep into view. Each time you do this, the semantic field will shift to center most closely on the anchoring word at the top of the stack. And as you do this again and again, you find that you start to traverse into completely different domains of meaning in the text. The war terms of the "horse" community can be followed into a cluster of terms about the body - no doubt, in the context of the war sections, related to _injury_ - which, in turn, can be used as a bridge to gain access to other body-related words like "face" and "lips," which finally give access to the prototypically peace-y threads in the text - "laugh," "smile," "dance," etc. Each sibling community is like a room in a massive maze, and each of the words is like a door that leads into an adjacent room that occupies a very similar but slightly different place in the overall topic-blueprint of the text.
 
-this fascinates me because it _de-linearizes_ the text - which, I think, is truer to the form it takes when it's executed in the mind of a reader. texts are one-dimensional lines, but - at the risk of generalizing, since this drifts into a subjective phenomenology of readng - we don't _think_ of texts as lines, or at least not _just_ as lines. we think of them as landscapes, regions, graphs, _maps_ - clusters of characters, scenes, ideas, emotional valences, color palettes, etc. the text scrolls by on a one-dimensional track, but we're constantly clipping things out and arranging them onto a heavily curated, continuously revised congnitive pinboard. notions of "proximity" or "closeness" become divorced from the literal, X-axis positions of things in the document. for example, in _War and Peace_, I think of the battles at Borodino and Austerliz as being very "close" to one another, in the sense that they're two of a kind, the two major military set pieces in the plot. even though they're actually separated by about 300,000 words:
+This fascinates me because it _de-linearizes_ the text - which, I think, is truer to the form it takes when it's staged in the mind of a reader. Texts are one-dimensional lines, but - at the risk of generalizing, since this drifts into a subjective phenomenology of reading - we don't really think of texts as lines, or at least not _just_ as lines. We think of them as landscapes, regions, graphs, maps, diagrams, networks - clusters of characters, scenes, ideas, emotional valences, and color palettes, all set in relation to one another and wired up in lots of different ways. The text scrolls by on a one-dimensional track, but we're constantly clipping things out, shuffling them around, and arranging them onto a kind of congnitive pinboard, a mental map of the text as a little dimensional world instead of a one-dimensional axis of of words. Notions of "proximity" or "closeness" become divorced from the literal, X-axis positions of things in the document. In _War and Peace_, for example, I think of the battles at Borodino and Austerliz as being very "close" to one another, in the sense that they're the two major military set pieces in the plot. Even though they're actually separated by about 300,000 words:
 
 [fig]
 
-the similarity communities operationalize these implicit proximities, the path through the semantic web of the text that connects things like Borodino and Austerliz.
+by computing the "distribution communities" for _all of the words in the text_,
 
-in a sense, then, the game of hopscotching through the word similarity communities might jibe more closely with the way that we _encode_ texts than going back and re-reading some section of the actual text.
-
-
-
-when texts are actually instantiated by readers, they take the form of non-linear graphs or networks, cognitive atlases that map out the literary world encoded in the document. in a sense, then, the "maze" of interconnected topic threads surfaced by the
-
-
-
-
-
-the text scrolls by on a one-dimensional track, but we're constantly clipping things out and arranging them onto a heavily curated, continuously revised mental pinboard.
-
-
-
-
-as we read, we clip things out and post them onto heavily curated, continuously revised mental pinboards.
-
-a tableau of little fragments of imagined scenes, which get clustered together and shaded by a mix of associations and emotional valences - delight, annoyance, interest, boredom
-
-
-
-
-
-what you really want, though, is to be able to zoom back and see the entire blueprint at once. this fascinates me because it seems
-
-this is neat, because it seems to formalize the little cognitive atlases that we construct when we read. this drifts into a kind of subjective phenomenology of reading, but
-
-but - at the risk of generalizing, since this drifts into a subjective phenomenology of reading - we don't _think_ of texts as lines, or at least not _just_ as lines. we think of them as graphs, landscapes, regions, _maps_ - as we read, we pluck off little bits of information and pin them onto heavily curated, continuously revised mental pinboards.
-
-
-the raw material of the text - the
-
-two-dimensional map that organizes and represent the little literary world encoded in the document.
-
-in memory, _War and Peace_ isn't an X-axis - it's a tableau of scenes, rendered in imagination, and laid out onto a kind of cognitive atlas.
-
-
-
-
-
-the text scrolls past on a one-dimensional axis, but as we read we pluck things off and arrange them into conceptual spl
-
-what you really want, though, is to be able to zoom back and wrap your head around the entire thing in a single glance - a god's eye view of the entire lattice of word-rooms, the original blueprint that captures the underlying topic structure of the document.
-
-the war terms of the "horse" community be followed into a cluster of terms about the body (no doubt related to
-
-hopscotch along the conceptual contiguities
-each sibling community is like a single room in a massive maze, and each of the words is like a door that leads into an adjacent room
-
-it's a way to operationalize the cognitive atlases that we construct when we
-read, the schematic tableau that pulls things off of the one-dimensional axis of
-the actual text as we encounter it and groups them together into related
-clusters of meaning.
-
-what you really want, though, is to be able to zoom back and see the entire maze in a single glance - the blueprint for the entire thing, the
-
-this is a perfect task for network analysis - each of the words is a node, and each of the pairs in the sibling-communities is a weighted edge.
-
-the basic idea here - converting a text into a network - is an old one.
-
-in the past, though, network analysis of texts has focused more on surfacing more traditional, narrowly-understood notions of colocation - for example, illustrating the connections between words that appear together within a 2- or 5-word radius in the text. the cool thing about using the kernel density estimates as the underlying statistic is that the conventional layout algorithms produce
-
-
+by hopscotching through the little maze of relationships traced out by the density function overlaps, the idea goes, we can trace out these types of cognitive proximities. what you really want, though, it so be able to zoom back and see the entire thing at once, instead of just stumbling through one little passageway at a time. this is a perfect task for network analysis - each of the words is a node, and each of the pairs in the sibling-communities is a weighted edge. the basic idea here - converting a text into a network - is an old one. in the past, though, network analysis of texts has focused more on relationships that are more discrete and boolean - mapping the social network between characters that appear in the same scenes in a play, for instance - or on a more traditional notion of colocation, which is usually defined more narrowly - for example, surfacing the connections between words that appear together within a 2- or 5-word radius in the text. by using the kernel density estimates as the underlying statistic, though, you get a really structurally differentiated graph that provides a kind of "x-ray" of the text, a schematic of the important regions and pathways of meaning. at first, the layout alrogithm thrashes around, pulling the nodes
 
 
 the organizing dialectics of texts - in
+
+
+
+a mental map of the text as a little dimensional world instead of a big linked list of words.
