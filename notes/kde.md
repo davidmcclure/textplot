@@ -108,14 +108,20 @@ And the final network:
 
 [fig]
 
-War at the bottom, peace at the top, history off to the left. I was also struck by the extent to which the war/peace opposition maps onto male/female, which I suppose isn't really that surprising - the word "man" bridges the gap between the war cluster and the center of the network, and the peace groups is anchored by Natasha and Sonya.
+war/peace/history, male/female
 
-odyssey
-divine comedy
-paradise lost
-walden
-moby dick
-leaves of grass (?)
+## odyssey
+
+ithaca/lost, ocean/land, near/far
+
+## divine comedy
+
+heaven/hell
+
+## walden
+
+man/nature
+
 bk
 
 
