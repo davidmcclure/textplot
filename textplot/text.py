@@ -208,6 +208,21 @@ class Text(object):
         return np.trapz(overlap)
 
 
+    def anchored_kde_overlaps(self, anchor, **kwargs):
+
+        """
+        Compute the KDE overlaps between an anchor terms and all other terms.
+
+        :param anchor: The anchor term.
+        """
+
+        pairs = OrderedDict()
+        for term in self.terms:
+            pairs[term] = self.kde_overlap(anchor, term, **kwargs)
+
+        return utils.sort_dict(pairs)
+
+
     def emd(self, term1, term2, **kwargs):
 
         """

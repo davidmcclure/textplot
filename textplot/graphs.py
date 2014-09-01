@@ -82,46 +82,4 @@ class Skimmer(Graph):
             for term, weight in pairs[:skim_depth]:
 
                 n2 = matrix.text.unstem(term)
-                self.graph.add_edge(n1, n2, weight=weight)
-
-
-class Texture(Graph):
-
-
-    def build(self, text, term_depth=None):
-
-        """
-        An implementation of the Textexture algorithm described here:
-        noduslabs.com/publications/Pathways-Meaning-Text-Network-Analysis.pdf
-
-        :param text: The text.
-        :param term_depth: The number of terms.
-        """
-
-        tokens = text.most_frequent_tokens(term_depth)
-
-        # 2-word pass:
-        for w in utils.window(tokens, 2):
-
-            w1 = w[0]['stemmed']
-            w2 = w[1]['stemmed']
-
-            # Update an existing edge.
-            if self.graph.has_edge(w1, w2):
-                self.graph.edge[w1][w2]['weight'] += 1
-
-            # Or, create a new edge.
-            else: self.graph.add_edge(w1, w2, weight=1)
-
-        # 5-word pass:
-        for w in utils.window(tokens, 5):
-
-            w1 = w[0]['stemmed']
-            w2 = w[-1]['stemmed']
-
-            # Update an existing edge.
-            if self.graph.has_edge(w1, w2):
-                self.graph.edge[w1][w2]['weight'] += 1
-
-            # Or, create a new edge.
-            else: self.graph.add_edge(w1, w2, weight=1)
+                self.graph.add_edge(n1, n2, weight=1-weight)
