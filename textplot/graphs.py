@@ -82,4 +82,4 @@ class Skimmer(Graph):
             for term, weight in pairs[:skim_depth]:
 
                 n2 = matrix.text.unstem(term)
-                self.graph.add_edge(n1, n2, weight=1-weight)
+                self.graph.add_edge(n1, n2, weight=weight)
