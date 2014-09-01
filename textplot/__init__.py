@@ -27,18 +27,3 @@ def skimmer(path, term_depth=500, skim_depth=10, **kwargs):
     g.build(m, skim_depth)
 
     return g
-
-
-def texture(path, term_depth=None, **kwargs):
-
-    """
-    Construct a "Texture" graph.
-
-    :param path: The file path.
-    """
-
-    t = Text.from_file(path)
-    g = Texture()
-
-    g.build(t, term_depth)
-    return g
