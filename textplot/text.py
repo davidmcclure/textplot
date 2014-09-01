@@ -8,9 +8,10 @@ import numpy as np
 import utils
 
 from nltk.stem import PorterStemmer
-from collections import OrderedDict, Counter
 from sklearn.neighbors import KernelDensity
+from collections import OrderedDict, Counter
 from pyemd import emd
+from scipy.stats import rankdata
 
 
 class Text(object):
@@ -88,7 +89,7 @@ class Text(object):
     def term_counts(self):
 
         """
-        Map terms to instance counts.
+        Get an ordered dictionary of term counts.
         """
 
         counts = OrderedDict()
@@ -96,6 +97,21 @@ class Text(object):
             counts[term] = len(self.terms[term])
 
         return utils.sort_dict(counts)
+
+
+    def term_count_ranks(self, **kwargs):
+
+        """
+        Get a ranked stack of term counts.
+        """
+
+        counts = self.term_counts()
+        ranks = rankdata(counts.values())
+
+        for i, term in enumerate(counts.keys()):
+            counts[term] = ranks[i]
+
+        return counts
 
 
     def term_count_buckets(self):
@@ -166,7 +182,7 @@ class Text(object):
 
 
     @utils.memoize
-    def kde(self, term, bandwidth=500, samples=10000, kernel='epanechnikov'):
+    def kde(self, term, bandwidth=500, samples=1000, kernel='epanechnikov'):
 
         """
         Estimate the kernel density of the instances of term in the text.
@@ -200,6 +216,34 @@ class Text(object):
         """
 
         return np.amax(self.kde(term, **kwargs))
+
+
+    def kde_maxima(self, **kwargs):
+
+        """
+        Get an ordered dictionary of KDE maxima.
+        """
+
+        maxima = OrderedDict()
+        for term in self.terms:
+            maxima[term] = self.kde_max(term, **kwargs)
+
+        return utils.sort_dict(maxima)
+
+
+    def kde_max_ranks(self, **kwargs):
+
+        """
+        Get a ranked stack of KDE maxima.
+        """
+
+        maxima = self.kde_maxima(**kwargs)
+        ranks = rankdata(maxima.values())
+
+        for i, term in enumerate(maxima.keys()):
+            maxima[term] = ranks[i]
+
+        return maxima
 
 
     def kde_overlap(self, term1, term2, **kwargs):
