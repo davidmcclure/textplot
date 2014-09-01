@@ -83,7 +83,7 @@ class Matrix(object):
     def anchored_pairs(self, anchor):
 
         """
-        Compute the pairs between an anchor terms and all other terms.
+        Compute the pairs between an anchor term and all other terms.
 
         :param anchor: The anchor term.
         """

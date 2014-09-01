@@ -191,6 +191,17 @@ class Text(object):
         return np.exp(scores) * (len(self.tokens) / samples)
 
 
+    def kde_max(self, term, **kwargs):
+
+        """
+        Get the max value on a term's KDE.
+
+        :param term: A stemmed term.
+        """
+
+        return np.amax(self.kde(term, **kwargs))
+
+
     def kde_overlap(self, term1, term2, **kwargs):
 
         """
@@ -211,7 +222,7 @@ class Text(object):
     def anchored_kde_overlaps(self, anchor, **kwargs):
 
         """
-        Compute the KDE overlaps between an anchor terms and all other terms.
+        Compute the KDE overlaps between an anchor term and all other terms.
 
         :param anchor: The anchor term.
         """
