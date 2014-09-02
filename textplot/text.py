@@ -99,19 +99,34 @@ class Text(object):
         return utils.sort_dict(counts)
 
 
-    def term_count_ranks(self, **kwargs):
+    def term_count_ranks(self):
 
         """
-        Get a ranked stack of term counts.
+        Get a ranked list of term counts.
         """
 
         counts = self.term_counts()
-        ranks = rankdata(counts.values())
+        ranks = rankdata(counts.values(), method='min')
 
         for i, term in enumerate(counts.keys()):
             counts[term] = ranks[i]
 
         return counts
+
+
+    def term_count_percentiles(self):
+
+        """
+        Get a ranked list of term count percentiles.
+        """
+
+        counts = self.term_counts()
+        top = float(max(counts.values()))
+
+        for term, count in counts.items():
+            counts[term] = np.log(count / top * 100) / 100
+
+        return utils.sort_dict(counts)
 
 
     def term_count_buckets(self):
@@ -246,6 +261,21 @@ class Text(object):
         return maxima
 
 
+    def kde_max_percentiles(self, **kwargs):
+
+        """
+        Get a ranked list of KDE max percentiles.
+        """
+
+        maxima = self.kde_maxima(**kwargs)
+        top = float(max(maxima.values()))
+
+        for term, peak in maxima.items():
+            maxima[term] = np.log(peak / top * 100) / 100
+
+        return utils.sort_dict(maxima)
+
+
     def kde_overlap(self, term1, term2, **kwargs):
 
         """
@@ -295,26 +325,32 @@ class Text(object):
         return emd(t1_kde, t2_kde, dm)
 
 
-    def query(self, query, **kwargs):
+    def semantic_focus_ranks(self, **kwargs):
 
         """
-        Given a query text as a raw string, sum the kernel density estimates
-        of each of the tokens in the query.
-
-        :param query: The query string.
+        For each term, get the sum of the ranks of the KDE maximum and the
+        instance count, which proxies semantic focus.
         """
 
-        query_text = Text(query)
-        signals = []
+        km = self.kde_max_percentiles(**kwargs)
+        tc = self.term_count_percentiles()
 
-        for term in query_text.terms:
-            if term in self.terms:
-                signals.append(self.kde(term, **kwargs))
+        ranks = OrderedDict()
+        for term in self.terms:
+            ranks[term] = np.linalg.norm(np.array(0.5-tc[term], 0.5-km[term]))
 
-        result = np.zeros(signals[0].size)
-        for signal in signals: result += signal
+        return utils.sort_dict(ranks, reverse=False)
 
-        return result
+
+    def most_focused_terms(self, depth, **kwargs):
+
+        """
+        Get the X most semantically focused terms in the text.
+
+        :param depth: The number of terms.
+        """
+
+        return self.semantic_focus_ranks().keys()[:depth]
 
 
     def plot_term_kdes(self, words, **kwargs):
@@ -333,14 +369,26 @@ class Text(object):
         plt.show()
 
 
-    def plot_query(self, query, **kwargs):
+    def plot_semantic_focus(self, **kwargs):
 
         """
-        Plot a query result.
-
-        :param query: The query string.
+        Plot KDE max vs. term count.
         """
 
-        result = self.query(query, **kwargs)
-        plt.plot(result)
+        km_p = self.kde_max_percentiles(**kwargs)
+        tc_p = self.term_count_percentiles()
+
+        xs = []
+        ys = []
+        for term in self.terms:
+            x = tc_p[term]
+            y = km_p[term]
+            xs.append(x)
+            ys.append(y)
+            plt.annotate(term, xy=(x,y))
+
+        plt.scatter(xs, ys)
+        plt.xlabel('Term Count')
+        plt.ylabel('KDE Max')
+
         plt.show()

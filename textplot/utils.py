@@ -76,7 +76,7 @@ def tokenize(text):
         }
 
 
-def sort_dict(d):
+def sort_dict(d, reverse=True):
 
     """
     Sort an ordered dictionary by value, descending.
@@ -84,7 +84,7 @@ def sort_dict(d):
     :param d: A dictionary.
     """
 
-    sort = sorted(d.iteritems(), key=lambda x: x[1], reverse=True)
+    sort = sorted(d.iteritems(), key=lambda x: x[1], reverse=reverse)
     return OrderedDict(sort)
 
 

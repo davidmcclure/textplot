@@ -8,11 +8,7 @@ from graphs import *
 def skimmer(path, term_depth=500, skim_depth=10, **kwargs):
 
     """
-    Construct a "Skimmer" graph.
-
-    :param path: The file path.
-    :param word_depth: The number of words.
-    :param skim_depth: The number of pair similarities per term.
+    Use most frequent terms.
     """
 
     t = Text.from_file(path)
