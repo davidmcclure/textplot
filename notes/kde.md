@@ -108,17 +108,31 @@ And the final network:
 
 [fig]
 
-war/peace/history, male/female
+War to the left, peace to the right, and history on top. It's also striking the extent to which the war/peace opposition maps onto male female, although I guess that's not really surprising.
 
-## odyssey
+The _Odyssey_ is an opposition between near and far, land and sea - Ithaca, Penelope, and the suitors on the bottom, the "raft" at the very top, the thematic icon of distance, solitude, and vulnerability during the seeing and knowing the Aegean:
 
-ithaca/lost, ocean/land, near/far
+[fig]
 
-## divine comedy
+_Walden_, occupies the same space between civilization and wilderness - at the bottom is the world of the town, of "people," "state," "tax," "comforts," and "government," and at the bery top the pure, impressionistic world of the pond - "lake," "boat," "shore," "surface," "reflected," "walden." This one fascinates me because of the remarkable conceptual cleanness of the gradient between the two - Concord fades into words that anchor that narrative about finding materials and building a house (Thoreau's purified version of Concord), which then gives way to the orbit of words around "day," the habits and rhythms of life in the woods, now far from the civilized world but still preoccupied with a human experience, which finally dissolves into the sub- or super-consciousness of the pond, which sits apart from
 
-heaven/hell
+[fig]
 
-## walden
+The _Divine Comedy_, meanwhile, gives a tidy illustration of the universe - like _Walden_, a thin pillar of words running from hell at the bottom ("torment," "sad," and "wretched") to heaven at the top, with, fittingly enough, "christ" sitting on top of the whole affair:
+
+[fig]
+
+_Paradise Lost_ isn't quite as defined, but still resolves into an easily-recognizable triad - heaven on top, eden to the left, the war in heaven on the right, and hell on the bottom:
+
+[fig]
+
+_Notes from Undergound_ falls out into a pretty clean division between the two halves of the novella - the existentialist manifesto of the first fifty or so pages ("Underground"), and then the narratives with Zverkov and Liza in the second half:
+
+[fig]
+
+
+
+
 
 man/nature
 

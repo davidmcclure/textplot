@@ -11,7 +11,7 @@ from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
 from collections import OrderedDict, Counter
 from pyemd import emd
-from scipy.stats import rankdata
+from scipy.spatial import distance
 
 
 class Text(object):
@@ -169,7 +169,7 @@ class Text(object):
 
 
     @utils.memoize
-    def kde(self, term, bandwidth=2000, samples=1000, kernel='gaussian'):
+    def kde(self, term, bandwidth=1000, samples=1000, kernel='gaussian'):
 
         """
         Estimate the kernel density of the instances of term in the text.
@@ -194,10 +194,11 @@ class Text(object):
         return np.exp(scores) * (len(self.tokens) / samples)
 
 
-    def kde_overlap(self, term1, term2, **kwargs):
+    def score_intersect(self, term1, term2, **kwargs):
 
         """
-        How much do the kernel density estimates of two terms overlap?
+        Compute the geometric area of the overlap between the kernel density
+        estimates of two terms.
 
         :param term1: The first term.
         :param term2: The second term.
@@ -211,17 +212,52 @@ class Text(object):
         return np.trapz(overlap)
 
 
-    def anchored_kde_overlaps(self, anchor, **kwargs):
+    def score_cosine(self, term1, term2, **kwargs):
 
         """
-        Compute the KDE overlaps between an anchor term and all other terms.
+        Compute a weighting score based on the cosine distance between the
+        kernel density estimates of two terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        t1_kde = self.kde(term1, **kwargs)
+        t2_kde = self.kde(term2, **kwargs)
+
+        return 1-distance.cosine(t1_kde, t2_kde)
+
+
+    def score_braycurtis(self, term1, term2, **kwargs):
+
+        """
+        Compute a weighting score based on the "City Block" distance between
+        the kernel density estimates of two terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        t1_kde = self.kde(term1, **kwargs)
+        t2_kde = self.kde(term2, **kwargs)
+
+        return 1-distance.braycurtis(t1_kde, t2_kde)
+
+
+    def anchored_scores(self, anchor, method='cosine', **kwargs):
+
+        """
+        Compute the intersections between an anchor term and all other terms.
 
         :param anchor: The anchor term.
+        :param method: The scoring function.
         """
+
+        evaluator = getattr(self, 'score_'+method)
 
         pairs = OrderedDict()
         for term in self.terms:
-            pairs[term] = self.kde_overlap(anchor, term, **kwargs)
+            pairs[term] = evaluator(anchor, term, **kwargs)
 
         return utils.sort_dict(pairs)
 

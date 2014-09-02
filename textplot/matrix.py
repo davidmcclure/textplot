@@ -35,23 +35,6 @@ class Matrix(object):
         return '_'.join(sorted((term1, term2)))
 
 
-    def score(self, term1, term2, **kwargs):
-
-        """
-        How much do the kernel density estimates of two terms overlap?
-
-        :param term1: The first term.
-        :param term2: The second term.
-        """
-
-        t1_kde = self.text.kde(term1, **kwargs)
-        t2_kde = self.text.kde(term2, **kwargs)
-
-        # Integrate the overlap.
-        overlap = np.minimum(t1_kde, t2_kde)
-        return np.trapz(overlap)
-
-
     def set_pair(self, term1, term2, **kwargs):
 
         """
@@ -62,7 +45,7 @@ class Matrix(object):
         """
 
         k = self.key(term1, term2)
-        d = self.score(term1, term2, **kwargs)
+        d = self.text.score_braycurtis(term1, term2, **kwargs)
         self.pairs[k] = d
 
 
