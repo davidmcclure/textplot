@@ -112,7 +112,7 @@ And the final network:
 
 War to the left, peace to the right, and history on top. It's also striking the extent to which the war/peace opposition maps onto male female, although I guess that's not really surprising.
 
-The _Odyssey_ is an opposition between near and far, land and sea - Ithaca, Penelope, and the suitors on the bottom, the "raft" at the very top, the thematic icon of distance, solitude, and vulnerability during the seeing and knowing the Aegean:
+The _Odyssey_ is an opposition between near and far, land and sea - Ithaca, Penelope, and the suitors on the bottom, the "raft" at the very top, the thematic icon of distance, solitude, and vulnerability during all the years of seeing and knowing between Troy and Ithaca:
 
 [fig]
 
