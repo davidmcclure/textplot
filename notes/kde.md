@@ -132,11 +132,8 @@ _Notes from Undergound_ falls out into a pretty clean division between the two h
 
 
 
+# moby dick
 
-
-man/nature
-
-bk
 
 
 war and peace, ocean and land, near and far, heaven and hell, god and man,
