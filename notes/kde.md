@@ -1,12 +1,13 @@
+
 ### (Mental) maps of texts with kernel density estimation
 
-Earlier in the summer, I was thinking about the way that words _distribute_ inside of long texts - the way they slosh around, ebb and flow, clump together in some parts but not others. Some words don't really do this at all - they're spaced evenly throughout the document, and their distribution doesn't say much about the overall structure of the text. This is certainly true for stopwords like "the" or "an," but it's also true for lots of words that carry more semantic information but aren't really associated with any particular content matter. For example, think of words like "quickly" or "never" - they're generic terms, free-agents that could be used in almost any context.
+Earlier in the summer, I was thinking about the way that words _distribute_ inside of long texts - the way they slosh around, ebb and flow, clump together in some parts but not others. Some words don't really do this at all - they're spaced evenly throughout the document, and their distribution doesn't say much about the overall structure of the text. This is certainly true for stopwords like "the" or "an," but it's also true for lots of words that carry more semantic information but aren't really associated with any particular content matter. For example, think of words like "quickly" or "put" - they're generic terms, free-agents that could be used in almost any context.
 
 Other words, though, have a really strong semantic focus - they occur unevenly, and they tend to hang together with other words that orbit around a shared topic. For example, think of a long novel like _War and Peace_, which contains dozens of different conceptual threads - plot lines, characters, scenes, themes, motifs, etc. There are battles, dances, hunts, meals, duels, salons, parlors, and so on and so forth - and, in the broadest sense, the "war" sections and the "peace" sections. Some words are really closely associated with some of these topics but not others. If you open to a random page and see words like "Natasha," "dancing," "family," "marry," or "children," it's a pretty good bet that you're in a peace-y section. But if you see words like "Napoleon," "Borodino," "horse," "fire," "cannon," or "guns," it's probably a war section. Or, at a more granular level, if you see words like "historian" or "clock" or "inevitable," there's a good chance it's one of those pesky historiographic essays.
 
 To borrow Franco Moretti's term, I was looking for a way to "operationalize" these distributions - a standardized way to generate some kind of lightweight, flexible statistic that would capture the structure of the locations of a term inside a document - ideally in a way that would make it easy to compare it with with the locations of other words. I started poking around, and quickly discovered that if you know anything about statistics (I really don't, so take all of this with a grain of salt), there's a really simple and obvious way to do this - a kernel density estimate, which takes a set of data points and works backward to approximate a probabilty density function that, if you sampled it the same number of times, would produce more or less the same set of data.
 
-Kernel density estimation (KDE) is really simple - unlike the math behind something like topic modeling, which gets complicated pretty fast, KDE is basically just simple arithmetic. Think of the text as a big X-axis, where each integer corresponds to a word position in the text. So, for _War and Peace_, the text would stretch from the origin to the X-axis offset of 573,064, the number of words in the text. Then, any word in the text can be plotted just by laying down ticks on the X-axis at all the offsets where the word shows up in the text. For example, here's "horse" in _War and Peace_:
+Kernel density estimation (KDE) is really easy to reason about - unlike the math behind something like topic modeling, which gets complicated pretty fast, KDE is basically just simple arithmetic. Think of the text as a big X-axis, where each integer corresponds to a word position in the text. So, for _War and Peace_, the text would stretch from the origin to the X-axis offset of 573,064, the number of words in the text. Then, any word in the text can be plotted just by laying down ticks on the X-axis at all the offsets where the word shows up in the text. For example, here's "horse" in _War and Peace_:
 
 [fig]
 
@@ -84,7 +85,7 @@ This fascinates me because it _de-linearizes_ the text - which, I think, is true
 
 [fig]
 
-So, how to operationalize that "conceptual" closeness? It turns out that this can be really easily captured just by creating a comprehensive network that traces out _all_ of the implicit linkages between the distribution topics, the "rooms" in the textual maze. The basic idea here - converting a text into a network - isn't a new one. In the past, lots of projects have experimented with representing a text as a social network, a set of relationships between characters to speak to one another or appear together in the same sections of the text. And, like I'm doing here, other projects have looked into different ways of representing all of the terms in a text in a graph, although in most cases the approaches have centered on the more traditional notion of "collocation," which has more to do with words that appear within a very tight window in the text. A really interesting project called Textexture, for example, devised a method for visualizing the relationships between words that appeared within a 2- or 5- word radisu in the document. As I'll show in a moment, though, I think that there are some interesting advantages to using the kernel density estimates as the underlying statistic when building out the network - the distributions tease out a kind of architectural blueprint of the document, which often maps (and at other times _doesn't_ map) onto the cognitive experience of the text in really interesting ways.
+So, how to operationalize that "conceptual" closeness? It turns out that this can be really easily captured just by creating a comprehensive network that traces out _all_ of the implicit linkages between the distribution topics, the "rooms" in the textual maze. The basic idea here - converting a text into a network - isn't a new one. In the past, lots of projects have experimented with representing a text as a social network, a set of relationships between characters to speak to one another or appear together in the same sections of the text. And, like I'm doing here, other projects have looked into different ways of representing all of the terms in a text in a graph, although in most cases the approaches have centered on the more traditional notion of "collocation," which has more to do with words that appear within a very tight window in the text. A really interesting project called TexTexture, for example, devised a method for visualizing the relationships between words that appeared within a 2- or 5- word radisu in the document. As I'll show in a moment, though, I think that there are some interesting advantages to using the kernel density estimates as the underlying statistic when building out the network - the distributions tease out a kind of architectural blueprint of the document, which often maps (and at other times _doesn't_ map) onto the cognitive experience of the text in really interesting ways.
 
 Anyway, once we've laid down all the piping to compute and compare the distribution densities of the words, building the actual graph is easy. For each word:
 
@@ -100,17 +101,71 @@ Once the network is formalized, we get access to the whole scientific literature
 
 With a path length of XXX, which puts "austerlitz" closer to "borodino" than about **XX%** of all other words in the text, even though they only co-occur about 10% of the time.
 
-### Text-ray
+### Mapping texts
 
-This is cool, but it's sort of like stumbling through one little twisty passage in the maze with a torch - what you really want is to be able to zoom back and see the whole structure at once, a blueprint that would organically surface the important regions and topics. Which, of course, is a perfect task job for any of the off-the-shelf network layout algorithms. Force Atlas 2 in Gephi works well - the algorithm thrashes around for a moment, and then unfolds into an equilibrium that tends to just _look like_ the text in remarkable ways. Here are the first few seconds of _War and Peace_:
-
-[video]
-
-And the final network:
+This is useful as a confirmation that the network is representing something real about the text - or, at least, that it jibes with the _experience_ of the text. But it's sort of like stumbling through one little twisty passage in the labyrinth with a torch, tracing out a single little thread of connection in the document. What your really want is to be able to zoom back and see the whole structure at once, to trace out all of the connections between each of the words in the text with all of the other words - a bird's-eye view of the entire thing. This, of course, is a perfect task job for any of the off-the-shelf network layout algorithms, which treat all of the nodes as "particles" that repel one another by default, but which are bound together by a set of attractive forces exerted by the edges that connect them. Force Atlas 2 in Gephi works well - _War and Peace_ unfolds into a huge, spindly triangle:
 
 [fig]
 
-War to the left, peace to the right, and history on top. It's also striking the extent to which the war/peace opposition maps onto male female, although I guess that's not really surprising.
+War to the left, peace to the right, and history on top, rising out of the center point between the two poles. I was also struck by the extent to which the war/peace opposition overlaps - and also doesn't overlap - with an opposition between men and women. Peace, on the far right, is essentially synonymous with women and children - "Natasha," "Sonya," "Marya," "girl," "lady," "daughter," "mother," - and women appear almost nowhere else in the entire graph. Whereas the men are much more evenly distributed. Pierre shows up near the center of the main war/peace axis, right near the connection point with the historiography cluster, surrounded by words of spiritual anxiety and questing - "doubt," "soul," "time," "world," "live." Anatole, meanwhile, is in the farthest reaches of the peace sections, right next to "visitors" (he was one) and "daughters" (he eloped with one). Rostov and Andrei (Andrew, in the Garnett translation) land near the center at the bottom, in the middle of a bridge that runs from the women and children on the right, into the world of the aristocratic salon ("Anna," "Pavlovna," "sitting"), which, interestingly, crosses over into the war sections by way of a cluster of terms related to the body and physical contact - "lips," "hand," "fingers," "touched," "eyes," "face," "shoulders," and "arm." (Which, apparently, crop up both in the word of Russian high society - embraces, clasps, arms over shoulders, pats on backs - and in the physicality of military life.) Andrei and Rostov land in middle of this nexus. The men traverse the gradient between war and peace, whereas the women essentially _are_ peace, and have almost no interaction with history or war.
+
+More suprsiring is the huge distance between "Napoleon" and "Bonaparte," which seem like they should hang together pretty closely. "Napoleon" sits far to the left, along the side of the triangle running from "battle" to "history," in the middle of a section related to military strategy and tactics ("military," "plan," "campaign," "men," "group"). Whereas "Bonaparte" is way down at the bottom of the triangle with Andrei and Rostov in the gradient between the military and the salon. The two names enact different roles in the text - Napoleon is the man himself, and Bonaparte is the Russian imagination of the man.
+
+Here's the _Odyssey_:
+
+[fig]
+
+Here, instead of war/peace, it's an opposition between land and sea, home and away. At the bottom are Ithaca, Penelope, the suitors, the world of people, civilization, conflict; at the top, the world of the "raft," the home away from home, the natural world, the physical and metaphorical space between Troy and Ithaca - "waves," "sea," "wind," "island," "cave," "shore," the cyclops, the sirens. There's an interesting affinity here with the architecture of _Walden_, which takes the form of long, narrow pillar of words, which also span a gradient between land/civilization and water/wilderness:
+
+[fig]
+
+The world of Concord at the bottom - "civilization," "enterprise," "comforts," "luxury," "dollars," "fashion." Which, as you move up, gives way Thoreau's narrative about his attempt to build his own, simplified version of the this world - "roof," "built," "dwelling," "simple." When in turn bleeds into the world of his day-to-day existince at Walden, anchored around the word "day" - "hoeing" the field, "planting beans," "singing" to himself, "sitting", "thinking." Then the graph crosses over completely into the world of the pond - "water," "surface," "depth," "waves," and "walden." Remarkably, at the very top of the network, along with "lake" and "shore," is "_boat_," a bizarrely close rhyme with "raft" on top of the _Odyssey_. Both enact the same dialectic - between a world of men, on land, and a world of solitude, on the pond or at sea. Of course, the direction is different - Thoreau flees Concord for the pond, Odysseus flees from the sea back to Ithaca. Or, maybe not - Tennyson, writing about twenty years before _Walden_, reads the _Odyssey_ as a false quest. Odysseus quickly bores of Ithaca and dreams of meaning and transcendence at sea.
+
+The _Divine Comedy_ looks almost exactly like _Walden_, except Concord/Walden is replaced with hell/heaven, with, fittingly enough, "christ" perched on top of the whole thing:
+
+[fig]
+
+
+
+
+
+
+
+proces of clustering similar things together has the side effect of pushing most distant and opposed things furthest apart. the network shakes out the organizing dialectics of the text.
+
+this is actually more interesting, though, when the dialectics aren't so obvious - although the specifics can be unexpected and interesting, it's no secret that war and peace is about war and peace, or that the divine comedy is about heaven and hell. many texts, though - even most texts - don't explicitly peddle in those kinds of
+
+there's actually more of a critical payoff, here, when the text doesn't cleave so cleanly along obvious conceptual lines - when it's not entirely
+
+
+
+proces of clustering similar things together has the side effect of pushing most distant and opposed things furthest apart.
+so far, though, all these examples have been accurate but unsurprising - it's no secret that war and peace is about war and peace, the divine comedy about heaven and hell, etc.
+but many texts (most text?) aren't built so literally around those kind of stark dichotomies, which
+
+this is one of those cases where I think computation can provide a kind of standardized
+
+
+what is log about, in the way that war and peace is about war and peace? in one sense it's an impossible question
+
+
+
+
+
+ - the process of clustering similar things together has the side effect of pushing the most distant and opposed things the furthest apart. A lot of the time, the structure is less clealy-defined, more
+
+it's not so cleanly delineated. Check out _Leaves of Grass_:
+
+[fig]
+
+Which is much
+
+
+
+
+
+
+
 
 The _Odyssey_ is an opposition between near and far, land and sea - Ithaca, Penelope, and the suitors on the bottom, the "raft" at the very top, the thematic icon of distance, solitude, and vulnerability during all the years of seeing and knowing between Troy and Ithaca:
 
