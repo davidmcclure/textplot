@@ -75,7 +75,7 @@ Or, at the other end of the spectrum, "Natasha" sits atop an immeditely-recogniz
 
 [fig]
 
-By skimming off the strongest links at the top of the stack, you end up with a little bespoke "distribution topic" for the word, a community of siblings that intuitively hang together.
+By skimming off the strongest links at the top of the stack, you end up with a little bespoke "distribution topic" for the word, a community of siblings that intuitively hang together. This is really just a simple side effect of the fact that words that appear in the same places tend to be related to one another - which is the exact same intuition that makes much sophisticated techniques like topic modeling work.
 
 ### Twisty little passages
 
@@ -131,6 +131,9 @@ The _Divine Comedy_ looks almost exactly like _Walden_, except Concord/Walden is
 
 
 
+### Failures, null results
+
+Where this doesn't work so well, though, is with texts that don't have any kind of pronounced semantic "shift" from section to section - or texts that don't really have sections at all, and are really just one big section.
 
 
 Anyway, I'm really just starting to tinker around with this stuff, and I'm still at the point where I've got more questions than answers. Some that come to mind:
