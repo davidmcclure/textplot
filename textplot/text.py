@@ -72,18 +72,17 @@ class Text(object):
         # Generate tokens.
         for token in utils.tokenize(self.text):
 
+            # Ignore stopwords.
             if token['unstemmed'] in stopwords:
-
-                # Ignore stopwords.
                 self.tokens.append(None)
 
             else:
 
-                # Token:
-                self.tokens.append(token)
-
                 t = token['stemmed']
                 o = token['offset']
+
+                # Token:
+                self.tokens.append(token)
 
                 # Term:
                 if t in self.terms: self.terms[t].append(o)
