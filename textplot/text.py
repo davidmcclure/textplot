@@ -82,7 +82,7 @@ class Text(object):
                 self.tokens.append(token)
 
                 # Term:
-                offsets = self.terms[token['stemmed']].setdefault([])
+                offsets = self.terms.setdefault(token['stemmed'], [])
                 offsets.append(token['offset'])
 
 
@@ -287,16 +287,11 @@ class Text(object):
         :param words: The unstemmed terms to plot.
         """
 
-        df = pd.DataFrame()
-
         for term in terms:
-            stemmed = self.stem(term)
-            df[stemmed] = self.kde(stemmed, **kwargs)
+            kde = self.kde(self.stem(term), **kwargs)
+            plt.plot(kde)
 
-        df = pd.melt(df)
-
-        return gp.ggplot(gp.aes(x='value'), data=df) + \
-            gp.geom_density()
+        plt.show()
 
 
     def plot_term_histogram(self, term):
