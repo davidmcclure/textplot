@@ -5,6 +5,8 @@ import requests
 import re
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import ggplot as gp
 import utils
 
 from nltk.stem import PorterStemmer
@@ -279,17 +281,37 @@ class Text(object):
         return utils.sort_dict(pairs)
 
 
-    def plot_term_kdes(self, words, **kwargs):
+    def plot_term_kdes(self, terms, **kwargs):
 
         """
         Plot kernel density estimates for multiple words.
 
-        :param words: The words to query.
-        :param bandwidth: The kernel width.
+        :param words: The unstemmed terms to plot.
         """
 
-        for word in words:
-            kde = self.kde(self.stem(word), **kwargs)
+        for term in terms:
+            kde = self.kde(self.stem(term), **kwargs)
             plt.plot(kde)
 
         plt.show()
+
+
+    def plot_term_histogram(self, term):
+
+        """
+        Plot the X-axis offsets of a term.
+
+        :param term: The unstemmed term to plot.
+        """
+
+        df = pd.DataFrame({
+            'offsets': self.terms[self.stem(term)]
+        })
+
+        p = gp.ggplot(gp.aes(x='offsets'), data=df) + \
+            gp.geom_histogram() + \
+            gp.xlab('Word Offset') + \
+            gp.ylab('Number of Occurrences') + \
+            gp.theme_bw()
+
+        return p
