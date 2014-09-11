@@ -19,11 +19,17 @@ A kernel density estimate is the same idea, except, instead of just counting up 
 
 ![Kernel functions](kernels.png)
 
-"[Kernels](http://commons.wikimedia.org/wiki/File:Kernels.svg#mediaviewer/File:Kernels.svg)" by Brian Amberg - CC Attribution-Share Alike 3.0 via Wikimedia Commons
+"[Kernels](http://commons.wikimedia.org/wiki/File:Kernels.svg#mediaviewer/File:Kernels.svg)" by Brian Amberg - CC Attribution-Share Alike 3.0 via Wikimedia Commons.
 
 The important thing, though, is that the kernel transforms the point into a _range_ or _interval_ of significance, instead of just a dimensionless dot. This is cool because it maps well onto basic intuitions about the "scope" of a word in a text. When you come across a word, _where_ exactly does it have significance? Definitely right there, at the exact location where it appears, but not _just_ there - it also makes sense to think of a kind of "relevance" or "meaning energy" that dissipates around the word, slowly at first across the immediately surrounding words and then more quickly as the distance increases. Words radiate meaning forward and backward onto one another. The kernel is a simple way to formalize this "meaning-shape" as it appears to the psychological gaze of the reader.
 
-Anyway, once the all of the kernels are in place, estimating the density function for the data set is just a matter of stepping through each position on the X-axis and adding up the values of all the kernel functions at that particular location. This gives a single, composite curve that captures the overall distributon of the term in the document. Here's "horse" again:
+Anyway, once the all of the kernels are in place, estimating the density function for the data set is just a matter of stepping through each position on the X-axis and adding up the values of all the kernel functions at that particular location:
+
+![Computing the density estimate](kernel-sums.png)
+
+Adapted from "[Comparison of 1D histogram and KDE](http://en.wikipedia.org/wiki/File:Comparison_of_1D_histogram_and_KDE.png#mediaviewer/File:Comparison_of_1D_histogram_and_KDE.png)" by Drleft talk)) - CC Attribution-Share Alike 3.0 via Wikimedia Commons.
+
+This gives a single, composite curve that captures the overall distributon of the term in the document. Here's "horse" again:
 
 [fig]
 
@@ -94,7 +100,7 @@ This, then, points to a interesting next step - for any given word, you can comp
  ('running', 0.5650928776822528)]
 ```
 
-Or, at the other end of the spectrum, "Natasha" sits atop an immeditely-recogniziable stack of words related to family, women, joy, and youth:
+Or, at the other end of the spectrum, "Natasha" sits atop an immeditely-recogniziable stack of words related to family, women, joy, and general peace-y happiness:
 
 ```shell
 [('natasha', 1.0),
@@ -119,7 +125,7 @@ Or, at the other end of the spectrum, "Natasha" sits atop an immeditely-recogniz
  ('jumped', 0.47428160237464612)]
 ```
 
-By skimming off the strongest links at the top of the stack, you end up with a custom little "distribution topic" for the word, a community of siblings that intuitively hang together. This is really just a side effect of the same basic intution that makes a much more sophisticated technique like topic modeling work - words that show up in the same places tend to be related to each other.
+By skimming off the strongest links at the top of the stack, you end up with a custom little "distribution topic" for the word, a community of siblings that intuitively hang together. It's sort of like really simple, "intra-document" form of topic modeling.
 
 ### Twisty little passages
 

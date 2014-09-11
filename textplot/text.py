@@ -300,7 +300,7 @@ class Text(object):
         df = pd.melt(df)
 
         return gp.ggplot(gp.aes(x='value'), data=df) + \
-            gp.geom_line()
+            gp.geom_density()
 
 
     def plot_term_histogram(self, term):
