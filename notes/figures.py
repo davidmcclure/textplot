@@ -1,21 +1,5 @@
 
 
-import os
-import requests
-import re
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import ggplot as gp
-import utils
-
-from nltk.stem import PorterStemmer
-from sklearn.neighbors import KernelDensity
-from collections import OrderedDict, Counter
-from pyemd import emd
-from scipy.spatial import distance
-
-
 class Text(object):
 
 
@@ -279,28 +263,10 @@ class Text(object):
         return utils.sort_dict(pairs)
 
 
-    def plot_term_offsets(self, term, **kwargs):
-
-        """
-        Plot the raw, X-axis offsets of a term.
-
-        :param term: The unstemmed term.
-        """
-
-        xs = self.terms[self.stem(term)]
-        ys = np.zeros(len(xs))
-
-        plt.scatter(xs, ys, marker='|', color='r')
-        plt.axes().get_yaxis().set_visible(False)
-        plt.axis([0, xs[-1], -1, 1])
-
-        return plt
-
-
     def plot_term_kdes(self, terms, **kwargs):
 
         """
-        Plot kernel density estimates for multiple terms.
+        Plot kernel density estimates for multiple words.
 
         :param words: The unstemmed terms to plot.
         """
