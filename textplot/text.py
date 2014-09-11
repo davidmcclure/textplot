@@ -70,22 +70,31 @@ class Text(object):
         stopwords = self.stopwords()
 
         # Generate tokens.
-        i = 0
         for token in utils.tokenize(self.text):
 
             # Ignore stopwords.
             if token['unstemmed'] in stopwords:
                 continue
 
+            t = token['stemmed']
+            o = token['offset']
+
             # Token:
             self.tokens.append(token)
 
             # Term:
-            stemmed = token['stemmed']
-            if stemmed in self.terms: self.terms[stemmed].append(i)
-            else: self.terms[stemmed] = [i]
+            if t in self.terms: self.terms[t].append(o)
+            else: self.terms[t] = [o]
 
-            i += 1
+
+    @property
+    def wordcount(self):
+
+        """
+        How many words are in the text, including stopwords?
+        """
+
+        return self.tokens[-1]['offset']
 
 
     def term_counts(self):
@@ -189,11 +198,11 @@ class Text(object):
         kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(terms)
 
         # Score an evely-spaced array of samples.
-        x_axis = np.linspace(0, len(self.tokens), samples)[:, np.newaxis]
+        x_axis = np.linspace(0, self.wordcount, samples)[:, np.newaxis]
         scores = kde.score_samples(x_axis)
 
         # Scale the scores to integrate to 1.
-        return np.exp(scores) * (len(self.tokens) / samples)
+        return np.exp(scores) * (self.wordcount / samples)
 
 
     def score_intersect(self, term1, term2, **kwargs):

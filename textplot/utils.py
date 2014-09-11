@@ -63,7 +63,7 @@ def tokenize(text):
 
     # Walk words in the text.
     pattern = re.compile('[a-z]+')
-    for match in re.finditer(pattern, text):
+    for offset, match in enumerate(re.finditer(pattern, text)):
 
         # Get the raw token.
         unstemmed = match.group(0)
@@ -71,6 +71,7 @@ def tokenize(text):
         yield { # Emit the token.
             'stemmed':      stem(unstemmed),
             'unstemmed':    unstemmed,
+            'offset':       offset,
             'left':         match.start(),
             'right':        match.end()
         }
