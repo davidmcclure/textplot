@@ -15,7 +15,7 @@ One easy way to start to think about this is to create a simple histogram, which
 
 ![Histogram of "horse"](horse-histogram.png)
 
-A kernel density estimate is the same idea, except, instead of just counting up the points, each point is represented as a "kernel" function centered around that point. A kernel is just some kind of weighting function that models a decay in intensity around the data point. At the very simplest, it could be something like the triangular kernel, which just draws a pair of straight, angled lines down to the X-axis, but most applications use something smooth and gradual, like the Epanechnikov or Gaussian functions. For the purposes of this project, though, they all seem give basically the same results.
+A kernel density estimate is the same idea, except, instead of just counting up the points, each point is represented as a "kernel" function centered around that point. A kernel is just some kind of weighting function that models a decay in intensity around the data point. At the very simplest, it could be something like the triangular kernel, which just draws a pair of straight, angled lines down to the X-axis, but most applications use something smooth and gradual, like the Epanechnikov or Gaussian functions. For the purposes of this project, though, they all give basically the same results.
 
 ![Kernel functions](kernels.png)
 
