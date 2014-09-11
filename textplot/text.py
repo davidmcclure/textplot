@@ -289,10 +289,37 @@ class Text(object):
 
         xs = self.terms[self.stem(term)]
         ys = np.zeros(len(xs))
-
         plt.scatter(xs, ys, marker='|', color='r')
+
+        plt.axis([0, len(self.tokens), -1, 1])
         plt.axes().get_yaxis().set_visible(False)
-        plt.axis([0, xs[-1], -1, 1])
+        plt.xlabel('Word Offset')
+
+        fig = plt.gcf()
+        fig.tight_layout()
+        fig.set_size_inches(20, 3)
+
+        return plt
+
+
+    def plot_term_histogram(self, term):
+
+        """
+        Plot the X-axis offsets of a term.
+
+        :param term: The unstemmed term to plot.
+        """
+
+        xs = self.terms[self.stem(term)]
+        plt.hist(xs, 40, color='#0067a2')
+
+        plt.xlabel('Word Offset')
+        plt.ylabel('Number of Occurrences')
+        plt.xlim(0, len(self.tokens))
+
+        fig = plt.gcf()
+        fig.tight_layout()
+        fig.set_size_inches(20, 8)
 
         return plt
 
@@ -310,22 +337,3 @@ class Text(object):
             plt.plot(kde)
 
         plt.show()
-
-
-    def plot_term_histogram(self, term):
-
-        """
-        Plot the X-axis offsets of a term.
-
-        :param term: The unstemmed term to plot.
-        """
-
-        df = pd.DataFrame({
-            'offsets': self.terms[self.stem(term)]
-        })
-
-        return gp.ggplot(gp.aes(x='offsets'), data=df) + \
-            gp.geom_histogram() + \
-            gp.xlab('Word Offset') + \
-            gp.ylab('Number of Occurrences') + \
-            gp.theme_bw()
