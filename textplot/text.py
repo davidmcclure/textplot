@@ -294,24 +294,3 @@ class Text(object):
             plt.plot(kde)
 
         plt.show()
-
-
-    def plot_term_histogram(self, term):
-
-        """
-        Plot the X-axis offsets of a term.
-
-        :param term: The unstemmed term to plot.
-        """
-
-        df = pd.DataFrame({
-            'offsets': self.terms[self.stem(term)]
-        })
-
-        p = gp.ggplot(gp.aes(x='offsets'), data=df) + \
-            gp.geom_histogram() + \
-            gp.xlab('Word Offset') + \
-            gp.ylab('Number of Occurrences') + \
-            gp.theme_bw()
-
-        return p
