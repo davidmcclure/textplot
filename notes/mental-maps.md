@@ -1,5 +1,5 @@
 
-## Mental maps of texts with kernel density estimation and force-directed networks
+## (Mental) maps of texts with kernel density estimation
 
 Earlier in the summer, I was thinking about the way that words distribute inside of long texts - the way they slosh around, ebb and flow, clump together in some parts but not others. Some words don't really do this at all - they're spaced evenly throughout the document, and their distribution doesn't say much about the overall structure of the text. This is certainly true for stopwords like "the" or "an," but it's also true for words that carry more semantic information but aren't really associated with any particular content matter. For example, think of words like "quickly" or "put" - they're generic terms, free-agents that could be used in almost any context.
 
@@ -15,7 +15,7 @@ One easy way to start to think about this is to create a simple histogram, which
 
 ![Histogram of "horse"](horse-histogram.png)
 
-A kernel density estimate is the same idea, except, instead of just counting up the points, each point is represented as a "kernel" function centered around that point. A kernel is just some kind of weighting function that models a decay in intensity around the data point. At the very simplest, it could be something like the triangular kernel, which just draws a pair of straight, angled lines down to the X-axis, but most applications use something smooth and gradual, like the Epanechnikov or Gaussian functions. For the purposes of this project, though, they all give basically the same results.
+A kernel density estimate is the same idea, except, instead of just counting up the points, each point is represented as a "kernel" function centered around that point. A kernel is just some kind of weighting function that models a decay in intensity around the data point. At the very simplest, it could be something like the uniform kernel, which just converts the point into a rectangular region over the X-axis, but most applications use something smoother, like the Epanechnikov or Gaussian functions. For the purposes of this project, though, they all give basically the same results.
 
 ![Kernel functions](kernels.png)
 
@@ -23,13 +23,7 @@ A kernel density estimate is the same idea, except, instead of just counting up 
 
 The important thing, though, is that the kernel transforms the point into a _range_ or _interval_ of significance, instead of just a dimensionless dot. This is cool because it maps well onto basic intuitions about the "scope" of a word in a text. When you come across a word, _where_ exactly does it have significance? Definitely right there, at the exact location where it appears, but not _just_ there - it also makes sense to think of a kind of "relevance" or "meaning energy" that dissipates around the word, slowly at first across the immediately surrounding words and then more quickly as the distance increases. Words radiate meaning forward and backward onto one another. The kernel is a simple way to formalize this "meaning-shape" as it appears to the psychological gaze of the reader.
 
-Anyway, once the all of the kernels are in place, estimating the density function is just a matter of stepping through each position on the X-axis and adding up the values of all the kernel functions at that particular location:
-
-![Computing the density estimate](kernel-sums.png)
-
-"[Comparison of 1D histogram and KDE](http://en.wikipedia.org/wiki/File:Comparison_of_1D_histogram_and_KDE.png#mediaviewer/File:Comparison_of_1D_histogram_and_KDE.png)" by Drleft - CC Attribution-Share Alike 3.0 via Wikimedia Commons.
-
-This gives a composite curve that captures the overall distributon of the term. Here's "horse" again:
+Anyway, once the all of the kernels are in place, estimating the density function is just a matter of stepping through each position on the X-axis and adding up the values of all the kernel functions at that particular location. This gives a composite curve that captures the overall distributon of the term. Here's "horse" again:
 
 [fig]
 
