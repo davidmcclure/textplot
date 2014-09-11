@@ -70,22 +70,24 @@ class Text(object):
         stopwords = self.stopwords()
 
         # Generate tokens.
-        i = 0
         for token in utils.tokenize(self.text):
 
-            # Ignore stopwords.
             if token['unstemmed'] in stopwords:
-                continue
 
-            # Token:
-            self.tokens.append(token)
+                # Ignore stopwords.
+                self.tokens.append(None)
 
-            # Term:
-            stemmed = token['stemmed']
-            if stemmed in self.terms: self.terms[stemmed].append(i)
-            else: self.terms[stemmed] = [i]
+            else:
 
-            i += 1
+                # Token:
+                self.tokens.append(token)
+
+                t = token['stemmed']
+                o = token['offset']
+
+                # Term:
+                if t in self.terms: self.terms[t].append(o)
+                else: self.terms[t] = [o]
 
 
     def term_counts(self):
@@ -171,7 +173,7 @@ class Text(object):
 
 
     @utils.memoize
-    def kde(self, term, bandwidth=1000, samples=1000, kernel='gaussian'):
+    def kde(self, term, bandwidth=2000, samples=1000, kernel='gaussian'):
 
         """
         Estimate the kernel density of the instances of term in the text.
