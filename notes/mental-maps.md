@@ -21,21 +21,13 @@ A kernel density estimate is the same idea, except, instead of just counting up 
 
 "[Kernels](http://commons.wikimedia.org/wiki/File:Kernels.svg#mediaviewer/File:Kernels.svg)" by Brian Amberg - CC Attribution-Share Alike 3.0 via Wikimedia Commons.
 
-The important thing, though, is that the kernel transforms the point into a _range_ or _interval_ of significance, instead of just a dimensionless dot. This is cool because it maps well onto basic intuitions about the "scope" of a word in a text. When you come across a word, _where_ exactly does it have significance? Definitely right there, at the exact location where it appears, but not _just_ there - it also makes sense to think of a kind of "relevance" or "meaning energy" that dissipates around the word, slowly at first across the immediately surrounding words and then more quickly as the distance increases. Words radiate meaning forward and backward onto one another. The kernel is a simple way to formalize this "meaning-shape" as it appears to the psychological gaze of the reader.
+The important thing, though, is that the kernel transforms the point into a _range_ or _interval_ of significance, instead of just a one-dimensional dot. This is cool because it maps well onto basic intuitions about the "scope" of a word in a text. When you come across a word, _where_ exactly does it have significance? Definitely right there, at the exact location where it appears, but not _just_ there - it also makes sense to think of a kind of "relevance" or "meaning energy" that dissipates around the word, slowly at first across the immediately surrounding words and then more quickly as the distance increases. Words radiate meaning forward and backward onto one another. The kernel is a simple way to formalize this "meaning-shape" as it appears to the psychological gaze of the reader.
 
 Anyway, once the all of the kernels are in place, estimating the density function is just a matter of stepping through each position on the X-axis and adding up the values of all the kernel functions at that particular location. This gives a composite curve that captures the overall distributon of the term. Here's "horse" again:
 
 [fig]
 
-Or, we can bump up the "bandwidth," a free parameter that controls the width of the kernel function, the radius of the meaning energy around a word. Higher bandwidths cause more of the kernels to overlap with each other and layer up to produce smooth, schematic functions that capture the really high-level shape of the distribution:
-
-[fig]
-
-Lower bandwidths, meanwhile, produce more differentiated functions that capture more granular detail about how the word distributes in any given section of the document:
-
-[fig]
-
-Either way, the density estimates make it possible to visually confirm the intuitions about the groups of words that tend to hang together in the text. Here's the peace-y cluster:
+This makes it possible to visually confirm the earlier intuitions about the groups of words that tend to hang together in the text. Here's the peace-y cluster from above:
 
 [fig]
 
@@ -43,7 +35,7 @@ And the war-y cluster:
 
 [fig]
 
-And all together, which teases out the basic contours of the two general categories:
+And all together, which throws the contours of the two general categories into relief:
 
 [fig]
 
@@ -123,7 +115,7 @@ By skimming off the strongest links at the top of the stack, you end up with a c
 
 ### Twisty little passages
 
-The really cool thing about this, though, is that it makes it possible to traverse the internal topic structure of the document, instead of just sliding back and forth on the linear axis of words. For example, once you've computed the sibling community for "horse," you can then do the same thing for any of the other words in the stack. If you take the second word, for example - "rode" - and compute _its_ sibling community, you'll see many of the same words again - by a kind of commutative property, words that were similar to "horse" will also be similar to "rode," since "rode" was similar to "horse". But, since the distribution of "rode" is a bit different, other terms will start to creep into view. Each time you do this, the semantic field will shift to center most closely on the anchoring word at the top of the stack. And as you do this again and again, you find that you start to traverse into completely different domains of meaning in the text. The war terms of the "horse" community can be followed into a cluster of terms about the body - no doubt, in the context of the war sections, related to _injury_ - which, in turn, can be used as a bridge to gain access to other body-related words like "face" and "lips," which finally give access to the prototypically peace-y threads in the text - "laugh," "smile," "dance," etc. Each sibling community is like a room in a massive maze, and each of the words is like a door that leads into an adjacent room that occupies a very similar but slightly different place in the overall topic-blueprint of the text.
+The really cool thing about this, though, is that it makes it possible to traverse the internal topic structure of the document, instead of just sliding back and forth on the linear axis of words. For example, once you've computed the sibling community for "horse," you can then do the same thing for any of the other words in the stack. If you take the second word, for example - "rode" - and compute _its_ sibling community, you'll see many of the same words again - by a kind of commutative property, words that were similar to "horse" will also be similar to "rode," since "rode" was similar to "horse". But, since the distribution of "rode" is a bit different, other terms will start to creep into view. Each time you do this, the semantic field will shift to center most closely on the anchoring word at the top of the stack. And as you do this again and again, you start to traverse into completely different domains of meaning in the text. The war terms of the "horse" community can be followed into a cluster of terms about the body - no doubt, in the context of the war sections, related to _injury_ - which, in turn, can be used as a bridge to gain access to other body-related words like "face" and "lips," which finally give access to the prototypically peace-y threads in the text - "laugh," "smile," "dance," etc. Each sibling community is like a room in a massive maze, and each of the words is like a door that leads into an adjacent room that occupies a similar but slightly different place in the overall topic-blueprint of the text.
 
 This fascinates me because it _de-linearizes_ the text - which, I think, is truer to the form it takes when it's staged in the mind of a reader. Texts are one-dimensional lines, but - at the risk of generalizing, since this drifts into a subjective phenomenology of reading - we don't really think of texts as lines, or at least not _just_ as lines. We think of them as landscapes, regions, graphs, maps, diagrams, networks - clusters of characters, scenes, ideas, emotional valences, and color palettes, all set in relation to one another and wired up in lots of different ways. The text scrolls by on a one-dimensional track, but we're constantly clipping things out, shuffling them around, and arranging them onto a kind of congnitive pinboard, a mental map of the text as a little dimensional world instead of a linear axis of of words. Notions of "proximity" or "closeness" become divorced from the literal, X-axis positions of things in the document. In _War and Peace_, for example, I think of the battles at Borodino and Austerliz as being very "close" to one another, in the sense that they're the two major military set pieces in the plot. In fact, though, they're actually very "distant" in terms of where they actually appear in the text - they're separated by about 300,000 words, and their density functions only have an overlap of ~0.11, meaning, essentially, that they _don't_ overlap with each other about 90% of the time:
 
