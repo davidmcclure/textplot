@@ -78,15 +78,12 @@ class Text(object):
 
             else:
 
-                t = token['stemmed']
-                o = token['offset']
-
                 # Token:
                 self.tokens.append(token)
 
                 # Term:
-                if t in self.terms: self.terms[t].append(o)
-                else: self.terms[t] = [o]
+                offsets = self.terms[token['stemmed']].setdefault([])
+                offsets.append(token['offset'])
 
 
     def term_counts(self):
