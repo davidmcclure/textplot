@@ -291,11 +291,16 @@ class Text(object):
         :param words: The unstemmed terms to plot.
         """
 
-        for term in terms:
-            kde = self.kde(self.stem(term), **kwargs)
-            plt.plot(kde)
+        df = pd.DataFrame()
 
-        plt.show()
+        for term in terms:
+            stemmed = self.stem(term)
+            df[stemmed] = self.kde(stemmed, **kwargs)
+
+        df = pd.melt(df)
+
+        return gp.ggplot(gp.aes(x='value'), data=df) + \
+            gp.geom_line()
 
 
     def plot_term_histogram(self, term):

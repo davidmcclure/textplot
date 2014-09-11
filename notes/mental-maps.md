@@ -71,11 +71,53 @@ Which puts "horse" just a bit closer than "shout," which weighs in at 0.XX:
 
 This, then, points to a interesting next step - for any given word, you can compute its similarity score with _every other word in the text_, and then sort the results in descending order to create a kind of "more-like-this" list. For example, here are the twenty words that distribute most closely with "horse," all clearly related to some manner of warfare:
 
-[fig]
+```shell
+[('horse', 1.0),
+ ('rode', 0.7156011202926531),
+ ('galloped', 0.67951772827583534),
+ ('shouted', 0.6602691076734325),
+ ('front', 0.64703726532420802),
+ ('stopped', 0.6337873432359088),
+ ('riding', 0.62709444946705306),
+ ('sound', 0.61458151640388214),
+ ('mounted', 0.60996757684494973),
+ ('black', 0.5989115268646108),
+ ('moved', 0.59016371232198606),
+ ('heard', 0.5851426836507474),
+ ('order', 0.58257239016777396),
+ ('fell', 0.58238137639270227),
+ ('officer', 0.58156350144177282),
+ ('past', 0.58038248681067495),
+ ('back', 0.58000948907079442),
+ ('saddle', 0.5722926514329203),
+ ('reins', 0.56943413446980706),
+ ('running', 0.5650928776822528)]
+```
 
 Or, at the other end of the spectrum, "Natasha" sits atop an immeditely-recogniziable stack of words related to family, women, joy, and youth:
 
-[fig]
+```shell
+[('natasha', 1.0),
+ ('countess', 0.64952743510222721),
+ ('love', 0.62780179107755063),
+ ('sonya', 0.61116472044961201),
+ ('happy', 0.55910563359716869),
+ ('mother', 0.55680969150565873),
+ ('girl', 0.55248518137847524),
+ ('tender', 0.55005081027294156),
+ ('mamma', 0.50991428606173173),
+ ('room', 0.50679420736877034),
+ ('kissed', 0.5065730294175661),
+ ('dress', 0.50582810087728014),
+ ('family', 0.49937575974145743),
+ ('flushed', 0.49724604947295203),
+ ('happened', 0.49627846138162601),
+ ('sat', 0.48512236990412561),
+ ('marry', 0.4766831441500663),
+ ('strange', 0.47472691162670833),
+ ('breathing', 0.47437113582007573),
+ ('jumped', 0.47428160237464612)]
+```
 
 By skimming off the strongest links at the top of the stack, you end up with a custom little "distribution topic" for the word, a community of siblings that intuitively hang together. This is really just a side effect of the same basic intution that makes a much more sophisticated technique like topic modeling work - words that show up in the same places tend to be related to each other.
 
