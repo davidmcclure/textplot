@@ -29,7 +29,7 @@ Anyway, once the all of the kernels are in place, estimating the density functio
 
 "[Comparison of 1D histogram and KDE](http://en.wikipedia.org/wiki/File:Comparison_of_1D_histogram_and_KDE.png#mediaviewer/File:Comparison_of_1D_histogram_and_KDE.png)" by Drleft - CC Attribution-Share Alike 3.0 via Wikimedia Commons.
 
-This gives a single, composite curve that captures the overall distributon of the term in the document. Here's "horse" again:
+This gives a composite curve that captures the overall distributon of the term. Here's "horse" again:
 
 [fig]
 
