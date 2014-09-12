@@ -292,6 +292,7 @@ class Text(object):
         plt.axis([0, len(self.tokens), -1, 1])
         plt.axes().get_yaxis().set_visible(False)
         plt.xlabel('Word Offset')
+        plt.title(term)
 
         fig = plt.gcf()
         fig.tight_layout()
@@ -313,6 +314,7 @@ class Text(object):
 
         plt.xlabel('Word Offset')
         plt.ylabel('Number of Occurrences')
+        plt.title(term)
 
         fig = plt.gcf()
         fig.tight_layout()
@@ -334,6 +336,7 @@ class Text(object):
 
         plt.xlabel('Word Offset')
         plt.ylabel('Number of Occurrences')
+        plt.title(term)
 
         fig = plt.gcf()
         fig.tight_layout()
