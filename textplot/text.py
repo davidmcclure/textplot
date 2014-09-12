@@ -4,6 +4,7 @@ import os
 import requests
 import re
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import numpy as np
 import utils
 
@@ -414,7 +415,10 @@ class Text(object):
         plt.xlabel('Word Offset')
         plt.ylabel('Number of Occurrences')
         plt.title('War vs. Peace')
-        plt.legend(loc='upper right')
+
+        w_patch = mpatches.Patch(color='#e8a945', label='War')
+        p_patch = mpatches.Patch(color='#0067a2', label='Peace')
+        plt.legend(handles=[w_patch, p_patch], loc='upper right')
 
         fig = plt.gcf()
         fig.set_size_inches(10, 4)
