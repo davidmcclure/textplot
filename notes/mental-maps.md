@@ -117,7 +117,7 @@ So, how to operationalize that "conceptual" closeness? It turns out that this ca
 
 Anyway, once we've laid down all the piping to compute and compare the distribution densities of the words, constructing the actual graph is easy. For each word:
 
-1. Compute the similarity between the word's probability density function and the function of every other word in the text.
+1. Compute the distribution similarity between the word and every other word in the text.
 
 1. Sort the list in descending order to get ranked stack of "distribution siblings," words that tend to show up in the same parts of the document.
 
