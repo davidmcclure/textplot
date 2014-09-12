@@ -60,7 +60,7 @@ class Graph(object):
 class Skimmer(Graph):
 
 
-    def build(self, matrix, skim_depth):
+    def build(self, matrix, skim_depth=10, d_weights=False):
 
         """
         1. For each term in the passed matrix, score its KDE similarity with
@@ -70,7 +70,8 @@ class Skimmer(Graph):
         pairs and add them as edges.
 
         :param matrix: A term matrix.
-        :param skim_depth: Pairs per word.
+        :param skim_depth: The number of siblings to register for each term.
+        :param d_weights: If true, give "close" words low edge weights.
         """
 
         for anchor in progress.bar(matrix.terms):
@@ -80,6 +81,10 @@ class Skimmer(Graph):
             # Heaviest pair scores:
             pairs = matrix.anchored_pairs(anchor).items()
             for term, weight in pairs[:skim_depth]:
+
+                # If edges represent distance, use the complement of the raw
+                # score, so that similar words are connected by "short" edges.
+                if d_weights: weight = 1-weight
 
                 n2 = matrix.text.unstem(term)
                 self.graph.add_edge(n1, n2, weight=weight)

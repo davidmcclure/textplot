@@ -5,7 +5,7 @@ from matrix import Matrix
 from graphs import *
 
 
-def skimmer(path, term_depth=500, skim_depth=10, **kwargs):
+def skimmer(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
 
     """
     Use most frequent terms.
@@ -20,6 +20,6 @@ def skimmer(path, term_depth=500, skim_depth=10, **kwargs):
     g = Skimmer()
 
     print 'Generating graph:'
-    g.build(m, skim_depth)
+    g.build(m, skim_depth, d_weights)
 
     return g
