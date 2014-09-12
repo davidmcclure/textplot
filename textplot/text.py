@@ -5,8 +5,6 @@ import requests
 import re
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import ggplot as gp
 import utils
 
 from nltk.stem import PorterStemmer
@@ -324,16 +322,23 @@ class Text(object):
         return plt
 
 
-    def plot_term_kdes(self, terms, **kwargs):
+    def plot_term_kde(self, term, **kwargs):
 
         """
-        Plot kernel density estimates for multiple terms.
+        Plot kernel density estimate for a terms
 
-        :param words: The unstemmed terms to plot.
+        :param words: The unstemmed term.
         """
 
-        for term in terms:
-            kde = self.kde(self.stem(term), **kwargs)
-            plt.plot(kde)
+        kde = self.kde(self.stem(term), **kwargs)
+        plt.plot(kde, color='#0067a2')
 
-        plt.show()
+        plt.xlabel('Word Offset')
+        plt.ylabel('Number of Occurrences')
+
+        fig = plt.gcf()
+        fig.tight_layout()
+        fig.set_size_inches(20, 8)
+
+        return plt
+
