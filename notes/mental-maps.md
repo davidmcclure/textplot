@@ -41,25 +41,13 @@ And all together, which throws the contours of the two general categories into r
 
 ### "More like this"
 
-These are fun to look at, but the real payoff is that the density estimates make it easy to compute a precise "similarity" score that measures the extent to which any two words appear in the same locations in the text. Since the end result is just a standard-issue probability density function, we can make use of any of the dozens of statistical tests that measure the closenes of two distributions (see this paper for a really good survey of the options). One of the simplest and most computationally efficient methods is just to measure the size of the geometric overlap between the two distributions. for each sample point on the X-axis, take the smaller of the two corresponding Y-axis values in the two distributions. Then, take the discrete integral of the resulting area:
+These are fun to look at, but the real payoff is that the density estimates make it easy to compute a precise similarity score that measures the extent to which any two words appear in the same locations in the text. Since the end result is just a standard-issue probability density function, we can make use of any of the dozens of statistical tests that measure the closenes of two distributions (see this paper for a really good survey of the options). One of the simplest and most efficient ways to do this is just to measure the size of the geometric overlap between the two distributions. This gives a score between 0 and 1, where 0 would mean that the two words appear in completely different parts of the text, and 1 would mean that the words appear in _exactly_ the same places. For example, how similar is "horse" to "rode"?
 
-[fig]
-
-Which gives a score between 0 and 1, where 0 would mean that the two words appear in completely different parts of the document, and 1 would mean that the words appear in _exactly_ the same places. So, for example, if you score a word against itself:
-
-[fig]
-
-The result is 1 (or, at least, it would be if we computed a continuous integral), since, tautologically, a word occurs exactly where it does. And, for two words that clump in very different places, the result edges towards 0:
-
-[fig]
-
-Or, when words clump together, the result edges back up towads 1. For example, how similar is "horse" to "cannon"?
-
-[fig]
+!["horse" vs. "rode"](horse-rode.png)
 
 Which puts "horse" just a bit closer than "shout," which weighs in at 0.XX:
 
-[fig]
+!["horse" vs. "galloped"](horse-galloped.png)
 
 This, then, points to a interesting next step - for any given word, you can compute its similarity score with _every other word in the text_, and then sort the results in descending order to create a kind of "more-like-this" list. For example, here are the twenty words that distribute most closely with "horse," all clearly related to some manner of warfare:
 

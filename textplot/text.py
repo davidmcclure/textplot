@@ -326,9 +326,9 @@ class Text(object):
     def plot_term_kde(self, term, color='#0067a2', **kwargs):
 
         """
-        Plot kernel density estimate for a terms
+        Plot the KDE for an individual term.
 
-        :param words: The unstemmed term.
+        :param term: The unstemmed term.
         """
 
         kde = self.kde(self.stem(term), **kwargs)
@@ -337,6 +337,41 @@ class Text(object):
         plt.xlabel('Word Offset')
         plt.ylabel('Number of Occurrences')
         plt.title(term)
+
+        fig = plt.gcf()
+        fig.tight_layout()
+        fig.set_size_inches(20, 8)
+
+        return plt
+
+
+    def plot_kde_overlap(self, term1, term2, color1='#0067a2',
+                         color2='#e8a945', overlap_color='#dddddd', **kwargs):
+
+        """
+        Plot the KDE overlap for two terms.
+
+        :param term1: The first term.
+        :param term2: The second term.
+        """
+
+        t1 = self.stem(term1)
+        t2 = self.stem(term2)
+
+        bc = self.score_braycurtis(t1, t2, **kwargs)
+
+        kde1 = self.kde(t1, **kwargs)
+        kde2 = self.kde(t2, **kwargs)
+        plt.plot(kde1, color=color1, label=term1)
+        plt.plot(kde2, color=color2, label=term2)
+
+        overlap = np.minimum(kde1, kde2)
+        plt.fill(overlap, color=overlap_color)
+        plt.title(term1+', '+term2+' - '+str(round(bc, 4)))
+
+        plt.xlabel('Word Offset')
+        plt.ylabel('Number of Occurrences')
+        plt.legend(loc='upper right')
 
         fig = plt.gcf()
         fig.tight_layout()
