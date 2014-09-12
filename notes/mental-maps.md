@@ -41,62 +41,66 @@ And all together, which throws the contours of the two general categories into r
 
 ### "More like this"
 
-These are fun to look at, but the real payoff is that the density estimates make it easy to compute a precise similarity score that measures the extent to which any two words appear in the same locations in the text. Since the end result is just a standard-issue probability density function, we can make use of any of the dozens of statistical tests that measure the closenes of two distributions (see this paper for a really good survey of the options). One of the simplest and most efficient ways to do this is just to measure the size of the geometric overlap between the two distributions. This gives a score between 0 and 1, where 0 would mean that the two words appear in completely different parts of the text, and 1 would mean that the words appear in _exactly_ the same places. For example, how similar is "horse" to "rode"?
+These are fun to look at, but the real payoff is that the density estimates make it easy to compute a precise similarity score that measures the extent to which any two words appear in the same locations in the text. Since the end result is just a regular probability density function, we can make use of any of the dozens of statistical tests that measure the closenes of two distributions (see this paper for a really good survey of the options). One of the simplest and most efficient ways to do this is just to measure the size of the geometric overlap between the two distributions. This gives a score between 0 and 1, where 0 would mean that the two words appear in completely different parts of the text, and 1 would mean that the words appear in _exactly_ the same places. For example, how similar is "horse" to "rode"?
 
 !["horse" vs. "rode"](horse-rode.png)
 
-Which puts "horse" just a bit closer than "shout," which weighs in at 0.XX:
+Which puts "rode" just a bit closer than "galloped," which weighs in at ~0.78:
 
 !["horse" vs. "galloped"](horse-galloped.png)
 
-This, then, points to a interesting next step - for any given word, you can compute its similarity score with _every other word in the text_, and then sort the results in descending order to create a kind of "more-like-this" list. For example, here are the twenty words that distribute most closely with "horse," all clearly related to some manner of warfare:
+Or, at the opposite end of the spectrum, words that show up in very different parts of the document will have much less overlap, and the score will edge towards 0:
+
+!["battle" vs. "dance"](battle-dance.png)
+
+This, then, points to a interesting next step - for any given word, you can compute its similarity score with _every other word in the text_, and then sort the results in descending order to create a kind of "more-like-this" list. For example, here are the twenty words that distribute most closely with "Napoleon," all clearly related to war, conquest, power, etc:
 
 ```shell
-[('horse', 1.0),
- ('rode', 0.7156011202926531),
- ('galloped', 0.67951772827583534),
- ('shouted', 0.6602691076734325),
- ('front', 0.64703726532420802),
- ('stopped', 0.6337873432359088),
- ('riding', 0.62709444946705306),
- ('sound', 0.61458151640388214),
- ('mounted', 0.60996757684494973),
- ('black', 0.5989115268646108),
- ('moved', 0.59016371232198606),
- ('heard', 0.5851426836507474),
- ('order', 0.58257239016777396),
- ('fell', 0.58238137639270227),
- ('officer', 0.58156350144177282),
- ('past', 0.58038248681067495),
- ('back', 0.58000948907079442),
- ('saddle', 0.5722926514329203),
- ('reins', 0.56943413446980706),
- ('running', 0.5650928776822528)]
+[('napoleon', 1.0),
+ ('war', 0.65319871313854128),
+ ('military', 0.64782349297012154),
+ ('men', 0.63958189887106576),
+ ('order', 0.63636730075877446),
+ ('general', 0.62621616907584432),
+ ('russia', 0.62233286026418089),
+ ('king', 0.61854160459241103),
+ ('single', 0.61630514751638699),
+ ('killed', 0.61262010905310182),
+ ('peace', 0.60775702746632576),
+ ('contrary', 0.60750138486684579),
+ ('number', 0.59936009740377516),
+ ('accompanied', 0.59748552019874168),
+ ('clear', 0.59661288775164523),
+ ('force', 0.59657370362505935),
+ ('army', 0.59584331507492383),
+ ('authority', 0.59523854206807647),
+ ('troops', 0.59293965397478188),
+ ('russian', 0.59077308177196441)]
 ```
 
-Or, at the other end of the spectrum, "Natasha" sits atop an immeditely-recogniziable stack of words related to family, women, joy, and general peace-y happiness:
+Or, at the other end of the spectrum, "Natasha" sits atop a stack of very Natasha-esque words related to family, emotion, and general peace-y happiness:
 
 ```shell
 [('natasha', 1.0),
- ('countess', 0.64952743510222721),
- ('love', 0.62780179107755063),
- ('sonya', 0.61116472044961201),
- ('happy', 0.55910563359716869),
- ('mother', 0.55680969150565873),
- ('girl', 0.55248518137847524),
- ('tender', 0.55005081027294156),
- ('mamma', 0.50991428606173173),
- ('room', 0.50679420736877034),
- ('kissed', 0.5065730294175661),
- ('dress', 0.50582810087728014),
- ('family', 0.49937575974145743),
- ('flushed', 0.49724604947295203),
- ('happened', 0.49627846138162601),
- ('sat', 0.48512236990412561),
- ('marry', 0.4766831441500663),
- ('strange', 0.47472691162670833),
- ('breathing', 0.47437113582007573),
- ('jumped', 0.47428160237464612)]
+ ('sonya', 0.70886263341693823),
+ ('countess', 0.69992603393549424),
+ ('mother', 0.69396076158543107),
+ ('love', 0.69394361206264776),
+ ('tender', 0.69022062349028213),
+ ('family', 0.63830887117531232),
+ ('marry', 0.63600169904982695),
+ ('secret', 0.6352113995040839),
+ ('happy', 0.63179263139217623),
+ ('girl', 0.62577947223072128),
+ ('flushed', 0.61694787819224595),
+ ('rapturous', 0.61229277139972438),
+ ('sad', 0.6121299034400407),
+ ('happened', 0.60853750169005538),
+ ('invited', 0.60431370654414285),
+ ('parents', 0.60292426299430668),
+ ('jumped', 0.59803596295531403),
+ ('realized', 0.59801227498210729),
+ ('lady', 0.596816756054939)]
 ```
 
 By skimming off the strongest links at the top of the stack, you end up with a custom little "distribution topic" for the word, a community of siblings that intuitively hang together. It's sort of like really simple, "intra-document" form of topic modeling.
