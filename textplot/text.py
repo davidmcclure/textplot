@@ -346,6 +346,83 @@ class Text(object):
         return plt
 
 
+    def war(self, **kwargs):
+
+        """
+        War terms.
+        """
+
+        g1 = ['napoleon', 'war', 'military', 'order', 'general']
+
+        for term in g1:
+            kde = self.kde(self.stem(term), **kwargs)
+            plt.plot(kde, label=term)
+
+        plt.xlabel('Word Offset')
+        plt.ylabel('Number of Occurrences')
+        plt.title('War')
+        plt.legend(loc='upper right')
+
+        fig = plt.gcf()
+        fig.set_size_inches(10, 4)
+        fig.tight_layout()
+
+        return plt
+
+
+    def peace(self, **kwargs):
+
+        """
+        War terms.
+        """
+
+        g2 = ['natasha', 'sonya', 'mother', 'love', 'tender']
+
+        for term in g2:
+            kde = self.kde(self.stem(term), **kwargs)
+            plt.plot(kde, label=term)
+
+        plt.xlabel('Word Offset')
+        plt.ylabel('Number of Occurrences')
+        plt.title('Peace')
+        plt.legend(loc='upper right')
+
+        fig = plt.gcf()
+        fig.set_size_inches(10, 4)
+        fig.tight_layout()
+
+        return plt
+
+
+    def war_and_peace(self, **kwargs):
+
+        """
+        War vs. peace terms.
+        """
+
+        g1 = ['napoleon', 'war', 'military', 'order', 'general']
+        g2 = ['natasha', 'sonya', 'mother', 'love', 'tender']
+
+        for term in g1:
+            kde = self.kde(self.stem(term), **kwargs)
+            plt.plot(kde, color='#e8a945', label='war')
+
+        for term in g2:
+            kde = self.kde(self.stem(term), **kwargs)
+            plt.plot(kde, color='#0067a2', label='peace')
+
+        plt.xlabel('Word Offset')
+        plt.ylabel('Number of Occurrences')
+        plt.title('War vs. Peace')
+        plt.legend(loc='upper right')
+
+        fig = plt.gcf()
+        fig.set_size_inches(10, 4)
+        fig.tight_layout()
+
+        return plt
+
+
     def plot_kde_overlap(self, term1, term2, color1='#0067a2',
                          color2='#e8a945', overlap_color='#dddddd', **kwargs):
 
