@@ -107,17 +107,13 @@ By skimming off the strongest links at the top of the stack, you end up with a c
 
 ### Twisty little passages
 
-The really cool thing about this, though, is that it makes it possible to traverse the internal topic structure of the document, instead of just sliding back and forth on the linear axis of words. For example, once you've computed the sibling community for "napoleon," you can then do the same thing for any of the other words in the stack. If you take the second word, for example - "war" - and compute _its_ sibling community, you'll see many of the same words again - by a kind of commutative property, words that were similar to "napoleon" will also be similar to "war," since "war" was similar to "napoleon". But, since the distribution of "war" is a bit different, other terms will start to creep into view. Each time you do this, the semantic field will shift to center most closely on the anchoring word at the top of the stack. And, as you do this again and again, you start to traverse into completely different domains of meaning in the text.
-
-
-
-The war terms of the "horse" community can be followed into a cluster of terms about the body - no doubt, in the context of the war sections, related to _injury_ - which, in turn, can be used as a bridge to gain access to other body-related words like "face" and "lips," which finally give access to the prototypically peace-y threads in the text - "laugh," "smile," "dance," etc. Each sibling community is like a room in a massive maze, and each of the words is like a door that leads into an adjacent room that occupies a similar but slightly different place in the overall topic-blueprint of the text.
+The really cool thing about this, though, is that it makes it possible to traverse the internal topic structure of the document, instead of just sliding back and forth on the linear axis of words. For example, once you've computed the sibling community for "napoleon," you can then do the same thing for any of the other words in the stack. If you take the second word, for example - "war" - and compute _its_ sibling community, you'll see many of the same words again - by a kind of commutative property, words that were similar to "napoleon" will also be similar to "war," since "war" was similar to "napoleon". But, since the distribution of "war" is a bit different, other terms will start to creep into view. Each time you do this, the semantic field will shift to center most closely on the anchoring word at the top of the stack. And, as you do this again and again, you start to traverse into completely different domains of meaning. The terms related to family under the "Natasha" topic - "mother," "marry," "love," "family" - can be followed into a more abstract cluster of words related to people in general - "relations," "act," "person," "people." Which, then, bleeds into Tolstoy's theory of history, which largely takes the form of _military_ history, which then crosses the gap into the terms about war - "war," "military," "men," "general," and, of course, "napoleon."Each sibling community is like a room in a massive maze, and each of the words is like a door that leads into an adjacent room that occupies a similar but slightly different place in the overall topic-blueprint of the text.
 
 This fascinates me because it _de-linearizes_ the text - which, I think, is closer to the form it takes when it's staged in the mind of a reader. Texts are one-dimensional lines, but - at the risk of generalizing, since this drifts into a subjective phenomenology of reading - we don't really think of texts as lines, or at least not _just_ as lines. We think of them as landscapes, regions, graphs, maps, diagrams, networks - clusters of characters, scenes, ideas, emotional valences, and color palettes, all set in relation to one another and wired up in lots of different ways. The text scrolls by on a one-dimensional track, but we're constantly clipping things out, shuffling them around, and arranging them onto a kind of congnitive pinboard, a mental map of the text as a little dimensional world instead of a linear axis of of words. Notions of "proximity" or "closeness" become divorced from the literal, X-axis positions of things in the document. In _War and Peace_, for example, I think of the battles at Borodino and Austerliz as being very "close" to one another, in the sense that they're the two major military set pieces in the plot. In fact, though, they're actually very "distant" in terms of where they actually appear in the text - they're separated by about 300,000 words, and their density functions only have an overlap of ~0.32, meaning, essentially, that they _don't_ overlap with each other about 70% of the time:
 
 !["borodino" vs. "austerlitz"](borodino-austerlitz.png)
 
-So, how to operationalize that "conceptual" closeness? It turns out that this can be captured just by creating a comprehensive network that traces out _all_ of the implicit linkages between the distribution topics, the "rooms" in the textual maze. The basic idea here - converting a text into a network - is an old one. In the past, lots of projects have experimented with representing a text as a social network, a set of relationships between characters to speak to one another or appear together in the same sections of the text. And, just like I'm doing here, lots of projects have looked into different ways of representing all of the terms in a text in a network. In the past, though, most of the techniques have centered around a more traditional notion of "collocation" as the word appears in computational lingustics, which has more to do with words that appear within a very tight window in the text - often literally side-by-side. A really interesting project called TexTexture, for example, devised a method for visualizing the relationships between words that appeared within a 2- or 5-word radius in the document. As I'll show in a moment, though, I think there are some interesting advantages to using the probability density estimates as the underlying statistic that governs how the words are connected in the network - the distributions tease out a kind of architectural "blueprint" of the document, which often maps onto the cognitive experience of the text in interesting ways.
+So, how to operationalize that "conceptual" closeness? It turns out that this can be captured really easily just by computing the distribution topics for every single word in the text, and then shoveling the strongest connections for each word into a big, comprehensive network that traces out all of the connections between all of the words at once. The basic idea here - converting a text into a network - is an old one. In the past, lots of projects have experimented with representing a text as a social network, a set of relationships between characters to speak to one another or appear in the same sections of the text. And, like I'm doing here, lots of projects have looked into different ways of representing all of the terms in a text. In the past, though, most of the approaches have centered around a more traditional notion of "collocation" as the word appears in computational lingustics, which has more to do with words that appear within a fairly narrow window in the text - often literally side-by-side. A really interesting project called TexTexture, for example, devised a method for visualizing the relationships between words that appeared within a 2- or 5-word radius in the document. As I'll show in a moment, though, I think there are some interesting advantages to using the probability densities as the underlying statistic to determine how the words are connected in the network - the distributions tease out a kind of architectural "blueprint" of the document, which often maps onto the cognitive experience of the text in interesting ways.
 
 Anyway, once we've laid down all the piping to compute and compare the distribution densities of the words, constructing the actual graph is easy. For each word:
 
@@ -131,7 +127,30 @@ Once this is in place, we get access to the whole scientific literature of graph
 
 `austerlitz -> battle -> borodino`
 
-With a path length of XXX, which puts "austerlitz" closer to "borodino" than about **XX%** of all other words in the text, even though they only co-occur about 10% of the time.
+With a path length of ~`1.12`, which puts "borodino" as the 17th closest word to "austerlitz" out of the 1000 most frequent words in the text, closer than **98%** of the list, even though they only co-occur about 30% of the time:
+
+```bash
+[('austerlitz', 0),
+ ('campaign', 0.65615563830253976),
+ ('military', 0.66679539911035457),
+ ('success', 0.67787007836939139),
+ ('proposed', 0.67865808794484395),
+ ('general', 0.68398944996815592),
+ ('emperor', 0.68560221976349289),
+ ('suggested', 0.68648086875769576),
+ ('battle', 0.68844748754808149),
+ ('war', 0.6976220338260869),
+ ('kutuzov', 0.70172001357385272),
+ ('men', 1.0728368565805544),
+ ('army', 1.0815712054823732),
+ ('russian', 1.1133724933839888),
+ ('commander', 1.1138451527645024),
+ ('sovereign', 1.1151396260899902),
+ ('french', 1.1172586830800189),
+ ('borodino', 1.1183098845396797), <---
+ ('chief', 1.1219820113396164),
+ ('day', 1.1225800115684308)]
+```
 
 ### Mapping the maze
 
