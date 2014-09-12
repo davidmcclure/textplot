@@ -55,7 +55,7 @@ Or, at the opposite end of the spectrum, words that show up in very different pa
 
 This, then, points to a interesting next step - for any given word, you can compute its similarity score with _every other word in the text_, and then sort the results in descending order to create a kind of "more-like-this" list. For example, here are the twenty words that distribute most closely with "Napoleon," all clearly related to war, conquest, power, etc:
 
-```shell
+```bash
 [('napoleon', 1.0),
  ('war', 0.65319871313854128),
  ('military', 0.64782349297012154),
@@ -80,7 +80,7 @@ This, then, points to a interesting next step - for any given word, you can comp
 
 Or, at the other end of the spectrum, "Natasha" sits atop a stack of very Natasha-esque words related to family, emotion, youth, and general peace-time happiness (with the exception of "sad," which, presumably, is the unhappy endings with Anatole and Andrei):
 
-```shell
+```bash
 [('natasha', 1.0),
  ('sonya', 0.70886263341693823),
  ('countess', 0.69992603393549424),
