@@ -312,6 +312,7 @@ class Text(object):
         xs = self.terms[self.stem(term)]
         plt.hist(xs, 40, color=color)
 
+        plt.xlim(0, len(self.tokens))
         plt.xlabel('Word Offset')
         plt.ylabel('Number of Occurrences')
         plt.title(term)
