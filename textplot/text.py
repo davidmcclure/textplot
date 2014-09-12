@@ -296,7 +296,7 @@ class Text(object):
 
         fig = plt.gcf()
         fig.tight_layout()
-        fig.set_size_inches(20, 3)
+        fig.set_size_inches(10, 2)
 
         return plt
 
@@ -318,7 +318,7 @@ class Text(object):
 
         fig = plt.gcf()
         fig.tight_layout()
-        fig.set_size_inches(20, 8)
+        fig.set_size_inches(10, 4)
 
         return plt
 
@@ -340,7 +340,7 @@ class Text(object):
 
         fig = plt.gcf()
         fig.tight_layout()
-        fig.set_size_inches(20, 8)
+        fig.set_size_inches(10, 4)
 
         return plt
 
@@ -375,7 +375,7 @@ class Text(object):
 
         fig = plt.gcf()
         fig.tight_layout()
-        fig.set_size_inches(20, 8)
+        fig.set_size_inches(10, 4)
 
         return plt
 
