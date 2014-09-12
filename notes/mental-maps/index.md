@@ -166,39 +166,39 @@ Also, take a look at the gradients that run between the conceptual extremes - th
 
 Here's the _Odyssey_:
 
-[fig]
+![Odyssey](networks/odyssey.jpg)
 
 Here, instead of war/peace, it's an opposition between land and sea, home and away. At the bottom are Ithaca, Penelope, the suitors, the world of people, civilization, conflict; at the top, the world of the "raft," the home away from home, the natural world, the physical and metaphorical space between Troy and Ithaca - "waves," "sea," "wind," "island," "cave," "shore," the cyclops, the sirens. Compare this with the architecture of _Walden_, which takes the form of long, narrow pillar of words, which also span a gradient between land/civilization and water/wilderness:
 
-[fig]
+![Walden](networks/walden.jpg)
 
 The world of Concord is at the bottom - "civilization," "enterprise," "comforts," "luxury," "dollars," "fashion." As you move up, this gives way Thoreau's narrative about his attempt to build his own, simplified version of the this world - "roof," "built," "dwelling," "simple." Which in turn bleeds into the world of his day-to-day existince at Walden, anchored around the word "day" - "hoeing" the field, "planting beans," "singing" to himself, "sitting", "thinking." Then the graph crosses over completely into the world of the pond - "water," "surface," "depth," "waves," and "walden." Remarkably, at the very top of the network, along with "lake" and "shore," is "_boat_," which is eerily similar to the "raft" on top of the _Odyssey_ - the most extreme removal from human civilization, the smallest outpost of habitable space. Both enact the same dialectic - between a world of men on land, and a world of solitude out in the midst of some kind of watery wilderness.
 
 The _Divine Comedy_ looks almost exactly like _Walden_, except Concord/Walden is replaced with hell/heaven, with, fittingly enough, "christ" perched on top of the whole thing:
 
-[fig]
+![Divine Comedy](networks/divine-comedy.jpg)
 
 Shakespeare's _The Winter's Tale_ unwinds into a big, crisply-differentiated stack that runs from the insane jealousy of Leontes in Sicily at the bottom ("tyrant," "accusation," "traitor") to the pastoral joy of Perdita's life in Bohemia:
 
-[fig]
+![The Winter's Tale](networks/winters-tale.jpg)
 
 _Moby Dick_ is roughly a big square - Nantucket and the world of land on the bottom ("room," "bed," "house," "landlord," "island"), Ahab and Starbuck to the right, the history of whaling on the left (whales in the abstract), and the hunting of whales at the top (whales in the flesh). Amusingly, it kind of looks like a big whale:
 
-[fig]
+![Moby Dick](networks/moby-dick.jpg)
 
 It's kind of like reading literary x-rays (hopefully not tea leaves). Here's _Notes from Underground_, which, like the text, splits along the center into two sections - the existentialist rant of "Underground" on the left, the adventures with Zverkov and Liza from "Apropos of the Wet Snow" on the right:
 
-[fig]
+![Notes from Undergound](networks/notes-from-underground.jpg)
 
 Here's the _Origin of Species_, which I've only read in small parts. But, it's actually interesting to do this with a text that you _don't_ know, and see what you can infer about the organization of the document. _Origin of Species_ gives a lot of structure to chew on:
 
-[fig]
+![Origin of Species](networks/origin-of-species.jpg)
 
 ### Failures, null results
 
 This big weakness with this, of course, is that it doesn't work nearly as well with texts that don't naturally split up into these kinds of cleanly-defined sections. For example, take a look at _Leaves of Grass_:
 
-[fig]
+![Leaves of Grass](networks/leaves-of-grass.jpg)
 
 It's more scrambled, less differentiated, less obviously "accurate" than the tidy triangle of _War and Peace_ or the cosmological pillar of the _Divine Comedy_. If you squint at it for a few minutes, it starts to assemble into some recognizable constellations of meaning, but it's much more of an interpretive exertion to make a case for how the lines should be drawn. Two regions of meaning are fairly clear - on top, a section about war ("soldiers," "battle," "camp," "armies," "war"), and, at the bottom left, a big, diffuse shoulder of the network related to the body, sensuality, sexuality - "neck," "fingers," "limbs," "flesh," "kiss," "touch," "hand," "happy." The right side of the network doesn't hold together as well, but, if this post weren't already much too long, I'd argue that lots of things on the right side converge on a shared preoccupation about _time_ - "eidolons," from the inscription of the same name about how the actions and accomplishments of people are ground into shadows over time; "pioneers," from "Pioneers! O Pioneers," one of the triumphalist narratives about the inevitability of American expansion in the west; and a cluster of terms related to geopolitics and deep time - "universe," "nation," "modern," "centuries," "globe," "liberty," "kings," "America," "mighty." This is Whitman looking back at Europe and forward to what he sees as an American future, both in a political and cultural sense but also in terms of his own relationship, as a poet, to literary and intellectual tradition. It's Whitman thinking about how things change over time. (If you buy this, the war/body/time triad starts to look interestingly similar to war/peace/history).
 
