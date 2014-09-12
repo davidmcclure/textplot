@@ -277,7 +277,7 @@ class Text(object):
         return utils.sort_dict(pairs)
 
 
-    def plot_term_offsets(self, term, **kwargs):
+    def plot_term_offsets(self, term, color='r', **kwargs):
 
         """
         Plot the raw, X-axis offsets of a term.
@@ -287,7 +287,7 @@ class Text(object):
 
         xs = self.terms[self.stem(term)]
         ys = np.zeros(len(xs))
-        plt.scatter(xs, ys, marker='|', color='r')
+        plt.scatter(xs, ys, marker='|', color=color)
 
         plt.axis([0, len(self.tokens), -1, 1])
         plt.axes().get_yaxis().set_visible(False)
@@ -300,7 +300,7 @@ class Text(object):
         return plt
 
 
-    def plot_term_histogram(self, term):
+    def plot_term_histogram(self, term, color='#0067a2'):
 
         """
         Plot the X-axis offsets of a term.
@@ -309,11 +309,10 @@ class Text(object):
         """
 
         xs = self.terms[self.stem(term)]
-        plt.hist(xs, 40, color='#0067a2')
+        plt.hist(xs, 40, color=color)
 
         plt.xlabel('Word Offset')
         plt.ylabel('Number of Occurrences')
-        plt.xlim(0, len(self.tokens))
 
         fig = plt.gcf()
         fig.tight_layout()
@@ -322,7 +321,7 @@ class Text(object):
         return plt
 
 
-    def plot_term_kde(self, term, **kwargs):
+    def plot_term_kde(self, term, color='#0067a2', **kwargs):
 
         """
         Plot kernel density estimate for a terms
@@ -331,7 +330,7 @@ class Text(object):
         """
 
         kde = self.kde(self.stem(term), **kwargs)
-        plt.plot(kde, color='#0067a2')
+        plt.plot(kde, color=color)
 
         plt.xlabel('Word Offset')
         plt.ylabel('Number of Occurrences')
