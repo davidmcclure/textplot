@@ -295,8 +295,8 @@ class Text(object):
         plt.title(term)
 
         fig = plt.gcf()
-        fig.tight_layout()
         fig.set_size_inches(10, 2)
+        fig.tight_layout()
 
         return plt
 
@@ -317,8 +317,8 @@ class Text(object):
         plt.title(term)
 
         fig = plt.gcf()
-        fig.tight_layout()
         fig.set_size_inches(10, 4)
+        fig.tight_layout()
 
         return plt
 
@@ -339,8 +339,8 @@ class Text(object):
         plt.title(term)
 
         fig = plt.gcf()
-        fig.tight_layout()
         fig.set_size_inches(10, 4)
+        fig.tight_layout()
 
         return plt
 
@@ -374,8 +374,8 @@ class Text(object):
         plt.legend(loc='upper right')
 
         fig = plt.gcf()
-        fig.tight_layout()
         fig.set_size_inches(10, 4)
+        fig.tight_layout()
 
         return plt
 
