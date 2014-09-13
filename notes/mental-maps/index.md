@@ -35,7 +35,7 @@ And the war-y cluster:
 
 ![War-y terms](figures/war.png)
 
-And all together, which shakes out the contours of the two general categories. When goes up, the other goes down:
+And all together, which shakes out the contours of the two general categories. When one goes up, the other goes down:
 
 ![War vs. Peace](figures/war-v-peace.png)
 
