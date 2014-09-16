@@ -156,13 +156,13 @@ With a path length of ~`1.12`, which puts "borodino" as the 17th closest word to
 
 This is useful as a confirmation that the network is capturing something real about the text. But it's sort of like stumbling through one little passage in the labyrinth with a torch, tracing out a single thread of connection in the document. What you really want is to be able to zoom back and see a bird's-eye view of the entire thing at once, to wrap your head around the complete set of relations that bind all of the words together. This is a perfect task job for any of the off-the-shelf network layout algorithms, which treat all of the nodes as "particles" that repel one another by default, but which are bound together by a set of attractive forces exerted by the edges that connect them. Force Atlas 2 in Gephi works well - _War and Peace_ unfolds into a huge, spindly triangle:
 
-[### Click to zoom in](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace)
+### [Click to zoom in](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace)
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">
 ![War and Peace](networks/war-and-peace.jpg)
 </a>
 
-_Click the bolded links to auto-focus the zoomed image._
+_(Click the bolded links to auto-focus the zoomed image.)_
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace/0.1861/0.7144/2.7717" target="_new">**War**</a> to the left, <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace/0.7907/0.6727/1.9248" target="_new">**peace**</a> to the right, and <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace/0.4989/0.3038/1.9248" target="_new">**history**</a> on top, between the two. Of course, the "on top" has no meaning in and of itself, since the orientation of the layout is random - here and elsewhere, I've rotated the final render to make it easy on the eyes. What does have meaning, though, is the _relative_ position of the words, the relationships between the regions - that history is "between" war and peace, in this case.
 
