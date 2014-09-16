@@ -156,13 +156,13 @@ With a path length of ~`1.12`, which puts "borodino" as the 17th closest word to
 
 This is useful as a confirmation that the network is capturing something real about the text. But it's sort of like stumbling through one little passage in the labyrinth with a torch, tracing out a single thread of connection in the document. What you really want is to be able to zoom back and see a bird's-eye view of the entire thing at once, to wrap your head around the complete set of relations that bind all of the words together. This is a perfect task job for any of the off-the-shelf network layout algorithms, which treat all of the nodes as "particles" that repel one another by default, but which are bound together by a set of attractive forces exerted by the edges that connect them. Force Atlas 2 in Gephi works well - _War and Peace_ unfolds into a huge, spindly triangle:
 
-#### [Click to zoom in](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace)
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace)
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">
 ![War and Peace](networks/war-and-peace.jpg)
 </a>
 
-_(Click the bolded links to auto-focus the zooming interface.)_
+_(Click the bolded links to auto-focus the zoomed image in a new tab.)_
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace/0.1861/0.7144/2.7717" target="_new">**War**</a> to the left, <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace/0.7907/0.6727/1.9248" target="_new">**peace**</a> to the right, and <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace/0.4989/0.3038/1.9248" target="_new">**history**</a> on top, between the two. Of course, the "on top" has no meaning in and of itself, since the orientation of the layout is random - here and elsewhere, I've rotated the final render to make it easy on the eyes. What does have meaning, though, is the _relative_ position of the words, the relationships between the regions - that history is "between" war and peace, in this case.
 
@@ -172,39 +172,71 @@ Also, take a look at the gradients that run between the conceptual extremes - th
 
 Here's the _Odyssey_:
 
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey" target="_new">
 ![Odyssey](networks/odyssey.jpg)
+</a>
 
 Here, instead of war/peace, it's an opposition between land and sea, home and away. At the bottom are Ithaca, Penelope, the suitors, the world of people, civilization, conflict; at the top, the world of the "raft," the home away from home, the natural world, the physical and metaphorical space between Troy and Ithaca - "waves," "sea," "wind," "island," "cave," "shore," the cyclops, the sirens. Compare this with the architecture of _Walden_, which takes the form of long, narrow pillar of words, which also span a gradient between land/civilization and water/wilderness:
 
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden" target="_new">
 ![Walden](networks/walden.jpg)
+</a>
 
 The world of Concord is at the bottom - "civilization," "enterprise," "comforts," "luxury," "dollars," "fashion." As you move up, this gives way Thoreau's narrative about his attempt to build his own, simplified version of the this world - "roof," "built," "dwelling," "simple." Which in turn bleeds into the world of his day-to-day existince at Walden, anchored around the word "day" - "hoeing" the field, "planting beans," "singing" to himself, "sitting", "thinking." Then the graph crosses over completely into the world of the pond - "water," "surface," "depth," "waves," and "walden." Remarkably, at the very top of the network, along with "lake" and "shore," is "_boat_," which is eerily similar to the "raft" on top of the _Odyssey_ - the most extreme removal from human civilization, the smallest outpost of habitable space. Both enact the same dialectic - between a world of men on land, and a world of solitude out in the midst of some kind of watery wilderness.
 
 The _Divine Comedy_ looks almost exactly like _Walden_, except Concord/Walden is replaced with hell/heaven, with, fittingly enough, "christ" perched on top of the whole thing:
 
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy" target="_new">
 ![Divine Comedy](networks/divine-comedy.jpg)
+</a>
 
 Shakespeare's _The Winter's Tale_ unwinds into a big, crisply-differentiated stack that runs from the insane jealousy of Leontes in Sicily at the bottom ("tyrant," "accusation," "traitor") to the pastoral joy of Perdita's life in Bohemia:
 
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale" target="_new">
 ![The Winter's Tale](networks/winters-tale.jpg)
+</a>
 
 _Moby-Dick_ is roughly a big square - Nantucket and the world of land on the bottom ("room," "bed," "house," "landlord," "island"), Ahab and Starbuck to the right, the history of whaling on the left (whales in the abstract), and the hunting of whales at the top (whales in the flesh). Amusingly, it kind of looks like a big whale:
 
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick" target="_new">
 ![Moby-Dick](networks/moby-dick.jpg)
+</a>
 
 It's kind of like reading literary x-rays (hopefully not tea leaves). Here's _Notes from Underground_, which, like the text, splits along the center into two sections - the existentialist rant of "Underground" on the left, the adventures with Zverkov and Liza from "Apropos of the Wet Snow" on the right:
 
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground" target="_new">
 ![Notes from Undergound](networks/notes-from-underground.jpg)
+</a>
 
 Here's the _Origin of Species_, which I've only read in small parts. But, it's actually interesting to do this with a text that you _don't_ know, and see what you can infer about the organization of the document. _Origin of Species_ gives a lot of structure to chew on:
 
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/origin-of-species)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/origin-of-species" target="_new">
 ![Origin of Species](networks/origin-of-species.jpg)
+</a>
 
 ### Failures, null results
 
 This big weakness with this, of course, is that it doesn't work nearly as well with texts that don't naturally split up into these kinds of cleanly-defined sections. For example, take a look at _Leaves of Grass_:
 
+#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass" target="_new">
 ![Leaves of Grass](networks/leaves-of-grass.jpg)
+</a>
 
 It's more scrambled, less differentiated, less obviously "accurate" than the tidy triangle of _War and Peace_ or the cosmological pillar of the _Divine Comedy_. If you squint at it for a few minutes, it starts to assemble into some recognizable constellations of meaning, but it's much more of an interpretive exertion to make a case for how the lines should be drawn. Two regions of meaning are fairly clear - on top, a section about war ("soldiers," "battle," "camp," "armies," "war"), and, at the bottom left, a big, diffuse shoulder of the network related to the body, sensuality, sexuality - "neck," "fingers," "limbs," "flesh," "kiss," "touch," "hand," "happy." The right side of the network doesn't hold together as well, but, if this post weren't already much too long, I'd argue that lots of things on the right side converge on a shared preoccupation about _time_ - "eidolons," from the inscription of the same name about how the actions and accomplishments of people are ground into shadows over time; "pioneers," from "Pioneers! O Pioneers," one of the triumphalist narratives about the inevitability of American expansion in the west; and a cluster of terms related to geopolitics and deep time - "universe," "nation," "modern," "centuries," "globe," "liberty," "kings," "America," "mighty." This is Whitman looking back at Europe and forward to what he sees as an American future, both in a political and cultural sense but also in terms of his own relationship, as a poet, to literary and intellectual tradition. It's Whitman thinking about how things change over time. (If you buy this, the war/body/time triad starts to look interestingly similar to war/peace/history).
 
