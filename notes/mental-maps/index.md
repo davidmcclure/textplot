@@ -172,15 +172,11 @@ Also, take a look at the gradients that run between the conceptual extremes - th
 
 Here's the _Odyssey_:
 
-#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey)
-
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey" target="_new">
 ![Odyssey](networks/odyssey.jpg)
 </a>
 
 Here, instead of war/peace, it's an opposition between land and sea, home and away. At the bottom are Ithaca, Penelope, the suitors, the world of people, civilization, conflict; at the top, the world of the "raft," the home away from home, the natural world, the physical and metaphorical space between Troy and Ithaca - "waves," "sea," "wind," "island," "cave," "shore," the cyclops, the sirens. Compare this with the architecture of _Walden_, which takes the form of long, narrow pillar of words, which also span a gradient between land/civilization and water/wilderness:
-
-#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden)
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden" target="_new">
 ![Walden](networks/walden.jpg)
@@ -190,15 +186,11 @@ The world of Concord is at the bottom - "civilization," "enterprise," "comforts,
 
 The _Divine Comedy_ looks almost exactly like _Walden_, except Concord/Walden is replaced with hell/heaven, with, fittingly enough, "christ" perched on top of the whole thing:
 
-#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy)
-
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy" target="_new">
 ![Divine Comedy](networks/divine-comedy.jpg)
 </a>
 
 Shakespeare's _The Winter's Tale_ unwinds into a big, crisply-differentiated stack that runs from the insane jealousy of Leontes in Sicily at the bottom ("tyrant," "accusation," "traitor") to the pastoral joy of Perdita's life in Bohemia:
-
-#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale)
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale" target="_new">
 ![The Winter's Tale](networks/winters-tale.jpg)
@@ -206,23 +198,17 @@ Shakespeare's _The Winter's Tale_ unwinds into a big, crisply-differentiated sta
 
 _Moby-Dick_ is roughly a big square - Nantucket and the world of land on the bottom ("room," "bed," "house," "landlord," "island"), Ahab and Starbuck to the right, the history of whaling on the left (whales in the abstract), and the hunting of whales at the top (whales in the flesh). Amusingly, it kind of looks like a big whale:
 
-#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick)
-
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick" target="_new">
 ![Moby-Dick](networks/moby-dick.jpg)
 </a>
 
 It's kind of like reading literary x-rays (hopefully not tea leaves). Here's _Notes from Underground_, which, like the text, splits along the center into two sections - the existentialist rant of "Underground" on the left, the adventures with Zverkov and Liza from "Apropos of the Wet Snow" on the right:
 
-#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground)
-
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground" target="_new">
 ![Notes from Undergound](networks/notes-from-underground.jpg)
 </a>
 
 Here's the _Origin of Species_, which I've only read in small parts. But, it's actually interesting to do this with a text that you _don't_ know, and see what you can infer about the organization of the document. _Origin of Species_ gives a lot of structure to chew on:
-
-#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/origin-of-species)
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/origin-of-species" target="_new">
 ![Origin of Species](networks/origin-of-species.jpg)
@@ -231,8 +217,6 @@ Here's the _Origin of Species_, which I've only read in small parts. But, it's a
 ### Failures, null results
 
 This big weakness with this, of course, is that it doesn't work nearly as well with texts that don't naturally split up into these kinds of cleanly-defined sections. For example, take a look at _Leaves of Grass_:
-
-#### [Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass)
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass" target="_new">
 ![Leaves of Grass](networks/leaves-of-grass.jpg)
@@ -246,6 +230,6 @@ Anyway, I'm still kind of stabbing around in the dark with this stuff, and I've 
 
 1. The layouts are extremely sensitive to the "skim depth" - the number of connections that get pulled off the top of the distribution topics and added to the graph as edges. Too few, and the network is fragmented and disconnected. Too many, and the layout is scrambled, a big ball of words that doesn't really surface anything interesting about the text. Again and again, 10 seems to be the magic number, the goldilocks zone where the words bind together into the most interpretable clumps. Why is this? What's actually being measured, here? Is it universally true that words tend to hang together in groups of 10, but no more and no less? Or does this vary - perhaps in interesting ways - from text to text, author to author, etc.?
 
-1. Is there a better way to compute the similarity between the probability distribution functions? Right now, I'm using the [Bray-Curtis dissimilarity](http://en.wikipedia.org/wiki/Bray%E2%80%93Curtis_dissimilarity) test in [scipy](http://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.spatial.distance.braycurtis.html), which is fast and easy to reason about. But, as I mentioned before, there are dozens of different ways to do this, and I'm not savvy enough with the statistics to really understand what's at stake.
+1. Is there a better way to compute the similarity between the probability distribution functions? Right now, I'm using the [Bray-Curtis dissimilarity](http://en.wikipedia.org/wiki/Bray%E2%80%93Curtis_dissimilarity) implementation in [scipy](http://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.spatial.distance.braycurtis.html), which is fast and easy to reason about. But, as I mentioned before, there are dozens of different ways to do this, and I'm not savvy enough with the statistics to really understand what's at stake.
 
 1. The visualizations are fun, but, in the long term, I'm actually more curious about whether this kinds of networks might offer up new ways to _classify_ texts. Just eyeballing the layouts, two things come to mind. First, some notion of "modularity" or "clumpiness" - the extent to which the text splits apart into discrete, self-contained regions of meaning (_War and Peace_). And, related but somewhat different - I bet it would be possible to capture the "width" or "breadth" of the text, the space over which it drifts or ranges - the maximum distance between any two nodes in the network. For example, the _Divine Comedy_, which is very "wide" - it's a long trip from "torment" at the bottom to "Christ" at the top - but not especially "clumpy" relative to a text like the _Odyssey_ or _Notes from Underground_. How would these metrics vary from text to text, author to author, genre to genre, period to period? It seems like an interesting way to quantify the intuition that the novel, for instance, is defined by a kind of internal variety - a plurality of plot lines, characters, etc. Which novels, authors, periods, are the clumpiest? How do the shapes of texts change over time?
