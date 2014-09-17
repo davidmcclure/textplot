@@ -107,7 +107,7 @@ Or, at the other end of the spectrum, "Natasha" sits atop a stack of very Natash
  ('lady', 0.596816756054939)]
 ```
 
-By skimming off the strongest links at the top of the stack, you end up with a custom little "distribution topic" for the word, a community of siblings that intuitively hang together. It's like really simple, "intra-document" form of topic modeling.
+By skimming off the strongest links at the top of the stack, you end up with a custom little "distribution topic" for the word, a community of siblings that intuitively hang together. It's sort of like really simple, "intra-document" form of topic modeling.
 
 ### Twisty little passages
 
