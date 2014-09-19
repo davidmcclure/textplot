@@ -1,5 +1,5 @@
 
-## (Mental) maps of texts with kernel density estimation
+## Mapping the "shapes" of texts with kernel density estimation and force-directed networks
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">
 ![War and Peace](networks/war-and-peace.jpg)
