@@ -12,7 +12,7 @@ Texplot turns a document into a network of terms that are connected to each othe
 
 1. Sort this list in descending order to get a custom "topic" for the term. Skim off the top X words (usually 10) to get the strongest links. Eg, here's "napoleon" from _War and Peace_:
 
-```bash
+  ```bash
 [('napoleon', 1.0),
  ('war', 0.65319871313854128),
  ('military', 0.64782349297012154),
@@ -33,7 +33,7 @@ Texplot turns a document into a network of terms that are connected to each othe
  ('authority', 0.59523854206807647),
  ('troops', 0.59293965397478188),
  ('russian', 0.59077308177196441)]
-```
+  ```
 
 1. Shovel all of these links into a network and export a GML file.
 
