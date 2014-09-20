@@ -37,7 +37,7 @@ Texplot turns a document into a network of terms that are connected to each othe
 
 ## Generating graphs
 
-The easiest way to build out a graph is to use the `skimmer` function, which wraps up all the intermediate steps of tokenizing the text, computing the term distance matrix, generating the per-word topic lists, etc. First, clone the repo and spin up a virtualenv:
+The easiest way to build out a graph is to use the `skimmer` function, which wraps up all the intermediate steps of tokenizing the text, computing the term distance matrix, generating the per-word topic lists, etc. First, spin up a virtualenv:
 
 ```bash
 virtualenv env
@@ -58,3 +58,17 @@ Generating graph:
 
 In [3]: g.write_gml('path/to/file.gml')
 ```
+
+The `skimmer` function takes these arguments:
+
+(int) **`term_depth=500`** - The number of terms to include in the network. Right now, the code just rakes the top X most frequent terms, after stopwords are removed.
+
+(int) **`skim_depth=10`** - The number of connections to skim off the top of the "topics" computer for each of the words and added to the network as edges.
+
+(bool) **`d_weights=False`** - Should the edge weights be treated as measures of "similarity" (similar terms have "high" weights) or "distance" (similar terms have "small" distances)?
+
+(int) **`bandwidth=2000`** - The [bandwidth](http://en.wikipedia.org/wiki/Kernel_density_estimation#Bandwidth_selection) for the kernel density estimation. This controls how "smoothness" of the curve. 2000 is a sensible default for long novels, but bump it down if you're working with shorter texts.
+
+(int) **`samples=1000`** - The number of equally-spaced points on the X-axis where the kernel density is sampled. 1000 is almost always enough, unless you're working with a huge document.
+
+(str) **`kernel="gaussian"`** - The kernel function. The scikit-learn implementation also supports `tophat`, `epanechnikov`, `exponential`, `linear`, and `cosine`.
