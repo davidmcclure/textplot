@@ -1,5 +1,9 @@
 # Textplot
 
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">**_War and Peace_**</a> (click to zoom)
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](networks/war-and-peace.jpg)</a>
+
 Texplot turns a document into a network of terms that are connected to each other depending on the extent to which they _distribute_ similarly in the text. For each unique term:
 
 1. Get the set of token offsets in the document where the term appears.
