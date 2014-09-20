@@ -4,7 +4,9 @@ Texplot turns a document into a network of terms that are connected to each othe
 
 1. Get the set of token offsets in the document where the term appears.
 
-1. Using kernel density estimation, compute a probability density function (PDF) that represents the word's distribution across the X-axis of the document.
+1. Using kernel density estimation, compute a probability density function (PDF) that represents the word's distribution across the X-axis of the document. For example, here are some words from _War and Peace_:
+
+  ![War and Peace](notes/mental-maps/figures/war.png)
 
 1. Compute a Bray-Curtis dissimilarity between the term's PDF and the PDFs of all other terms in the document. This measures the extent to which two words appear in the same locations.
 
@@ -72,3 +74,7 @@ The `skimmer` function takes these arguments:
 - **(int) `samples=1000`** - The number of equally-spaced points on the X-axis where the kernel density is sampled. 1000 is almost always enough, unless you're working with a huge document.
 
 - **(str) `kernel="gaussian"`** - The kernel function. The scikit-learn implementation also supports `tophat`, `epanechnikov`, `exponential`, `linear`, and `cosine`.
+
+---
+
+Texplot uses numpy, scipy, scikit-learn, matplotlib, clint, and networkx.
