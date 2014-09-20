@@ -14,25 +14,25 @@ Texplot turns a document into a network of terms that are connected to each othe
 
   ```bash
   [('napoleon', 1.0),
-   ('war', 0.65319871313854128),
-   ('military', 0.64782349297012154),
-   ('men', 0.63958189887106576),
-   ('order', 0.63636730075877446),
-   ('general', 0.62621616907584432),
-   ('russia', 0.62233286026418089),
-   ('king', 0.61854160459241103),
-   ('single', 0.61630514751638699),
-   ('killed', 0.61262010905310182),
-   ('peace', 0.60775702746632576),
-   ('contrary', 0.60750138486684579),
-   ('number', 0.59936009740377516),
-   ('accompanied', 0.59748552019874168),
-   ('clear', 0.59661288775164523),
-   ('force', 0.59657370362505935),
-   ('army', 0.59584331507492383),
-   ('authority', 0.59523854206807647),
-   ('troops', 0.59293965397478188),
-   ('russian', 0.59077308177196441)]
+  ('war', 0.65319871313854128),
+  ('military', 0.64782349297012154),
+  ('men', 0.63958189887106576),
+  ('order', 0.63636730075877446),
+  ('general', 0.62621616907584432),
+  ('russia', 0.62233286026418089),
+  ('king', 0.61854160459241103),
+  ('single', 0.61630514751638699),
+  ('killed', 0.61262010905310182),
+  ('peace', 0.60775702746632576),
+  ('contrary', 0.60750138486684579),
+  ('number', 0.59936009740377516),
+  ('accompanied', 0.59748552019874168),
+  ('clear', 0.59661288775164523),
+  ('force', 0.59657370362505935),
+  ('army', 0.59584331507492383),
+  ('authority', 0.59523854206807647),
+  ('troops', 0.59293965397478188),
+  ('russian', 0.59077308177196441)]
   ```
 
 1. Shovel all of these links into a network and export a GML file.
@@ -77,4 +77,4 @@ The `skimmer` function takes these arguments:
 
 ---
 
-Texplot uses numpy, scipy, scikit-learn, matplotlib, clint, and networkx.
+Texplot uses **[numpy](http://www.numpy.org)**, **[scipy](http://www.scipy.org)**, **[scikit-learn](http://scikit-learn.org)**, **[matplotlib](http://matplotlib.org)**, **[networkx](http://networkx.github.io)**, and **[clint](https://github.com/kennethreitz/clint)**.
