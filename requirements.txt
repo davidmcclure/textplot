@@ -7,4 +7,3 @@ nltk==2.0.4
 clint==0.3.7
 networkx==1.9
 pyemd==0.0.10
-pandas==0.14.1
