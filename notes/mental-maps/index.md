@@ -1,9 +1,7 @@
 
 ## (Mental) maps of texts
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">
-![War and Peace](networks/war-and-peace.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](networks/war-and-peace.jpg)</a>
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">**_War and Peace_**</a> (click to zoom)
 
@@ -164,9 +162,7 @@ This is useful as a confirmation that the network is capturing something real ab
 
 **[Click to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace)**
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">
-![War and Peace](networks/war-and-peace.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](networks/war-and-peace.jpg)</a>
 
 _(Click the bold links to auto-focus the zoomed image in a new tab.)_
 
@@ -178,55 +174,39 @@ Also, take a look at the gradients that run between the conceptual extremes - th
 
 Here's the _Odyssey_:
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey" target="_new">
-![Odyssey](networks/odyssey.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey" target="_new">![Odyssey](networks/odyssey.jpg)</a>
 
 Here, instead of war/peace, it's an opposition between land and sea, home and away. At the bottom is <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey/0.7129/0.7626/1.5273" target="_new">**Ithaca, Penelope, the suitors, the world of people, civilization, conflict**</a>; at the top, the world of the "raft," the home away from home, the natural world, the physical and <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey/0.3522/0.2816/2.1553" target="_new">**metaphorical space between Troy and Ithaca**</a> - "waves," "sea," "wind," "island," "cave," "shore," the cyclops, the sirens. Compare this with the architecture of _Walden_, which takes the form of long, narrow pillar of words, which also span a gradient between land/civilization and water/wilderness:
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden" target="_new">
-![Walden](networks/walden.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden" target="_new">![Walden](networks/walden.jpg)</a>
 
 The world of <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden/0.5142/0.8874/1.4279" target="_new">**Concord**</a> is at the bottom - "civilization," "enterprise," "comforts," "luxury," "dollars," "fashion." As you move up, this gives way Thoreau's narrative about his attempt to build <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden/0.3243/0.6457/2.9609" target="_new">**his own, simplified version of the this world**</a> - "roof," "built," "dwelling," "simple." Which in turn bleeds into the world of his <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden/0.5004/0.4986/2.4674" target="_new">**day-to-day existince at Walden**</a>, anchored around the word "day" - "hoeing" the field, "planting beans," "singing" to himself, "sitting", "thinking." Then the network crosses over completely into the <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden/0.5141/0.1290/2.4674" target="_new">**world of the pond**</a> - "water," "surface," "depth," "waves," and "walden." Remarkably, at the very top of the network, along with "lake" and "shore," is "<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden/0.4600/0.0588/8.8413" target="_new">**_boat_**</a>," which is eerily similar to the "<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey/0.3633/0.1561/3.4485" target="_new">**raft**</a>" on top of the _Odyssey_ - the most extreme removal from human civilization, the smallest outpost of habitable space. Both enact the same dialectic - between a world of men on land, and a world of solitude out in the midst of some kind of watery wilderness.
 
 The _Divine Comedy_ looks almost exactly like _Walden_, except Concord/Walden is replaced with <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy/0.5232/0.9055/2.0562" target="_new">**hell**</a> / <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy/0.4992/0.1253/2.0562" target="_new">**heaven**</a>, with, fittingly enough, "<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy/0.4916/0.0529/7.3678" target="_new">**christ**</a>" perched on top of the whole thing:
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy" target="_new">
-![Divine Comedy](networks/divine-comedy.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy" target="_new">![Divine Comedy](networks/divine-comedy.jpg)</a>
 
 Shakespeare's _The Winter's Tale_ unwinds into a big, crisply-differentiated stack that runs from the insane jealousy of Leontes in <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale/0.4902/0.8498/2.1553" target="_new">**Sicily**</a> at the bottom ("tyrant," "accusation," "traitor") to the pastoral joy of Perdita's life in <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale/0.4903/0.2002/1.4967" target="_new">**Bohemia**</a>:
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale" target="_new">
-![The Winter's Tale](networks/winters-tale.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale" target="_new">![The Winter's Tale](networks/winters-tale.jpg)</a>
 
 _Moby-Dick_ is roughly a big square - <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick/0.4094/0.8044/1.4967" target="_new">**New Bedford and the world of land**</a> on the bottom ("room," "bed," "house," "landlord," "island"), <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick/0.8150/0.4657/1.4967" target="_new">**Ahab and Starbuck**</a> to the right, the <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick/0.2220/0.4263/1.4967" target="_new">**history of whaling**</a> on the left (whales in the abstract), and the <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick/0.4248/0.1585/1.4967" target="_new">**hunting of whales**</a> at the top (whales in the flesh). Amusingly, it kind of looks like a big whale:
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick" target="_new">
-![Moby-Dick](networks/moby-dick.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick" target="_new">![Moby-Dick](networks/moby-dick.jpg)</a>
 
 It's kind of like reading literary x-rays (hopefully not tea leaves). Here's _Notes from Underground_, which, like the text, splits along the center into two sections - the existentialist rant of "<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground/0.2222/0.4258/1.6630" target="_new">**Underground**</a>" on the left, the adventures with <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground/0.7522/0.7204/1.6630" target="_new">Zverkov</a> and <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground/0.7222/0.3446/1.6630" target="_new">**Liza**</a> from "Apropos of the Wet Snow" on the right:
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground" target="_new">
-![Notes from Undergound](networks/notes-from-underground.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground" target="_new">![Notes from Undergound](networks/notes-from-underground.jpg)</a>
 
 Here's the _Origin of Species_, which I've only read in small parts. But, it's actually interesting to do this with a text that you _don't_ know, and see what you can infer about the organization of the document. _Origin of Species_ gives a lot of structure to chew on:
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/origin-of-species" target="_new">
-![Origin of Species](networks/origin-of-species.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/origin-of-species" target="_new">![Origin of Species](networks/origin-of-species.jpg)</a>
 
 ### Failures, null results
 
 This big weakness with this, of course, is that it doesn't work nearly as well with texts that don't naturally split up into these kinds of cleanly-defined sections. For example, take a look at _Leaves of Grass_:
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass" target="_new">
-![Leaves of Grass](networks/leaves-of-grass.jpg)
-</a>
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass" target="_new">![Leaves of Grass](networks/leaves-of-grass.jpg)</a>
 
 It's more scrambled, less differentiated, less obviously "accurate" than the tidy triangle of _War and Peace_ or the cosmological pillar of the _Divine Comedy_. If you squint at it for a few minutes, it starts to assemble into some recognizable constellations of meaning, but it's much more of an interpretive exertion to make a case for how the lines should be drawn. Two regions of meaning are fairly clear - on top, a section about <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass/0.4919/0.2293/1.7961" target="_new">**war**</a> ("soldiers," "battle," "camp," "armies," "war"), and, at the bottom left, a big, diffuse shoulder of the network related to the <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass/0.3567/0.7838/1.7961" target="_new">**body, sensuality, sexuality**</a> - "neck," "fingers," "limbs," "flesh," "kiss," "touch," "hand," "happy." The right side of the network doesn't hold together as well, but, if this post weren't already much too long, I'd argue that lots of things on the right side converge on a shared preoccupation about _time_ - "<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass/0.8239/0.6082/4.4692" target="_new">**eidolons**</a>," from the inscription of the same name about how the actions and accomplishments of people are ground into shadows over time; "<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass/0.6894/0.7385/4.4692" target="_new">**pioneers**</a>," from "Pioneers! O Pioneers," one of the triumphalist narratives about the inevitability of American expansion in the west; and a cluster of terms related to <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass/0.6862/0.6402/1.7961" target="_new">**geopolitics and deep time**</a> - "universe," "nation," "modern," "centuries," "globe," "liberty," "kings," "America," "mighty." This is Whitman looking back at Europe and forward to what he sees as an American future, both in a political and cultural sense but also in terms of his own relationship, as a poet, to literary and intellectual tradition. It's Whitman thinking about how things change over time. (If you buy this, the war/body/time triad starts to look interestingly similar to war/peace/history).
 
