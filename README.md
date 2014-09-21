@@ -69,9 +69,9 @@ The `skimmer` function takes these arguments:
 
 - **(int) `term_depth=500`** - The number of terms to include in the network. Right now, the code just rakes the top X most frequent terms, after stopwords are removed.
 
-- **(int) `skim_depth=10`** - The number of connections to skim off the top of the "topics" computer for each of the words and added to the network as edges.
+- **(int) `skim_depth=10`** - The number of connections to skim off the top of the "topics" computed for each of the words and added to the network as edges.
 
-- **(bool) `d_weights=False`** - Should the edge weights be treated as measures of "similarity" (similar terms have "high" weights) or "distance" (similar terms have "small" distances)?
+- **(bool) `d_weights=False`** - Should the edge weights be treated as measures of "similarity" (similar terms have "heavy" weights) or "distance" (similar terms have "short" distances)?
 
 - **(int) `bandwidth=2000`** - The [bandwidth](http://en.wikipedia.org/wiki/Kernel_density_estimation#Bandwidth_selection) for the kernel density estimation. This controls how "smoothness" of the curve. 2000 is a sensible default for long novels, but bump it down if you're working with shorter texts.
 
