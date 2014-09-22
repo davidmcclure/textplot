@@ -158,7 +158,7 @@ With a path length of ~`1.12`, which puts "borodino" as the 17th closest word to
 
 ### Mapping the maze
 
-This is useful as a confirmation that the network is capturing something real about the text. But it's sort of like stumbling through one little passage in the labyrinth with a torch, tracing out a single thread of connection in the document. What you really want is to be able to zoom back and see a bird's-eye view of the entire thing at once, to wrap your head around the complete set of relations that bind all of the words together. This is a perfect task job for any of the off-the-shelf network layout algorithms, which treat all of the nodes as "particles" that repel one another by default, but which are bound together by a set of attractive forces exerted by the edges that connect them. Force Atlas 2 in Gephi works well - _War and Peace_ unfolds into a huge, spindly triangle ([click the image to zoom](http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace)):
+This is useful as a confirmation that the network is capturing something real about the text. But it's sort of like stumbling through one little passage in the labyrinth with a torch, tracing out a single thread of connection in the document. What you really want is to be able to zoom back and see a bird's-eye view of the entire thing at once, to wrap your head around the complete set of relations that bind all of the words together. This is a perfect task job for any of the off-the-shelf network layout algorithms, which treat all of the nodes as "particles" that repel one another by default, but which are bound together by a set of attractive forces exerted by the edges that connect them. Force Atlas 2 in Gephi works well - _War and Peace_ unfolds into a huge, spindly triangle:
 
 ##### War and Peace
 
@@ -174,9 +174,13 @@ Also, take a look at the gradients that run between the conceptual extremes - th
 
 Here's the _Odyssey_:
 
+##### The Odyssey
+
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey" target="_new" href="#odyssey">![Odyssey](networks/odyssey.jpg)</a>
 
 Here, instead of war/peace, it's an opposition between land and sea, home and away. At the bottom is <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey/0.7725/0.7709/1.5272" target="_new">**Ithaca, Penelope, the suitors, the world of people, civilization, conflict**</a>; at the top, the world of the "raft," the home away from home, the natural world, the <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/odyssey/0.3512/0.2717/1.2727" target="_new">**physical and metaphorical space between Troy and Ithaca**</a> - "waves," "sea," "wind," "island," "cave," "shore," the cyclops, the sirens. Compare this with the architecture of _Walden_, which takes the form of long, narrow pillar of words, which also span a gradient between land/civilization and water/wilderness:
+
+##### Walden
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/walden" target="_new" href="#walden">![Walden](networks/walden.jpg)</a>
 
@@ -184,27 +188,39 @@ The world of <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental
 
 The _Divine Comedy_ looks almost exactly like _Walden_, except Concord/Walden is replaced with <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy/0.5337/0.9227/1.8326" target="_new">**hell**</a> / <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy/0.5057/0.1211/1.8326" target="_new">**heaven**</a>, with, fittingly enough, "<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy/0.4970/0.0603/4.5602" target="_new">**christ**</a>" perched on top of the whole thing:
 
+##### The Divine Comedy
+
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/divine-comedy" target="_new" href="#divine-comedy">![Divine Comedy](networks/divine-comedy.jpg)</a>
 
 Shakespeare's _The Winter's Tale_ unwinds into a big, crisply-differentiated stack that runs from <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale/0.4973/0.8358/1.5272" target="_new">**Leontes' psychotic jealousy in Sicily**</a> at the bottom ("tyrant," "accusation," "traitor") to the <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale/0.4693/0.2143/1.2727" target="_new">**pastoral joy of Perdita's life in Bohemia**</a>:
+
+##### The Winter's Tale
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/winters-tale" target="_new" href="#winters-tale">![The Winter's Tale](networks/winters-tale.jpg)</a>
 
 _Moby-Dick_ is roughly a big square - <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick/0.4105/0.8073/1.2275" target="_new">**New Bedford and the world of land**</a> on the bottom ("room," "bed," "house," "landlord," "island"), <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick/0.8033/0.4553/1.2275" target="_new">**Ahab, Starbuck, and Moby Dick**</a> to the right, the <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick/0.2241/0.4289/1.2275" target="_new">**history of whaling**</a> on the left (whales in the abstract), and the <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick/0.4469/0.1815/1.2275" target="_new">**hunting of whales**</a> at the top (whales in the flesh). Amusingly, it kind of looks like a big whale:
 
+##### Moby Dick
+
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/moby-dick" target="_new" href="#moby-dick">![Moby-Dick](networks/moby-dick.jpg)</a>
 
 It's kind of like reading literary x-rays (hopefully not tea leaves). Here's _Notes from Underground_, which, like the text, splits along the center into two sections - the existentialist rant of "<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground/0.1903/0.4518/1.0606" target="_new">**Underground**</a>" on the left, the adventures with <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground/0.7793/0.7337/1.5272" target="_new">Zverkov</a> and <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground/0.7930/0.3466/1.5272" target="_new">**Liza**</a> from "Apropos of the Wet Snow" on the right:
 
+##### Notes from Underground
+
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/notes-from-underground" target="_new" href="#notes-from-underground">![Notes from Undergound](networks/notes-from-underground.jpg)</a>
 
 Here's the _Origin of Species_, which I've only read in small parts. But, it's actually interesting to do this with a text that you _don't_ know, and see what you can infer about the organization of the document. _Origin of Species_ gives a lot of structure to chew on:
+
+##### Origin of Species
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/origin-of-species" target="_new" href="#origin-of-species">![Origin of Species](networks/origin-of-species.jpg)</a>
 
 ### Failures, null results
 
 This big weakness with this, of course, is that it doesn't work nearly as well with texts that don't naturally split up into these kinds of cleanly-defined sections. For example, take a look at _Leaves of Grass_:
+
+##### Leaves of Grass
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/leaves-of-grass" target="_new" href="#leaves-of-grass">![Leaves of Grass](networks/leaves-of-grass.jpg)</a>
 
