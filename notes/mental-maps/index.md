@@ -19,7 +19,13 @@ An obvious first step is to create a simple histogram:
 
 ![Histogram of "horse"](figures/horse-histogram.png)
 
-A kernel density estimate is the same idea, except, instead of just chopping the X-axis up into a set of bins and counting the points, each point is represented as a "[kernel](http://en.wikipedia.org/wiki/Kernel_(statistics))" function. A kernel is just some kind of weighting function that models a decay in intensity around the point. At the very simplest, it could be something like the uniform kernel, which just converts the point into a rectangular region over the X-axis, but most applications opt for something smoother like the Epanechnikov or Gaussian functions. The important thing, though, is that the kernel transforms the point into a _range_ or _interval_ of significance, instead of just a one-dimensional dot. This is nice because it maps well onto basic intuitions about the "scope" of a word in a text. When you come across a word, _where_ exactly does it have significance? Definitely right there, where it appears, but not _just_ there - it also makes sense to think of a kind of "relevance" or "meaning energy" that dissipates around the word, slowly at first across the immediately surrounding words and then more quickly as the distance increases. The kernel is a nice way to formalize this "meaning-shape" as it appears to the pyschological gaze of the reader.
+A kernel density estimate is the same idea, except, instead of just chopping the X-axis up into a set of bins and counting the points, each point is represented as a "[kernel](http://en.wikipedia.org/wiki/Kernel_(statistics))" function. A kernel is just some kind of weighting function that models a decay in intensity around the point. At the very simplest, it could be something like the uniform kernel, which just converts the point into a rectangular region over the X-axis, but most applications opt for something smoother like the Epanechnikov or Gaussian functions. For the purposes of this project, though, they all give basically the same results.
+
+![Kernel functions](figures/kernels.png)
+
+"[Kernels](http://commons.wikimedia.org/wiki/File:Kernels.svg#mediaviewer/File:Kernels.svg)" by Brian Amberg - CC Attribution-Share Alike 3.0 via Wikimedia Commons.
+
+The important thing, though, is that the kernel transforms the point into a _range_ or _interval_ of significance, instead of just a one-dimensional dot. This is nice because it maps well onto basic intuitions about the "scope" of a word in a text. When you come across a word, _where_ exactly does it have significance? Definitely right there, where it appears, but not _just_ there - it also makes sense to think of a kind of "relevance" or "meaning energy" that dissipates around the word, slowly at first across the immediately surrounding words and then more quickly as the distance increases. Words aren't self-contained little atoms of information - they radiate meaning forward and backward onto one another. As you slide your eyes across the text, each word carries a kind of psychological energy that spikes highest at the moment that you actually encounter it. But that energy doesn't instantly materialize and then vanish - the word casts a shadow of meaning onto the words that follow it, and also exerts an energy backwards in memory on the words that came before it. The kernel is a simple way to formalize this "meaning-shape" as it appears to the psychological gaze of the reader.
 
 Anyway, once the all of the kernels are in place, estimating the density function is just a matter of stepping through each position on the X-axis and adding up the values of all the kernel functions at that particular location. This gives a composite curve that captures the overall distributon of the term. Here's "horse" again:
 
@@ -115,11 +121,11 @@ So, how to operationalize that "conceptual" closeness? It turns out that this ca
 
 Anyway, once we've laid down all the piping to compute and compare the distribution densities of the words, constructing the network is easy. For each word:
 
-1. Compute the distribution similarity between the word and every other word in the text.
+1. Compute the similarities between the distribution of that word and each of the other words in the text.
 
-1. Sort the list in descending order to get ranked stack of "distribution siblings," words that tend to show up in the same parts of the document.
+1. Sort the list in descending order to get the ranked stack of "distribution siblings," words that tend to show up in the same parts of the document.
 
-1. Skim off the strongest links - say, the top 10 - and add them as nodes to a graph, using the similarity score as the weight of the edge that connects them.
+1. Skim off the strongest links at the top of the stack (usually 10) and add them as nodes to a graph, using the similarity score as the weight of the edge that connects them.
 
 Once this is in place, we get access to the whole scientific literature of graph-theoretic concepts, and the conceptual relationship between "austerlitz" and "borodino" falls out really easily - we can use Dijkstra's algorithm to get the shortest path between the two, which, unsurprisingly, makes just a single hop through the word "battle":
 
