@@ -276,3 +276,19 @@ class Text(object):
             pairs[term] = evaluator(anchor, term, **kwargs)
 
         return utils.sort_dict(pairs)
+
+
+    def plot_term_kdes(self, words, **kwargs):
+
+        """
+        Plot kernel density estimates for multiple words.
+
+        :param words: The words to query.
+        :param bandwidth: The kernel width.
+        """
+
+        for word in words:
+            kde = self.kde(self.stem(word), **kwargs)
+            plt.plot(kde)
+
+        plt.show()
