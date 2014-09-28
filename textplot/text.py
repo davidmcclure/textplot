@@ -13,6 +13,7 @@ from sklearn.neighbors import KernelDensity
 from collections import OrderedDict, Counter
 from pyemd import emd
 from scipy.spatial import distance
+from scipy.stats import geom
 
 
 class Text(object):
@@ -96,21 +97,6 @@ class Text(object):
             counts[term] = len(self.terms[term])
 
         return utils.sort_dict(counts)
-
-
-    def term_count_ranks(self):
-
-        """
-        Get a ranked list of term counts.
-        """
-
-        counts = self.term_counts()
-        ranks = rankdata(counts.values(), method='min')
-
-        for i, term in enumerate(counts.keys()):
-            counts[term] = ranks[i]
-
-        return counts
 
 
     def term_count_buckets(self):
@@ -273,6 +259,42 @@ class Text(object):
 
         dm = utils.offset_matrix(t1_kde.size)
         return emd(t1_kde, t2_kde, dm)
+
+
+    def term_density(self, term):
+
+        """
+        Compute a "density" or "clumpiness" score for a term.
+
+        :param term: A stemmed term.
+        """
+
+        count = len(self.terms[term])
+
+        # Get the observed occurance distances.
+        actual = sorted(self.term_distances(term))
+
+        # Pull samples from geometric distribution.
+        p = float(count) / len(self.tokens)
+        random = sorted(geom.rvs(p, size=count-1))
+
+        # Measure the distance between the two.
+        density = distance.braycurtis(random, actual)
+        return density * np.log(count)
+
+
+    def all_term_densities(self):
+
+        """
+        Get an ordered dictionary of term densities.
+        """
+
+        densities = OrderedDict()
+        for term in self.terms:
+            d = self.term_density(term)
+            if not np.isnan(d): densities[term] = d
+
+        return utils.sort_dict(densities)
 
 
     def anchored_scores(self, anchor, method='braycurtis', **kwargs):
