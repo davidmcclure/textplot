@@ -297,6 +297,31 @@ class Text(object):
         return utils.sort_dict(densities)
 
 
+    def term_kde_max(self, term, **kwargs):
+
+        """
+        Get the maximum value of a term's KDE.
+
+        :param term: A stemmed term.
+        """
+
+        return np.amax(self.kde(term, **kwargs)) * \
+            (float(len(self.terms[term])) / len(self.tokens))
+
+
+    def all_kde_maxes(self, **kwargs):
+
+        """
+        Get an ordered dictionary of term KDE maxes.
+        """
+
+        maxes = OrderedDict()
+        for term in self.terms:
+            maxes[term] = self.term_kde_max(term)
+
+        return utils.sort_dict(maxes)
+
+
     def anchored_scores(self, anchor, method='braycurtis', **kwargs):
 
         """

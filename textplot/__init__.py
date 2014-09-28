@@ -15,7 +15,8 @@ def skimmer(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
     m = Matrix(t)
 
     print 'Indexing terms:'
-    m.index(t.most_frequent_terms(term_depth), **kwargs)
+    terms = t.all_kde_maxes(**kwargs).keys()[:term_depth]
+    m.index(terms, **kwargs)
 
     g = Skimmer()
 
