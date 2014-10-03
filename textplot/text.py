@@ -261,68 +261,6 @@ class Text(object):
         return emd(t1_kde, t2_kde, dm)
 
 
-    def term_density(self, term):
-
-        """
-        Compute a "density" or "clumpiness" score for a term.
-
-        :param term: A stemmed term.
-        """
-
-        count = len(self.terms[term])
-
-        # Get the observed occurance distances.
-        actual = sorted(self.term_distances(term))
-
-        # Pull samples from geometric distribution.
-        p = float(count) / len(self.tokens)
-        random = sorted(geom.rvs(p, size=count-1))
-
-        # Measure the distance between the two.
-        density = distance.braycurtis(random, actual)
-        return density * np.log(count)
-
-
-    def all_term_densities(self):
-
-        """
-        Get an ordered dictionary of term densities.
-        """
-
-        densities = OrderedDict()
-        for term in self.terms:
-            d = self.term_density(term)
-            if not np.isnan(d): densities[term] = d
-
-        return utils.sort_dict(densities)
-
-
-    def term_kde_max(self, term, **kwargs):
-
-        """
-        Get the maximum value of a term's KDE.
-
-        :param term: A stemmed term.
-        """
-
-        kde_max = np.amax(self.kde(term, **kwargs))
-        easing = float(len(self.terms[term])) / len(self.tokens)
-        return kde_max * easing
-
-
-    def all_kde_maxes(self, **kwargs):
-
-        """
-        Get an ordered dictionary of term KDE maxes.
-        """
-
-        maxes = OrderedDict()
-        for term in self.terms:
-            maxes[term] = self.term_kde_max(term)
-
-        return utils.sort_dict(maxes)
-
-
     def anchored_scores(self, anchor, method='braycurtis', **kwargs):
 
         """
@@ -339,6 +277,68 @@ class Text(object):
             pairs[term] = evaluator(anchor, term, **kwargs)
 
         return utils.sort_dict(pairs)
+
+
+    def kde_max(self, term, **kwargs):
+
+        """
+        Get the maximum value of a term's KDE.
+
+        :param term: A stemmed term.
+        """
+
+        return np.amax(self.kde(term, **kwargs))
+
+
+    def normalized_kde_maxima(self, **kwargs):
+
+        """
+        For each term, get the difference between the term's KDE max and the
+        lowest KDE max of any term.
+        """
+
+        maxima = OrderedDict()
+        for term in self.terms:
+            maxima[term] = self.kde_max(term, **kwargs)
+
+        lowest = np.amin(maxima.values())
+        for term in self.terms:
+            maxima[term] -= lowest
+
+        return utils.sort_dict(maxima)
+
+
+    def frequency_ratios(self):
+
+        """
+        For each term, get the ratio between the number of times that the term
+        occurs and the number of times that the most frequent term occurs.
+        """
+
+        counts = self.term_counts()
+
+        highest = float(np.amax(counts.values()))
+        for term in self.terms:
+            counts[term] /= highest
+
+        return utils.sort_dict(counts)
+
+
+    def densities(self, **kwargs):
+
+        """
+        For each term, compute a "density" score by multiplying the normalized
+        height of the kernel density estimate by the frequency ratio.
+        """
+
+        kms = self.normalized_kde_maxima(**kwargs)
+        frs = self.frequency_ratios()
+
+        densities = OrderedDict()
+        for term in self.terms:
+            densities[term] = kms[term] * frs[term]
+
+        return utils.sort_dict(densities)
 
 
     def plot_term_kdes(self, words, **kwargs):
