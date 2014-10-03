@@ -305,8 +305,9 @@ class Text(object):
         :param term: A stemmed term.
         """
 
-        return np.amax(self.kde(term, **kwargs)) * \
-            (float(len(self.terms[term])) / len(self.tokens))
+        kde_max = np.amax(self.kde(term, **kwargs))
+        easing = float(len(self.terms[term])) / len(self.tokens)
+        return kde_max * easing
 
 
     def all_kde_maxes(self, **kwargs):
