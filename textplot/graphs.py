@@ -105,11 +105,14 @@ class Listserv(Graph):
         # Nodes:
         for term in progress.bar(matrix.terms):
 
+            # Unstem the label.
             label = matrix.text.unstem(term);
 
+            # Register the metadata.
             self.graph.add_node(label, {
                 'count':    len(matrix.text.terms[term]),
-                'kde_max':  matrix.text.kde_max(term)
+                'kde_max':  matrix.text.kde_max(term),
+                'median':   matrix.text.median_ratio(term)
             })
 
         # Edges:

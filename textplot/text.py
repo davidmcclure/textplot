@@ -168,6 +168,28 @@ class Text(object):
         return mode[0][0]
 
 
+    def median_offset(self, term):
+
+        """
+        Get the median word offset.
+
+        :param term: A stemmed term.
+        """
+
+        return np.median(self.terms[term])
+
+
+    def median_ratio(self, term):
+
+        """
+        Get the median offset as a ratio with the text length.
+
+        :param term: A stemmed term.
+        """
+
+        return self.median_offset(term) / len(self.tokens)
+
+
     @utils.memoize
     def kde(self, term, bandwidth=2000, samples=1000, kernel='gaussian'):
 
