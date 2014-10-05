@@ -52,7 +52,7 @@ def listserv(path, term_depth=5000, spike_depth=1000, skim_depth=10,
              spike_bandwidth=300000, bandwidth=100000, **kwargs):
 
     """
-    Use "spiky-est" terms.
+    Use most "spiky" terms.
     """
 
     t = Text.from_file(path)
@@ -62,7 +62,7 @@ def listserv(path, term_depth=5000, spike_depth=1000, skim_depth=10,
     frequent = t.most_frequent_terms(term_depth)
 
     # Get the KDE maxes for all terms.
-    kde_maxima = t.normalized_kde_maxima(bandwidth=spike_bw)
+    kde_maxima = t.kde_maxima(bandwidth=spike_bandwidth)
 
     spiky = OrderedDict()
     for term in frequent:
@@ -74,9 +74,9 @@ def listserv(path, term_depth=5000, spike_depth=1000, skim_depth=10,
     print 'Indexing terms:'
     m.index(spiky.keys()[:spike_depth], **kwargs)
 
-    g = Skimmer()
+    g = Listserv()
 
     print 'Generating graph:'
-    g.build(m, skim_depth, d_weights)
+    g.build(m, skim_depth)
 
     return g
