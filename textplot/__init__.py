@@ -48,8 +48,8 @@ def clumpy(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
     return g
 
 
-def spiky(path, term_depth=5000, spike_depth=1000, skim_depth=10,
-          spike_bw=300000, d_weights=False, **kwargs):
+def listserv(path, term_depth=5000, spike_depth=1000, skim_depth=10,
+             spike_bandwidth=300000, bandwidth=100000, **kwargs):
 
     """
     Use "spiky-est" terms.
