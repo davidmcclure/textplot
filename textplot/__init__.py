@@ -5,7 +5,7 @@ from matrix import Matrix
 from graphs import *
 
 
-def skimmer(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
+def frequent(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
 
     """
     Use most frequent terms.
