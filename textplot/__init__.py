@@ -48,7 +48,7 @@ def clumpy(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
     return g
 
 
-def listserv(path, term_depth=3000, spike_depth=1000, skim_depth=6,
+def listserv(path, term_depth=3000, spike_depth=1000, skim_depth=30,
              spike_bandwidth=500000, **kwargs):
 
     """
