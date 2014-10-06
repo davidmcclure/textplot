@@ -103,7 +103,7 @@ class Listserv(Graph):
         """
 
         # Nodes:
-        for term in progress.bar(matrix.terms):
+        for term in matrix.terms:
 
             # Unstem the label.
             label = matrix.text.unstem(term);

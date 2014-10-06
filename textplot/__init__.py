@@ -48,8 +48,8 @@ def clumpy(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
     return g
 
 
-def listserv(path, term_depth=5000, spike_depth=1000, skim_depth=10,
-             spike_bandwidth=300000, bandwidth=100000, **kwargs):
+def listserv(path, term_depth=3000, spike_depth=1000, skim_depth=6,
+             spike_bandwidth=500000, **kwargs):
 
     """
     Use most "spiky" terms.
@@ -61,12 +61,9 @@ def listserv(path, term_depth=5000, spike_depth=1000, skim_depth=10,
     # Get the top X most frequent terms.
     frequent = t.most_frequent_terms(term_depth)
 
-    # Get the KDE maxes for all terms.
-    kde_maxima = t.kde_maxima(bandwidth=spike_bandwidth)
-
     spiky = OrderedDict()
     for term in frequent:
-        spiky[term] = kde_maxima[term]
+        spiky[term] = t.kde_max(term, bandwidth=spike_bandwidth)
 
     # Sort by KDE max.
     spiky = utils.sort_dict(spiky)

@@ -312,19 +312,6 @@ class Text(object):
         return np.amax(self.kde(term, **kwargs))
 
 
-    def kde_maxima(self, **kwargs):
-
-        """
-        Get the KDE maxima for all terms.
-        """
-
-        maxima = OrderedDict()
-        for term in self.terms:
-            maxima[term] = self.kde_max(term, **kwargs)
-
-        return utils.sort_dict(maxima)
-
-
     def normalized_kde_maxima(self, **kwargs):
 
         """
@@ -332,7 +319,9 @@ class Text(object):
         lowest KDE max of any term.
         """
 
-        maxima = self.kde_maxima(**kwargs)
+        maxima = OrderedDict()
+        for term in self.terms:
+            maxima[term] = self.kde_max(term, **kwargs)
 
         lowest = np.amin(maxima.values())
         for term in self.terms:
