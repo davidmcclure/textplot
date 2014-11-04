@@ -4,6 +4,7 @@ from setuptools import setup, find_packages
 
 
 setup(
+
     name='textplot',
     version='0.1.0',
     description='(Mental) maps of texts.',
@@ -13,4 +14,15 @@ setup(
     author_email='davidwilliammcclure@gmail.com',
     include_package_data=True,
     packages=find_packages(),
+
+    install_requires=[
+        'scikit-learn',
+        'numpy',
+        'scipy',
+        'nltk',
+        'clint',
+        'networkx',
+        'pyemd',
+    ]
+
 )
