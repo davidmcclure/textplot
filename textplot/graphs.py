@@ -90,7 +90,7 @@ class Skimmer(Graph):
                 self.graph.add_edge(n1, n2, weight=weight)
 
 
-class Listserv(Graph):
+class Diachronic(Graph):
 
 
     def build(self, matrix, skim_depth=10):

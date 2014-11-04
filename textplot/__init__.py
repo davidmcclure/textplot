@@ -48,11 +48,11 @@ def clumpy(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
     return g
 
 
-def listserv(path, term_depth=3000, spike_depth=1000, skim_depth=30,
+def diachronic(path, term_depth=3000, spike_depth=1000, skim_depth=30,
              spike_bandwidth=500000, **kwargs):
 
     """
-    Use most "spiky" terms.
+    Use most "spiky" terms, to capture diachronic shifts.
     """
 
     t = Text.from_file(path)
@@ -71,7 +71,7 @@ def listserv(path, term_depth=3000, spike_depth=1000, skim_depth=30,
     print 'Indexing terms:'
     m.index(spiky.keys()[:spike_depth], **kwargs)
 
-    g = Listserv()
+    g = Diachronic()
 
     print 'Generating graph:'
     g.build(m, skim_depth)
