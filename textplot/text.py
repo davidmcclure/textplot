@@ -168,28 +168,6 @@ class Text(object):
         return mode[0][0]
 
 
-    def median_offset(self, term):
-
-        """
-        Get the median word offset.
-
-        :param term: A stemmed term.
-        """
-
-        return np.median(self.terms[term])
-
-
-    def median_ratio(self, term):
-
-        """
-        Get the median offset as a ratio with the text length.
-
-        :param term: A stemmed term.
-        """
-
-        return self.median_offset(term) / len(self.tokens)
-
-
     @utils.memoize
     def kde(self, term, bandwidth=2000, samples=1000, kernel='gaussian'):
 
@@ -310,6 +288,18 @@ class Text(object):
         """
 
         return np.amax(self.kde(term, **kwargs))
+
+
+    def kde_max_ratio(self, term, **kwargs):
+
+        """
+        Get the position ratio of a term's KDE max.
+
+        :param term: A stemmed term.
+        """
+
+        kde = self.kde(term, **kwargs)
+        return np.where(kde==np.amax(kde))[0][0] / float(len(kde))
 
 
     def normalized_kde_maxima(self, **kwargs):
