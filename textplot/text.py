@@ -363,7 +363,7 @@ class Text(object):
         return np.where(kde==np.amax(kde))[0][0] / float(len(kde))
 
 
-    def kde_center_of_mass_ratio(self, term, **kwargs):
+    def kde_com_ratio(self, term, **kwargs):
 
         """
         Get the center of mass of a term's KDE as a ratio.
