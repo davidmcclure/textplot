@@ -13,7 +13,7 @@ from sklearn.neighbors import KernelDensity
 from collections import OrderedDict, Counter
 from pyemd import emd
 from scipy.spatial import distance
-from scipy.stats import geom
+from scipy import ndimage
 
 
 class Text(object):
@@ -290,18 +290,6 @@ class Text(object):
         return np.amax(self.kde(term, **kwargs))
 
 
-    def kde_max_ratio(self, term, **kwargs):
-
-        """
-        Get the position ratio of a term's KDE max.
-
-        :param term: A stemmed term.
-        """
-
-        kde = self.kde(term, **kwargs)
-        return np.where(kde==np.amax(kde))[0][0] / float(len(kde))
-
-
     def normalized_kde_maxima(self, **kwargs):
 
         """
@@ -351,6 +339,41 @@ class Text(object):
             densities[term] = kms[term] * frs[term]
 
         return utils.sort_dict(densities)
+
+
+    def median_ratio(self, term):
+
+        """
+        Get the median offset as a ratio with the text length.
+        :param term: A stemmed term.
+        """
+
+        return np.median(self.terms[term]) / len(self.tokens)
+
+
+    def kde_max_ratio(self, term, **kwargs):
+
+        """
+        Get the position ratio of a term's KDE max.
+
+        :param term: A stemmed term.
+        """
+
+        kde = self.kde(term, **kwargs)
+        return np.where(kde==np.amax(kde))[0][0] / float(len(kde))
+
+
+    def kde_center_of_mass_ratio(self, term, **kwargs):
+
+        """
+        Get the center of mass of a term's KDE as a ratio.
+
+        :param term: A stemmed term.
+        """
+
+        kde = self.kde(term, **kwargs)
+        com = ndimage.measurements.center_of_mass(kde)
+        return com[0] / len(kde)
 
 
     def plot_term_kdes(self, words, **kwargs):
