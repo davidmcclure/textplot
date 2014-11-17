@@ -1,7 +1,6 @@
 
 
 import os
-import requests
 import re
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
