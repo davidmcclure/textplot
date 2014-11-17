@@ -11,7 +11,6 @@ import utils
 from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
 from collections import OrderedDict, Counter
-from pyemd import emd
 from scipy.spatial import distance
 from scipy import ndimage
 
@@ -242,23 +241,6 @@ class Text(object):
         t2_kde = self.kde(term2, **kwargs)
 
         return 1-distance.braycurtis(t1_kde, t2_kde)
-
-
-    def score_emd(self, term1, term2, **kwargs):
-
-        """
-        Compute the "earth mover's distance" between two terms.
-
-        :param term1: The first term.
-        :param term2: The second term.
-        :param distances: A distance matrix.
-        """
-
-        t1_kde = self.kde(term1, **kwargs)
-        t2_kde = self.kde(term2, **kwargs)
-
-        dm = utils.offset_matrix(t1_kde.size)
-        return emd(t1_kde, t2_kde, dm)
 
 
     def anchored_scores(self, anchor, method='braycurtis', **kwargs):

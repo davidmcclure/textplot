@@ -89,25 +89,6 @@ def sort_dict(d, reverse=True):
     return OrderedDict(sort)
 
 
-@memoize
-def offset_matrix(size):
-
-    """
-    Build a symmetric 2D matrix where m[i, j] is the absolute value of the
-    difference between the word offsets i and j - the "word distance".
-
-    :param size: The term count.
-    """
-
-    m = np.zeros(shape=(size,size))
-
-    for i in xrange(size):
-        for j in xrange(size):
-            m[i][j] = abs(i-j)
-
-    return m
-
-
 def window(seq, n=2):
 
     """
