@@ -54,9 +54,9 @@ pip install -r requirements.txt
 Then, fire up an IPython terminal and build a network:
 
 ```bash
-In [1]: from textplot import skimmer
+In [1]: from textplot import frequent
 
-In [2]: g = skimmer('path/to/file.txt')
+In [2]: g = frequent('path/to/file.txt')
 Indexing terms:
 [############################### ] 140000/140185 - 00:00:03
 Generating graph:
