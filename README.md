@@ -43,7 +43,7 @@ Texplot is a little program that turns a document into a network of terms that a
 
 ## Generating graphs
 
-The easiest way to build out a graph is to use the `skimmer` function, which wraps up all the intermediate steps of tokenizing the text, computing the term distance matrix, generating the per-word topic lists, etc. First, spin up a virtualenv:
+The easiest way to build out a graph is to use the `frequent` function, which wraps up all the intermediate steps of tokenizing the text, computing the term distance matrix, generating the per-word topic lists, etc. (Or, use the `clumpy` function, which tries to pick words that concentrate really tightly in specific parts of the text). First, spin up a virtualenv:
 
 ```bash
 virtualenv env
@@ -65,7 +65,7 @@ Generating graph:
 In [3]: g.write_gml('path/to/file.gml')
 ```
 
-The `skimmer` function takes these arguments:
+The `frequent` function takes these arguments:
 
 - **(int) `term_depth=500`** - The number of terms to include in the network. Right now, the code just rakes the top X most frequent terms, after stopwords are removed.
 
