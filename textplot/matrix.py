@@ -1,7 +1,7 @@
 
 
 import numpy as np
-import utils
+import textplot.utils as utils
 
 from clint.textui import progress
 from itertools import combinations
@@ -9,7 +9,7 @@ from collections import OrderedDict
 from scipy.misc import comb
 
 
-class Matrix(object):
+class Matrix:
 
 
     def __init__(self, text):

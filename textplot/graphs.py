@@ -2,13 +2,12 @@
 
 import networkx as nx
 import matplotlib.pyplot as plt
-import utils
 
 from abc import ABCMeta, abstractmethod
 from clint.textui import progress
 
 
-class Graph(object):
+class Graph:
 
 
     __metaclass__ = ABCMeta
@@ -80,7 +79,7 @@ class Skimmer(Graph):
 
             # Heaviest pair scores:
             pairs = matrix.anchored_pairs(anchor).items()
-            for term, weight in pairs[:skim_depth]:
+            for term, weight in list(pairs)[:skim_depth]:
 
                 # If edges represent distance, use the complement of the raw
                 # score, so that similar words are connected by "short" edges.

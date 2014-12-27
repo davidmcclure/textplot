@@ -85,7 +85,7 @@ def sort_dict(d, reverse=True):
     :param d: A dictionary.
     """
 
-    sort = sorted(d.iteritems(), key=lambda x: x[1], reverse=reverse)
+    sort = sorted(d.items(), key=lambda x: x[1], reverse=reverse)
     return OrderedDict(sort)
 
 

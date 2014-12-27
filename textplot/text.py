@@ -5,7 +5,7 @@ import re
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
-import utils
+import textplot.utils as utils
 
 from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
@@ -14,7 +14,7 @@ from scipy.spatial import distance
 from scipy import ndimage
 
 
-class Text(object):
+class Text:
 
 
     @classmethod
@@ -124,8 +124,8 @@ class Text(object):
         counts = self.term_counts()
 
         # Get the top X terms and the instance count of the last word.
-        top_terms = set(counts.keys()[:depth])
-        end_count = counts.values()[:depth][-1]
+        top_terms = set(list(counts.keys())[:depth])
+        end_count = list(counts.values())[:depth][-1]
 
         # Merge in all other words with that appear that number of times, so
         # that we don't truncate the last bucket - eg, half of the words that

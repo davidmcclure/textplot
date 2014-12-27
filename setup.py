@@ -19,10 +19,10 @@ setup(
         'scikit-learn',
         'numpy',
         'scipy',
+        'matplotlib',
         'nltk',
-        'clint',
         'networkx',
-        'pyemd',
+        'clint',
     ]
 
 )
