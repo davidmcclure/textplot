@@ -63,12 +63,7 @@ class Graph:
 
         :param path: The file path.
         """
-        # The GraphML writer cannot handle numpy types.
-        # Copy the graph and convert weights to python floats.
-        graph = self.graph.copy()
-        for edge in graph.edges_iter(data=True):
-            edge[2]['weight'] = float(edge[2]['weight'])
-        nx.readwrite.graphml.write_graphml(graph, path)
+        nx.readwrite.graphml.write_graphml(self.graph, path)
 
 
 class Skimmer(Graph):
@@ -101,4 +96,6 @@ class Skimmer(Graph):
                 if d_weights: weight = 1-weight
 
                 n2 = matrix.text.unstem(term)
-                self.graph.add_edge(n1, n2, weight=weight)
+                # nx does not handle numpy types well when writing graphml,
+                # so ensure that weight is a regular float.
+                self.graph.add_edge(n1, n2, weight=float(weight))
