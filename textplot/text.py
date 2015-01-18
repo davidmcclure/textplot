@@ -26,7 +26,7 @@ class Text:
         :param path: The file path.
         """
 
-        return cls(open(path, 'r').read())
+        return cls(open(path, 'r', errors='replace').read())
 
 
     def __init__(self, text):
