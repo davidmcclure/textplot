@@ -63,6 +63,7 @@ class Graph:
 
         :param path: The file path.
         """
+
         nx.readwrite.graphml.write_graphml(self.graph, path)
 
 
@@ -96,6 +97,7 @@ class Skimmer(Graph):
                 if d_weights: weight = 1-weight
 
                 n2 = matrix.text.unstem(term)
-                # nx does not handle numpy types well when writing graphml,
-                # so ensure that weight is a regular float.
+
+                # NetworkX does not handle numpy types when writing graphml,
+                # so we cast the weight to a regular float.
                 self.graph.add_edge(n1, n2, weight=float(weight))
