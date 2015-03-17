@@ -7,3 +7,4 @@ nltk
 networkx
 clint
 pytest
+click

@@ -1,7 +1,5 @@
 
 
-import textplot.utils
-
 from collections import OrderedDict
 from textplot.text import Text
 from textplot.matrix import Matrix

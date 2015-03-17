@@ -24,6 +24,7 @@ setup(
         'networkx',
         'clint',
         'pytest',
+        'click',
     ]
 
 )

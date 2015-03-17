@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+
+import click
+
+
+@click.group()
+def textplot():
+    pass
+
+
+@textplot.command()
+@click.argument('in_file', type=click.File('rt'))
+def generate(in_file):
+
+    """
+    Convert a text into a GML file.
+    """
+
+    click.echo('generate')
+
+
+if __name__ == '__main__':
+    textplot()
