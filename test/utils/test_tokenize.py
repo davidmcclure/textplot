@@ -32,3 +32,24 @@ def test_tokenize():
     assert dd['stemmed']    == 'dd'
     assert dd['unstemmed']  == 'dd'
     assert dd['offset']     == 3
+
+
+def test_stem():
+
+    """
+    Stemm-able tokens should be stemmed.
+    """
+
+    text = 'happy days'
+
+    tokens = tokenize(text)
+
+    t1 = next(tokens)
+    assert t1['stemmed']    == 'happi'
+    assert t1['unstemmed']  == 'happy'
+    assert t1['offset']     == 0
+
+    t2 = next(tokens)
+    assert t2['stemmed']    == 'day'
+    assert t2['unstemmed']  == 'days'
+    assert t2['offset']     == 1
