@@ -1,0 +1,13 @@
+setup.py
+test/__init__.py
+test/matrix.py
+textplot/__init__.py
+textplot/graphs.py
+textplot/matrix.py
+textplot/text.py
+textplot/utils.py
+textplot.egg-info/PKG-INFO
+textplot.egg-info/SOURCES.txt
+textplot.egg-info/dependency_links.txt
+textplot.egg-info/requires.txt
+textplot.egg-info/top_level.txt
