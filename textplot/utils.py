@@ -9,33 +9,6 @@ from nltk.stem import PorterStemmer
 from itertools import islice
 
 
-def memoize(obj):
-
-    """
-    Memoize a function, respecting kwargs. From:
-    https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
-
-    :param obj: The cache dictionary.
-    """
-
-    cache = obj.cache = {}
-
-    @functools.wraps(obj)
-    def memoizer(*args, **kwargs):
-
-        # Serialize the args.
-        key = str(args) + str(kwargs)
-
-        # If uncached, run the call.
-        if key not in cache:
-            cache[key] = obj(*args, **kwargs)
-
-        # Return the value.
-        return cache[key]
-
-    return memoizer
-
-
 def tokenize(text):
 
     """

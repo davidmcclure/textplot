@@ -3,15 +3,15 @@
 import os
 import re
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import numpy as np
 import textplot.utils as utils
+import numpy as np
 
 from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
 from collections import OrderedDict, Counter
 from scipy.spatial import distance
 from scipy import ndimage
+from functools import lru_cache
 
 
 class Text:
@@ -166,7 +166,7 @@ class Text:
         return mode[0][0]
 
 
-    @utils.memoize
+    @lru_cache()
     def kde(self, term, bandwidth=2000, samples=1000, kernel='gaussian'):
 
         """
