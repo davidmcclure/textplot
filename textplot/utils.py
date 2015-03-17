@@ -59,9 +59,7 @@ def tokenize(text):
         yield { # Emit the token.
             'stemmed':      stem(unstemmed),
             'unstemmed':    unstemmed,
-            'offset':       offset,
-            'left':         token.start(),
-            'right':        token.end()
+            'offset':       offset
         }
 
 
