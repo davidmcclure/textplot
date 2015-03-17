@@ -3,13 +3,14 @@
 from textplot.utils import tokenize
 
 
-def test_tokenize():
+def assert_abc(text):
 
     """
-    tokenize() should yield token dicts from a string.
-    """
+    Assert tokens aa/bb/cc.
 
-    text = 'aa bb cc dd'
+    Args:
+        text (str): A raw text string.
+    """
 
     tokens = tokenize(text)
 
@@ -28,10 +29,23 @@ def test_tokenize():
     assert cc['unstemmed']  == 'cc'
     assert cc['offset']     == 2
 
-    dd = next(tokens)
-    assert dd['stemmed']    == 'dd'
-    assert dd['unstemmed']  == 'dd'
-    assert dd['offset']     == 3
+
+def test_tokenize():
+
+    """
+    tokenize() should yield token dicts from a string.
+    """
+
+    assert_abc('aa bb cc')
+
+
+def test_ignore_non_letters():
+
+    """
+    tokenize() should ignore non [a-z] characters.
+    """
+
+    assert_abc('aa. 12 bb? 34 cc!')
 
 
 def test_stem():
@@ -40,7 +54,7 @@ def test_stem():
     Stemm-able tokens should be stemmed.
     """
 
-    text = 'happy days'
+    text = 'happy lovely days'
 
     tokens = tokenize(text)
 
@@ -50,6 +64,37 @@ def test_stem():
     assert t1['offset']     == 0
 
     t2 = next(tokens)
-    assert t2['stemmed']    == 'day'
-    assert t2['unstemmed']  == 'days'
+    assert t2['stemmed']    == 'love'
+    assert t2['unstemmed']  == 'lovely'
     assert t2['offset']     == 1
+
+    t3 = next(tokens)
+    assert t3['stemmed']    == 'day'
+    assert t3['unstemmed']  == 'days'
+    assert t3['offset']     == 2
+
+
+def test_ignore_case():
+
+    """
+    Tokens should be downcased.
+    """
+
+    text = 'One TWO ThReE'
+
+    tokens = tokenize(text)
+
+    t1 = next(tokens)
+    assert t1['stemmed']    == 'one'
+    assert t1['unstemmed']  == 'one'
+    assert t1['offset']     == 0
+
+    t2 = next(tokens)
+    assert t2['stemmed']    == 'two'
+    assert t2['unstemmed']  == 'two'
+    assert t2['offset']     == 1
+
+    t2 = next(tokens)
+    assert t2['stemmed']    == 'three'
+    assert t2['unstemmed']  == 'three'
+    assert t2['offset']     == 2

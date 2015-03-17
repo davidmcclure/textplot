@@ -51,10 +51,10 @@ def tokenize(text):
     stem = PorterStemmer().stem
     tokens = re.finditer('[a-z]+', text.lower())
 
-    for offset, token in enumerate(tokens):
+    for offset, match in enumerate(tokens):
 
         # Get the raw token.
-        unstemmed = token.group(0)
+        unstemmed = match.group(0)
 
         yield { # Emit the token.
             'stemmed':      stem(unstemmed),
