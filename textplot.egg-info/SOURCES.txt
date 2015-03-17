@@ -1,6 +1,4 @@
 setup.py
-test/__init__.py
-test/matrix.py
 textplot/__init__.py
 textplot/graphs.py
 textplot/matrix.py

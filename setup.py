@@ -23,6 +23,7 @@ setup(
         'nltk',
         'networkx',
         'clint',
+        'pytest',
     ]
 
 )

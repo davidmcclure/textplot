@@ -6,3 +6,4 @@ matplotlib
 nltk
 networkx
 clint
+pytest
