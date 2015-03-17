@@ -36,44 +36,32 @@ def memoize(obj):
     return memoizer
 
 
-def strip_tags(text):
-
-    """
-    Replace all tags in a string with spaces, so as to preserve the original
-    character offsets of the words.
-
-    :param text: The original text.
-    """
-
-    pattern = re.compile('<\/?[^<>]*>')
-    return pattern.sub(lambda x: len(x.group()) * ' ', text)
-
-
 def tokenize(text):
 
     """
     Yield tokens.
 
-    :param text: The original text.
+    Args:
+        text (str): The original text.
+
+    Yields:
+        dict: The next token.
     """
 
-    # Strip tags and downcase.
-    text = strip_tags(text).lower()
     stem = PorterStemmer().stem
+    tokens = re.finditer('[a-z]+', text.lower())
 
-    # Walk words in the text.
-    pattern = re.compile('[a-z]+')
-    for offset, match in enumerate(re.finditer(pattern, text)):
+    for offset, token in enumerate(tokens):
 
         # Get the raw token.
-        unstemmed = match.group(0)
+        unstemmed = token.group(0)
 
         yield { # Emit the token.
             'stemmed':      stem(unstemmed),
             'unstemmed':    unstemmed,
             'offset':       offset,
-            'left':         match.start(),
-            'right':        match.end()
+            'left':         token.start(),
+            'right':        token.end()
         }
 
 
@@ -99,8 +87,12 @@ def window(seq, n=2):
     """
     Yield a sliding window over an iterable.
 
-    :param seq: The sequence.
-    :param n: The window width.
+    Args:
+        seq (iter): The sequence.
+        n (int): The window width.
+
+    Yields:
+        tuple: The next window.
     """
 
     it = iter(seq)
