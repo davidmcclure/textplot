@@ -23,7 +23,8 @@ class Text:
         """
         Create a text from a file.
 
-        :param path: The file path.
+        Args:
+            path (str): The file path.
         """
 
         return cls(open(path, 'r', errors='replace').read())
@@ -34,7 +35,8 @@ class Text:
         """
         Store the raw text, tokenize.
 
-        :param text: The text as a raw string.
+        Args:
+            text (str): The raw text string.
         """
 
         self.text = text
@@ -46,6 +48,12 @@ class Text:
 
         """
         Load a set of stopwords.
+
+        Args:
+            path (str): The stopwords file path.
+
+        Returns:
+            set: Stopwords.
         """
 
         # Get an absolute path for the file.
@@ -87,7 +95,8 @@ class Text:
     def term_counts(self):
 
         """
-        Get an ordered dictionary of term counts.
+        Returns:
+            OrderedDict: An ordered dictionary of term counts.
         """
 
         counts = OrderedDict()
@@ -100,8 +109,9 @@ class Text:
     def term_count_buckets(self):
 
         """
-        Build a dictionary that maps occurrence counts to the terms that
-        appear that many times in the text.
+        Returns:
+            dict: A dictionary that maps occurrence counts to the terms that
+            appear that many times in the text.
         """
 
         buckets = {}
@@ -118,7 +128,11 @@ class Text:
         Get the X most frequent terms in the text, and then probe down to get
         any other terms that have the same count as the last term.
 
-        :param depth: The number of terms.
+        Args:
+            depth (int): The number of terms.
+
+        Returns:
+            set: The set of frequent terms.
         """
 
         counts = self.term_counts()
@@ -140,7 +154,11 @@ class Text:
         """
         Get a list of distances between the occurrences of a term.
 
-        :param term: A stemmed term.
+        Args:
+            term (str): A stemmed term.
+
+        Returns:
+            list: The interval distances.
         """
 
         distances = []
@@ -155,7 +173,11 @@ class Text:
         """
         Given a stemmed term, get the most common unstemmed variant.
 
-        :param term: A stemmed term.
+        Args:
+            term (str): A stemmed term.
+
+        Returns:
+            str: The unstemmed token.
         """
 
         originals = []
@@ -172,10 +194,14 @@ class Text:
         """
         Estimate the kernel density of the instances of term in the text.
 
-        :param term: A stememd term.
-        :param bandwidth: The kernel width.
-        :param samples: The number samples.
-        :param kernel: The kernel function.
+        Args:
+            term (str): A stemmed term.
+            bandwidth (int): The kernel bandwidth.
+            samples (int): The number of evenly-spaced sample points.
+            kernel (str): The kernel function.
+
+        Returns:
+            np.array: The density estimate.
         """
 
         # Get the offsets of the term instances.
@@ -198,8 +224,11 @@ class Text:
         Compute the geometric area of the overlap between the kernel density
         estimates of two terms.
 
-        :param term1: The first term.
-        :param term2: The second term.
+        Args:
+            term1 (str)
+            term1 (str)
+
+        Returns: float
         """
 
         t1_kde = self.kde(term1, **kwargs)
@@ -216,8 +245,11 @@ class Text:
         Compute a weighting score based on the cosine distance between the
         kernel density estimates of two terms.
 
-        :param term1: The first term.
-        :param term2: The second term.
+        Args:
+            term1 (str)
+            term1 (str)
+
+        Returns: float
         """
 
         t1_kde = self.kde(term1, **kwargs)
@@ -232,8 +264,11 @@ class Text:
         Compute a weighting score based on the "City Block" distance between
         the kernel density estimates of two terms.
 
-        :param term1: The first term.
-        :param term2: The second term.
+        Args:
+            term1 (str)
+            term1 (str)
+
+        Returns: float
         """
 
         t1_kde = self.kde(term1, **kwargs)
@@ -247,8 +282,12 @@ class Text:
         """
         Compute the intersections between an anchor term and all other terms.
 
-        :param anchor: The anchor term.
-        :param method: The scoring function.
+        Args:
+            anchor (str): The anchor term.
+            method (str): The scoring function.
+
+        Returns:
+            OrderedDict: Distances between the anchor and all other terms.
         """
 
         evaluator = getattr(self, 'score_'+method)
@@ -258,103 +297,6 @@ class Text:
             pairs[term] = evaluator(anchor, term, **kwargs)
 
         return utils.sort_dict(pairs)
-
-
-    def kde_max(self, term, **kwargs):
-
-        """
-        Get the maximum value of a term's KDE.
-
-        :param term: A stemmed term.
-        """
-
-        return np.amax(self.kde(term, **kwargs))
-
-
-    def normalized_kde_maxima(self, **kwargs):
-
-        """
-        For each term, get the difference between the term's KDE max and the
-        lowest KDE max of any term.
-        """
-
-        maxima = OrderedDict()
-        for term in self.terms:
-            maxima[term] = self.kde_max(term, **kwargs)
-
-        lowest = np.amin(maxima.values())
-        for term in self.terms:
-            maxima[term] -= lowest
-
-        return utils.sort_dict(maxima)
-
-
-    def frequency_ratios(self):
-
-        """
-        For each term, get the ratio between the number of times that the term
-        occurs and the number of times that the most frequent term occurs.
-        """
-
-        counts = self.term_counts()
-
-        highest = float(np.amax(counts.values()))
-        for term in self.terms:
-            counts[term] /= highest
-
-        return utils.sort_dict(counts)
-
-
-    def densities(self, **kwargs):
-
-        """
-        For each term, compute a "density" score by multiplying the normalized
-        height of the kernel density estimate by the frequency ratio.
-        """
-
-        kms = self.normalized_kde_maxima(**kwargs)
-        frs = self.frequency_ratios()
-
-        densities = OrderedDict()
-        for term in self.terms:
-            densities[term] = kms[term] * frs[term]
-
-        return utils.sort_dict(densities)
-
-
-    def median_ratio(self, term):
-
-        """
-        Get the median offset as a ratio with the text length.
-        :param term: A stemmed term.
-        """
-
-        return np.median(self.terms[term]) / len(self.tokens)
-
-
-    def kde_max_ratio(self, term, **kwargs):
-
-        """
-        Get the position ratio of a term's KDE max.
-
-        :param term: A stemmed term.
-        """
-
-        kde = self.kde(term, **kwargs)
-        return np.where(kde==np.amax(kde))[0][0] / float(len(kde))
-
-
-    def kde_com_ratio(self, term, **kwargs):
-
-        """
-        Get the center of mass of a term's KDE as a ratio.
-
-        :param term: A stemmed term.
-        """
-
-        kde = self.kde(term, **kwargs)
-        com = ndimage.measurements.center_of_mass(kde)
-        return com[0] / len(kde)
 
 
     def plot_term_kdes(self, words, **kwargs):
