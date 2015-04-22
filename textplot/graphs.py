@@ -53,7 +53,7 @@ class Graph:
         :param path: The file path.
         """
 
-        nx.readwrite.gml.write_gml(self.graph, path)
+        nx.write_gml(self.graph, path)
 
 
     def write_graphml(self, path):
@@ -64,7 +64,7 @@ class Graph:
         :param path: The file path.
         """
 
-        nx.readwrite.graphml.write_graphml(self.graph, path)
+        nx.write_graphml(self.graph, path)
 
 
 class Skimmer(Graph):
