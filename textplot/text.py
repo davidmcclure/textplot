@@ -56,7 +56,9 @@ class Text:
             path (str): The stopwords file path.
         """
 
-        if path: pass
+        if path:
+            with open(path) as f:
+                self.stopwords = set(f.read().splitlines())
 
         else:
             self.stopwords = set(

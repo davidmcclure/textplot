@@ -1,6 +1,7 @@
 
 
 import pkgutil
+import os
 
 from textplot.text import Text
 
@@ -30,4 +31,11 @@ def test_custom_file():
     Load a custom file, when a path is passed.
     """
 
-    pass
+    path = os.path.join(
+        os.path.dirname(__file__),
+        'fixtures/stopwords.txt'
+    )
+
+    t = Text('test', stopwords=path)
+
+    assert t.stopwords == set(['sa', 'sb', 'sc'])
