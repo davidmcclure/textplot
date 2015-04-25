@@ -152,25 +152,6 @@ class Text:
         return top_terms.union(set(bucket))
 
 
-    def term_distances(self, term):
-
-        """
-        Get a list of distances between the occurrences of a term.
-
-        Args:
-            term (str): A stemmed term.
-
-        Returns:
-            list: The interval distances.
-        """
-
-        distances = []
-        for o1, o2 in utils.window(self.terms[term], 2):
-            distances.append(o2-o1)
-
-        return distances
-
-
     def unstem(self, term):
 
         """
