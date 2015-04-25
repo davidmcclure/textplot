@@ -5,6 +5,7 @@ import re
 import matplotlib.pyplot as plt
 import textplot.utils as utils
 import numpy as np
+import pkgutil
 
 from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
