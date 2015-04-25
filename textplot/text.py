@@ -28,40 +28,43 @@ class Text:
             path (str): The file path.
         """
 
-        return cls(open(path, 'r', errors='replace').read())
+        with open(path, 'r', errors='replace') as f:
+            return cls(f.read())
 
 
-    def __init__(self, text):
+    def __init__(self, text, stopwords=None):
 
         """
         Store the raw text, tokenize.
 
         Args:
             text (str): The raw text string.
+            stopwords (str): A custom stopwords list path.
         """
 
         self.text = text
-        self.stem = PorterStemmer().stem
+        self.load_stopwords(stopwords)
         self.tokenize()
 
 
-    def stopwords(self, path='stopwords.txt'):
+    def load_stopwords(self, path):
 
         """
         Load a set of stopwords.
 
         Args:
             path (str): The stopwords file path.
-
-        Returns:
-            set: Stopwords.
         """
 
-        # Get an absolute path for the file.
-        path = os.path.join(os.path.dirname(__file__), path)
+        if path: pass
 
-        with open(path) as f:
-            return set(f.read().splitlines())
+        else:
+            self.stopwords = set(
+                pkgutil
+                .get_data('textplot', 'data/stopwords.txt')
+                .decode('utf8')
+                .splitlines()
+            )
 
 
     def tokenize(self):
@@ -73,14 +76,11 @@ class Text:
         self.tokens = []
         self.terms = OrderedDict()
 
-        # Load stopwords.
-        stopwords = self.stopwords()
-
         # Generate tokens.
         for token in utils.tokenize(self.text):
 
             # Ignore stopwords.
-            if token['unstemmed'] in stopwords:
+            if token['unstemmed'] in self.stopwords:
                 self.tokens.append(None)
 
             else:
@@ -309,8 +309,10 @@ class Text:
         :param bandwidth: The kernel width.
         """
 
+        stem = PorterStemmer().stem
+
         for word in words:
-            kde = self.kde(self.stem(word), **kwargs)
+            kde = self.kde(stem(word), **kwargs)
             plt.plot(kde)
 
         plt.show()
