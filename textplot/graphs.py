@@ -3,6 +3,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
+from textplot.matrix import Matrix
 from abc import ABCMeta, abstractmethod
 from clint.textui import progress
 
@@ -50,7 +51,8 @@ class Graph:
         """
         Write a GML file.
 
-        :param path: The file path.
+        Args:
+            path (str): The file path.
         """
 
         nx.write_gml(self.graph, path)
@@ -61,7 +63,8 @@ class Graph:
         """
         Write a GraphML file.
 
-        :param path: The file path.
+        Args:
+            path (str): The file path.
         """
 
         nx.write_graphml(self.graph, path)
@@ -70,7 +73,7 @@ class Graph:
 class Skimmer(Graph):
 
 
-    def build(self, matrix, skim_depth=10, d_weights=False):
+    def build(self, text, skim_depth=10, d_weights=False):
 
         """
         1. For each term in the passed matrix, score its KDE similarity with
@@ -79,9 +82,10 @@ class Skimmer(Graph):
         2. With the ordered stack of similarities in hand, skim off the top X
         pairs and add them as edges.
 
-        :param matrix: A term matrix.
-        :param skim_depth: The number of siblings to register for each term.
-        :param d_weights: If true, give "close" words low edge weights.
+        Args:
+            text (Text): The source Text instance.
+            skim_depth (int) The number of siblings for each term.
+            d_weights (bool) If true, give "close" words low edge weights.
         """
 
         for anchor in progress.bar(matrix.terms):
