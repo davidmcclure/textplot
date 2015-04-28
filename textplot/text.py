@@ -172,7 +172,7 @@ class Text:
         return mode[0][0]
 
 
-    @lru_cache()
+    @lru_cache(maxsize=None)
     def kde(self, term, bandwidth=2000, samples=1000, kernel='gaussian'):
 
         """
@@ -210,7 +210,7 @@ class Text:
 
         Args:
             term1 (str)
-            term1 (str)
+            term2 (str)
 
         Returns: float
         """
@@ -231,7 +231,7 @@ class Text:
 
         Args:
             term1 (str)
-            term1 (str)
+            term2 (str)
 
         Returns: float
         """
@@ -250,7 +250,7 @@ class Text:
 
         Args:
             term1 (str)
-            term1 (str)
+            term2 (str)
 
         Returns: float
         """
