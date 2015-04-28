@@ -109,6 +109,7 @@ class TextMatrix(Matrix):
         pairs = OrderedDict()
 
         for term in self.terms:
-            pairs[term] = self.get_pair(anchor, term)
+            score = self.get_pair(anchor, term)
+            if score: pairs[term] = score
 
         return utils.sort_dict(pairs)

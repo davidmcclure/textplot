@@ -261,28 +261,6 @@ class Text:
         return 1-distance.braycurtis(t1_kde, t2_kde)
 
 
-    def anchored_scores(self, anchor, method='braycurtis', **kwargs):
-
-        """
-        Compute the intersections between an anchor term and all other terms.
-
-        Args:
-            anchor (str): The anchor term.
-            method (str): The scoring function.
-
-        Returns:
-            OrderedDict: Distances between the anchor and all other terms.
-        """
-
-        evaluator = getattr(self, 'score_'+method)
-
-        pairs = OrderedDict()
-        for term in self.terms:
-            pairs[term] = evaluator(anchor, term, **kwargs)
-
-        return utils.sort_dict(pairs)
-
-
     def plot_term_kdes(self, words, **kwargs):
 
         """
