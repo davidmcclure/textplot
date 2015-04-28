@@ -3,10 +3,10 @@
 import numpy as np
 import textplot.utils as utils
 
-from clint.textui import progress
 from itertools import combinations
-from collections import OrderedDict
+from clint.textui.progress import bar
 from scipy.misc import comb
+from collections import OrderedDict
 
 
 class Matrix:
@@ -87,7 +87,10 @@ class TextMatrix(Matrix):
         # By default, use all terms.
         self.terms = terms or text.terms.keys()
 
-        for t1, t2 in combinations(self.terms, 2):
+        pairs = combinations(self.terms, 2)
+        count = comb(len(self.terms), 2)
+
+        for t1, t2 in bar(pairs, expected_size=count, every=1000):
 
             # Set the Bray-Curtis distance.
             score = text.score_braycurtis(t1, t2, **kwargs)
