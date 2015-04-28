@@ -6,7 +6,7 @@ from textplot.text import Text
 def test_set_tokens():
 
     """
-    Text#tokenize() should record individual tokens.
+    tokenize() should record individual tokens.
     """
 
     t = Text('aa bb cc')

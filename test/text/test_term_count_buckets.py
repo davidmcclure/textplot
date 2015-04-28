@@ -4,10 +4,11 @@ from textplot.text import Text
 from collections import OrderedDict
 
 
-def test_term_counts():
+def test_term_count_buckets():
 
     """
-    Text#term_counts() should return a map of term -> count.
+    term_count_buckets() should map integer counts to the list of terms in the
+    text that appear that many times.
     """
 
     t = Text('aa bb bb cc cc dd dd dd')

@@ -7,7 +7,7 @@ from collections import OrderedDict
 def test_most_frequent_terms():
 
     """
-    Text#most_frequent_terms() should return the N most frequent terms.
+    most_frequent_terms() should return the N most frequent terms.
     """
 
     t = Text('aa bb bb cc cc cc')

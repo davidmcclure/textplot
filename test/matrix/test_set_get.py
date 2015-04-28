@@ -6,7 +6,7 @@ from textplot.matrix import TextMatrix
 def test_set_pair():
 
     """
-    Matrix#set_pair() should set the value under an order-independent key.
+    set_pair() should set the value under an order-independent key.
     """
 
     m = TextMatrix()

@@ -7,8 +7,8 @@ from nltk.stem import PorterStemmer
 def test_unstem():
 
     """
-    Given a word stem, Text#unstem() should return the most frequently-
-    occurring unstemmed variant in the text.
+    Given a word stem, unstem() should return the most frequently- occurring
+    unstemmed variant in the text.
     """
 
     # cat > cats

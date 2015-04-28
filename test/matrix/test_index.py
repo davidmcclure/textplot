@@ -7,7 +7,7 @@ from textplot.matrix import TextMatrix
 def test_index():
 
     """
-    TextMatrix#index() should index the Bray-Curtis distances between terms.
+    index() should index the Bray-Curtis distances between terms.
     """
 
     t = Text('aa bb cc')

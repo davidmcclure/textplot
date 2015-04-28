@@ -9,7 +9,7 @@ from textplot.text import Text
 def test_default_file():
 
     """
-    When no path is passed to Text#load_stopwords(), the default file in the
+    When no path is passed to load_stopwords(), the default file in the
     textplot module should be loaded.
     """
 
