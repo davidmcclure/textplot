@@ -66,13 +66,13 @@ class Matrix:
         """
 
         key = self.key(term1, term2)
-        return self.pairs[key]
+        return self.pairs.get(key, None)
 
 
 class TextMatrix(Matrix):
 
 
-    def index(self, text, terms=None):
+    def index(self, text, terms=None, **kwargs):
 
         """
         Index all term pair distances.
@@ -82,7 +82,16 @@ class TextMatrix(Matrix):
             terms (list): Terms to index.
         """
 
-        pass
+        self.pairs = {}
+
+        # By default, use all terms.
+        self.terms = terms or text.terms.keys()
+
+        for t1, t2 in combinations(self.terms, 2):
+
+            # Set the Bray-Curtis distance.
+            score = text.score_braycurtis(t1, t2, **kwargs)
+            self.set_pair(t1, t2, score)
 
 
     def anchored_pairs(self, anchor):
@@ -97,4 +106,9 @@ class TextMatrix(Matrix):
             OrderedDict: The distances, in descending order.
         """
 
-        pass
+        pairs = OrderedDict()
+
+        for term in self.terms:
+            pairs[term] = self.get_pair(anchor, term)
+
+        return utils.sort_dict(pairs)
