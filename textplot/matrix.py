@@ -67,3 +67,34 @@ class Matrix:
 
         key = self.key(term1, term2)
         return self.pairs[key]
+
+
+class TextMatrix(Matrix):
+
+
+    def index(self, text, terms=None):
+
+        """
+        Index all term pair distances.
+
+        Args:
+            text (Text): The source text.
+            terms (list): Terms to index.
+        """
+
+        pass
+
+
+    def anchored_pairs(self, anchor):
+
+        """
+        Get distances between an anchor term and all other terms.
+
+        Args:
+            anchor (str): The anchor term.
+
+        Returns:
+            OrderedDict: The distances, in descending order.
+        """
+
+        pass
