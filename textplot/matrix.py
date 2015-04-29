@@ -93,7 +93,8 @@ class TextMatrix(Matrix):
             terms (list): Terms to index.
         """
 
-        self.pairs = {}
+        self.clear()
+        self.text = text
 
         # By default, use all terms.
         terms = terms or text.terms.keys()

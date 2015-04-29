@@ -3,9 +3,9 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from textplot.matrix import Matrix
+from textplot.matrix import TextMatrix
 from abc import ABCMeta, abstractmethod
-from clint.textui import progress
+from clint.textui.progress import bar
 
 
 class Graph:
@@ -73,7 +73,7 @@ class Graph:
 class Skimmer(Graph):
 
 
-    def build(self, text, skim_depth=10, d_weights=False):
+    def build(self, matrix, skim_depth=10, d_weights=False):
 
         """
         1. For each term in the passed matrix, score its KDE similarity with
@@ -83,12 +83,12 @@ class Skimmer(Graph):
         pairs and add them as edges.
 
         Args:
-            text (Text): The source Text instance.
+            matrix (TextMatrix): An indexed term matrix.
             skim_depth (int) The number of siblings for each term.
             d_weights (bool) If true, give "close" words low edge weights.
         """
 
-        for anchor in progress.bar(matrix.terms):
+        for anchor in bar(matrix.keys):
 
             n1 = matrix.text.unstem(anchor)
 
