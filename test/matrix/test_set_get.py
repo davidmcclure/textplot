@@ -16,6 +16,19 @@ def test_set_pair():
     assert m.get_pair('b', 'a') == 1
 
 
+def test_update_key_set():
+
+    """
+    Keys should be added to a set of stored keys.
+    """
+
+    m = TextMatrix()
+    m.set_pair('a', 'b', 1)
+    m.set_pair('a', 'c', 2)
+
+    assert m.keys == set(['a', 'b', 'c'])
+
+
 def test_missing_key():
 
     """

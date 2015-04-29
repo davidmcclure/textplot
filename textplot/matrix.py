@@ -18,6 +18,16 @@ class Matrix:
         Initialize the underlying dictionary.
         """
 
+        self.clear()
+
+
+    def clear(self):
+
+        """
+        Reset the pair mappings and key set.
+        """
+
+        self.keys = set()
         self.pairs = {}
 
 
@@ -49,6 +59,7 @@ class Matrix:
         """
 
         key = self.key(term1, term2)
+        self.keys.update([term1, term2])
         self.pairs[key] = value
 
 
@@ -85,10 +96,10 @@ class TextMatrix(Matrix):
         self.pairs = {}
 
         # By default, use all terms.
-        self.terms = terms or text.terms.keys()
+        terms = terms or text.terms.keys()
 
-        pairs = combinations(self.terms, 2)
-        count = comb(len(self.terms), 2)
+        pairs = combinations(terms, 2)
+        count = comb(len(terms), 2)
 
         for t1, t2 in bar(pairs, expected_size=count, every=1000):
 
@@ -111,7 +122,7 @@ class TextMatrix(Matrix):
 
         pairs = OrderedDict()
 
-        for term in self.terms:
+        for term in self.keys:
             score = self.get_pair(anchor, term)
             if score: pairs[term] = score
 
