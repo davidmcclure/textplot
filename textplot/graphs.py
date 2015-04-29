@@ -8,10 +8,7 @@ from abc import ABCMeta, abstractmethod
 from clint.textui.progress import bar
 
 
-class Graph:
-
-
-    __metaclass__ = ABCMeta
+class Graph(metaclass=ABCMeta):
 
 
     def __init__(self):
