@@ -12,9 +12,9 @@ def test_anchored_pairs():
     """
 
     t = Text('aa bb cc dd')
-    m = TextMatrix()
+    m = TextMatrix(t)
 
-    m.index(t)
+    m.index()
 
     pairs = m.anchored_pairs('aa')
 

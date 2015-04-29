@@ -11,9 +11,9 @@ def test_index():
     """
 
     t = Text('aa bb cc')
-    m = TextMatrix()
+    m = TextMatrix(t)
 
-    m.index(t)
+    m.index()
 
     assert m.get_pair('aa', 'bb') == t.score_braycurtis('aa', 'bb')
     assert m.get_pair('aa', 'cc') == t.score_braycurtis('aa', 'cc')
@@ -27,9 +27,9 @@ def test_term_subset():
     """
 
     t = Text('aa bb cc')
-    m = TextMatrix()
+    m = TextMatrix(t)
 
-    m.index(t, terms=['aa', 'bb'])
+    m.index(['aa', 'bb'])
 
     # Should index 'aa' and 'bb'.
     assert m.get_pair('aa', 'bb') == t.score_braycurtis('aa', 'bb')

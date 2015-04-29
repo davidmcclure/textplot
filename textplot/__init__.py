@@ -13,10 +13,10 @@ def frequent(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
 
     print('Tokenizing text...')
     t = Text.from_file(path)
-    m = TextMatrix()
+    m = TextMatrix(t)
 
     print('Indexing terms:')
-    m.index(t, t.most_frequent_terms(term_depth), **kwargs)
+    m.index(t.most_frequent_terms(term_depth), **kwargs)
 
     g = Skimmer()
 

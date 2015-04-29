@@ -81,8 +81,8 @@ class Skimmer(Graph):
 
         Args:
             matrix (TextMatrix): An indexed term matrix.
-            skim_depth (int) The number of siblings for each term.
-            d_weights (bool) If true, give "close" words low edge weights.
+            skim_depth (int): The number of siblings for each term.
+            d_weights (bool): If true, give "close" words low edge weights.
         """
 
         for anchor in bar(matrix.keys):

@@ -1,6 +1,6 @@
 
 
-from textplot.matrix import TextMatrix
+from textplot.matrix import Matrix
 
 
 def test_set_pair():
@@ -9,7 +9,7 @@ def test_set_pair():
     set_pair() should set the value under an order-independent key.
     """
 
-    m = TextMatrix()
+    m = Matrix()
     m.set_pair('a', 'b', 1)
 
     assert m.get_pair('a', 'b') == 1
@@ -22,7 +22,7 @@ def test_update_key_set():
     Keys should be added to a set of stored keys.
     """
 
-    m = TextMatrix()
+    m = Matrix()
     m.set_pair('a', 'b', 1)
     m.set_pair('a', 'c', 2)
 
@@ -35,7 +35,7 @@ def test_missing_key():
     If an unindexed key pair is passed, return None.
     """
 
-    m = TextMatrix()
+    m = Matrix()
     m.set_pair('a', 'b', 1)
 
     assert m.get_pair('a', 'c') == None
