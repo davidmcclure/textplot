@@ -92,7 +92,7 @@ class TextMatrix(Matrix):
             text (Text): The source text.
         """
 
-        super(self.__class__, self).__init__()
+        super().__init__()
         self.text = text
 
 
