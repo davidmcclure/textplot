@@ -1,8 +1,8 @@
 
 
 from textplot.text import Text
-from textplot.matrix import TextMatrix
 from textplot.graphs import Skimmer
+from textplot.matrix import Matrix
 
 
 def frequent(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
@@ -13,14 +13,14 @@ def frequent(path, term_depth=500, skim_depth=10, d_weights=False, **kwargs):
 
     print('Tokenizing text...')
     t = Text.from_file(path)
-    m = TextMatrix(t)
+    m = Matrix()
 
     print('Indexing terms:')
-    m.index(t.most_frequent_terms(term_depth), **kwargs)
+    m.index(t, t.most_frequent_terms(term_depth), **kwargs)
 
     g = Skimmer()
 
     print('Generating graph:')
-    g.build(m, skim_depth, d_weights)
+    g.build(t, m, skim_depth, d_weights)
 
     return g

@@ -3,7 +3,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from textplot.matrix import TextMatrix
 from abc import ABCMeta, abstractmethod
 from clint.textui.progress import bar
 
@@ -70,7 +69,7 @@ class Graph(metaclass=ABCMeta):
 class Skimmer(Graph):
 
 
-    def build(self, matrix, skim_depth=10, d_weights=False):
+    def build(self, text, matrix, skim_depth=10, d_weights=False):
 
         """
         1. For each term in the passed matrix, score its KDE similarity with
@@ -80,14 +79,15 @@ class Skimmer(Graph):
         pairs and add them as edges.
 
         Args:
-            matrix (TextMatrix): An indexed term matrix.
+            text (Text): The source text instance.
+            matrix (Matrix): An indexed term matrix.
             skim_depth (int): The number of siblings for each term.
             d_weights (bool): If true, give "close" words low edge weights.
         """
 
         for anchor in bar(matrix.keys):
 
-            n1 = matrix.text.unstem(anchor)
+            n1 = text.unstem(anchor)
 
             # Heaviest pair scores:
             pairs = matrix.anchored_pairs(anchor).items()
@@ -97,7 +97,7 @@ class Skimmer(Graph):
                 # score, so that similar words are connected by "short" edges.
                 if d_weights: weight = 1-weight
 
-                n2 = matrix.text.unstem(term)
+                n2 = text.unstem(term)
 
                 # NetworkX does not handle numpy types when writing graphml,
                 # so we cast the weight to a regular float.

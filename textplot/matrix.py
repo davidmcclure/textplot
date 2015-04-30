@@ -80,23 +80,7 @@ class Matrix:
         return self.pairs.get(key, None)
 
 
-class TextMatrix(Matrix):
-
-
-    def __init__(self, text):
-
-        """
-        Set the source text instance.
-
-        Args:
-            text (Text): The source text.
-        """
-
-        super().__init__()
-        self.text = text
-
-
-    def index(self, terms=None, **kwargs):
+    def index(self, text, terms=None, **kwargs):
 
         """
         Index all term pair distances.
@@ -109,7 +93,7 @@ class TextMatrix(Matrix):
         self.clear()
 
         # By default, use all terms.
-        terms = terms or self.text.terms.keys()
+        terms = terms or text.terms.keys()
 
         pairs = combinations(terms, 2)
         count = comb(len(terms), 2)
@@ -117,7 +101,7 @@ class TextMatrix(Matrix):
         for t1, t2 in bar(pairs, expected_size=count, every=1000):
 
             # Set the Bray-Curtis distance.
-            score = self.text.score_braycurtis(t1, t2, **kwargs)
+            score = text.score_braycurtis(t1, t2, **kwargs)
             self.set_pair(t1, t2, score)
 
 

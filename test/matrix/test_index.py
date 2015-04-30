@@ -1,7 +1,7 @@
 
 
 from textplot.text import Text
-from textplot.matrix import TextMatrix
+from textplot.matrix import Matrix
 
 
 def test_index():
@@ -11,9 +11,9 @@ def test_index():
     """
 
     t = Text('aa bb cc')
-    m = TextMatrix(t)
+    m = Matrix()
 
-    m.index()
+    m.index(t)
 
     assert m.get_pair('aa', 'bb') == t.score_braycurtis('aa', 'bb')
     assert m.get_pair('aa', 'cc') == t.score_braycurtis('aa', 'cc')
@@ -27,9 +27,9 @@ def test_term_subset():
     """
 
     t = Text('aa bb cc')
-    m = TextMatrix(t)
+    m = Matrix()
 
-    m.index(['aa', 'bb'])
+    m.index(t, ['aa', 'bb'])
 
     # Should index 'aa' and 'bb'.
     assert m.get_pair('aa', 'bb') == t.score_braycurtis('aa', 'bb')

@@ -1,7 +1,7 @@
 
 
 from textplot.text import Text
-from textplot.matrix import TextMatrix
+from textplot.matrix import Matrix
 
 
 def test_anchored_pairs():
@@ -12,9 +12,9 @@ def test_anchored_pairs():
     """
 
     t = Text('aa bb cc dd')
-    m = TextMatrix(t)
+    m = Matrix()
 
-    m.index()
+    m.index(t)
 
     pairs = m.anchored_pairs('aa')
 
