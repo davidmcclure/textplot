@@ -14,6 +14,7 @@ setup(
     author_email='davidwilliammcclure@gmail.com',
     include_package_data=True,
     packages=find_packages(),
+    scripts=['bin/textplot'],
 
     install_requires=[
         'scikit-learn',
