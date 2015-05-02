@@ -60,7 +60,7 @@ def textplot():
     ])
 )
 
-def build(in_file, out_file, **kwargs):
+def generate(in_file, out_file, **kwargs):
 
     """
     Convert a text into a GML file.
