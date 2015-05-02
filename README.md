@@ -43,29 +43,49 @@ Texplot is a little program that turns a document into a network of terms that a
 
 ## Generating graphs
 
-The easiest way to build out a graph is to use the `frequent` function, which wraps up all the intermediate steps of tokenizing the text, computing the term distance matrix, generating the per-word topic lists, etc. (Or, use the `clumpy` function, which tries to pick words that concentrate really tightly in specific parts of the text). First, spin up a virtualenv:
+The easiest way to build out a graph is to use the `textplot` executable, which wraps up all the intermediate steps of tokenizing the text, estimating probability densities for the words, and indexing the distance matrix.
+
+First, install Textplot via PyPI:
+
+`pip3 install textplot`
+
+Or, clone the repo and install the package manually:
 
 ```bash
-virtualenv env
+pyvenv env
 . env/bin/activate
-pip install -r requirements.txt
+pip3 install -r requirements.txt
+python3 setup.py install
 ```
+
+Then, generate graphs with:
+
+`texplot generate [] []`
+
+
+
+
 
 Then, fire up an IPython terminal and build a network:
 
 ```bash
-In [1]: from textplot import frequent
+In [1]: from textplot.helpers import build_graph
 
-In [2]: g = frequent('path/to/file.txt')
+In [2]: g = build_graph('../texts/war-and-peace.txt')
+
+Tokenizing text...
+Extracted 573064 tokens
+
 Indexing terms:
-[############################### ] 140000/140185 - 00:00:03
-Generating graph:
-[################################] 530/530 - 00:00:00
+[################################] 124750/124750 - 00:00:06
 
-In [3]: g.write_gml('path/to/file.gml')
+Generating graph:
+[################################] 500/500 - 00:00:04
+
+In [3]: g.write_gml('war-and-peace.gml')
 ```
 
-The `frequent` function takes these arguments:
+The `build_graph` function takes these arguments:
 
 - **(int) `term_depth=500`** - The number of terms to include in the network. Right now, the code just rakes the top X most frequent terms, after stopwords are removed.
 

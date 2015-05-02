@@ -24,20 +24,20 @@ def build_graph(path, term_depth=500, skim_depth=10,
     """
 
     # Tokenize text.
-    click.echo('Tokenizing text...')
+    click.echo('\nTokenizing text...')
     t = Text.from_file(path)
     click.echo('Extracted %d tokens' % len(t.tokens))
 
     m = Matrix()
 
     # Index the term matrix.
-    click.echo('Indexing terms:')
+    click.echo('\nIndexing terms:')
     m.index(t, t.most_frequent_terms(term_depth), **kwargs)
 
     g = Skimmer()
 
     # Construct the network.
-    click.echo('Generating graph:')
+    click.echo('\nGenerating graph:')
     g.build(t, m, skim_depth, d_weights)
 
     return g
