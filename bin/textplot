@@ -13,8 +13,8 @@ def textplot():
 
 @textplot.command()
 
-@click.argument('in_file', type=click.Path())
-@click.argument('out_file', type=click.Path())
+@click.argument('in_path', type=click.Path())
+@click.argument('out_path', type=click.Path())
 
 @click.option(
     '--term_depth',
@@ -60,14 +60,14 @@ def textplot():
     ])
 )
 
-def generate(in_file, out_file, **kwargs):
+def generate(in_path, out_path, **kwargs):
 
     """
     Convert a text into a GML file.
     """
 
-    g = build_graph(in_file, **kwargs)
-    g.write_gml(out_file)
+    g = build_graph(in_path, **kwargs)
+    g.write_gml(out_path)
 
 
 if __name__ == '__main__':
