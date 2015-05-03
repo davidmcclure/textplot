@@ -13,8 +13,9 @@ setup(
     author='David McClure',
     author_email='davidwilliammcclure@gmail.com',
     include_package_data=True,
-    packages=find_packages(),
     scripts=['bin/textplot'],
+    packages=find_packages(),
+    package_data={'textplot': ['data/*']},
 
     install_requires=[
         'scikit-learn',
