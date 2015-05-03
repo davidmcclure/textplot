@@ -43,11 +43,13 @@ Texplot is a little program that turns a document into a network of terms that a
 
 ## Generating graphs
 
-First, intall Textplot, either via PyPI:
+There are two ways to create graphs - you can use the `textplot` executable from the command line, or, if you want to tinker around with the underlying NetworkX graph instance, you can fire up a Python shell and use the `build_graph()` helper directly.
+
+Either way, first install Textplot. With PyPI:
 
 `pip3 install textplot`
 
-Or clone the repo and install the package manually:
+Or, clone the repo and install the package manually:
 
 ```bash
 pyvenv env
@@ -55,6 +57,8 @@ pyvenv env
 pip3 install -r requirements.txt
 python3 setup.py install
 ```
+
+### From the command line
 
 Then, from the command line, generate graphs with:
 
@@ -64,17 +68,21 @@ So, if you're working with _War and Peace_:
 
 `texplot generate war-and-peace.txt war-and-peace.gml`
 
-`textplot` takes these options:
+The `generate` command takes these options:
 
 - **(int) `--term_depth=500`** - The number of terms to include in the network. For now, Textplot takes the top N most frequent terms, after stopwords are removed.
 
 - **(int) `--skim_depth=10`** - The number of connections (edges) to skim off the top of the "topics" computed for each word.
+
+- **(flag) `--d_weights`** - By default, terms that appear in similar locations in the document will be connected by "heavy" edge weights, the semantic expected by layout algorithms like Force Atlas 2 in Gephi. If this flag is passed, the weights will be inverted, so that "close" words are connected with "short" weights, as is expected by pathfinding algorithms.
 
 - **(int) `--bandwidth=2000`** - The [bandwidth](http://en.wikipedia.org/wiki/Kernel_density_estimation#Bandwidth_selection) for the kernel density estimation. This controls how "smoothness" of the curve. 2000 is a sensible default for long novels, but bump it down if you're working with shorter texts.
 
 - **(int) `--samples=1000`** - The number of equally-spaced points on the X-axis where the kernel density is sampled. 1000 is almost always enough, unless you're working with a huge document.
 
 - **(str) `--kernel=gaussian`** - The kernel function. The scikit-learn implementation also supports `tophat`, `epanechnikov`, `exponential`, `linear`, and `cosine`.
+
+### From a Python shell
 
 Or, if you want to work with the NetworkX graph instance directly, fire up a Python shell and import `build_graph()`:
 
@@ -93,7 +101,12 @@ Generating graph:
 [################################] 500/500 - 00:00:03
 ```
 
-`build_graph()` takes all the same options as `textplot generate`.
+Then, you can do whatever with the graph. Eg, computing degree centralities:
+
+```bash
+In [3]: import networkx as nx
+In [4]: nx.degree_centrality(g.graph)
+```
 
 ---
 
