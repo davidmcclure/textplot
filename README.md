@@ -2,9 +2,11 @@
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](notes/mental-maps/networks/war-and-peace.jpg)</a>
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">**_War and Peace_**</a> (click to zoom)
+<small><a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">**_War and Peace_**</a> (click to zoom)</small>
 
-Textplot is a little program that tries to model the internal topic structure of a document - each word is added to a network and connected with other words that show up in similar patterns of distribution inside the text. For each term:
+Textplot is a little program that tries to model the internal topic structure of a document - each word is added to a network, and then connected to other words with similar patterns of distribution.
+
+It works like this - for each term:
 
 1. Get the set of offsets in the document where the term appears.
 
