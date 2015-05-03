@@ -14,7 +14,7 @@
 
 1. Compute a [Bray-Curtis](http://en.wikipedia.org/wiki/Bray%E2%80%93Curtis_dissimilarity) dissimilarity between the term's PDF and the PDFs of all other terms in the document. This measures the extent to which two words appear in the same locations.
 
-1. Sort this list in descending order to get a custom "topic" for the term. Skim off the top N words (usually 10) to get the strongest links. Eg, here's "napoleon" from _War and Peace_:
+1. Sort this list in descending order to get a custom "topic" for the term. Skim off the top N words (usually 10) to get the strongest links. Here's "napoleon":
 
   ```bash
   [('napoleon', 1.0),
