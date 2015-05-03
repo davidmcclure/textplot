@@ -4,7 +4,7 @@
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](notes/mental-maps/networks/war-and-peace.jpg)</a>
 
-Textplot is a little program that converts a document into a network of terms, with the goal of teasing out the internal topic structure of the text. For each term:
+**Textplot** is a little program that converts a document into a network of terms, with the goal of teasing out the internal topic structure of the text. For each term:
 
 1. Get the set of offsets in the document where the term appears.
 
