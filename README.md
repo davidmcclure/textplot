@@ -4,9 +4,7 @@
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">**_War and Peace_**</a> (click to zoom)
 
-Textplot is a little program that tries to model the internal topic structure of a document - each word is added to a network, and then connected to other words with similar patterns of distribution.
-
-It's really, really simple. For each term:
+Textplot is a little program that converts a document into a network of terms, with the goal of teasing out the internal topic structure of the text. For each term:
 
 1. Get the set of offsets in the document where the term appears.
 
@@ -64,9 +62,9 @@ python setup.py install
 
 Then, from the command line, generate graphs with:
 
-`texplot generate [IN_PATH - .txt] [OUT_PATH - .gml] [OPTIONS]`
+`texplot generate [IN_PATH] [OUT_PATH] [OPTIONS]`
 
-So, if you're working with _War and Peace_:
+Where the input is a regular `.txt` file, and the output is a [`.gml`](http://en.wikipedia.org/wiki/Graph_Modelling_Language) file. So, if you're working with _War and Peace_:
 
 `texplot generate war-and-peace.txt war-and-peace.gml`
 
