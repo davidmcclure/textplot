@@ -4,7 +4,7 @@
 
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](notes/mental-maps/networks/war-and-peace.jpg)</a>
 
-Texplot is a little program that turns a document into a network of terms that are connected to each other depending on the extent to which they appear in the same locations in the text. For each term:
+Texplot is a little program that converts a document into a network of terms that are connected to each other depending on the extent to which they appear in the same parts of the document. For each term:
 
 1. Get the set of offsets in the document where the term appears.
 
@@ -47,15 +47,15 @@ There are two ways to create graphs - you can use the `textplot` executable from
 
 Either way, first install Textplot. With PyPI:
 
-`pip3 install textplot`
+`pip install textplot`
 
 Or, clone the repo and install the package manually:
 
 ```bash
 pyvenv env
 . env/bin/activate
-pip3 install -r requirements.txt
-python3 setup.py install
+pip install -r requirements.txt
+python setup.py install
 ```
 
 ### From the command line
@@ -70,17 +70,17 @@ So, if you're working with _War and Peace_:
 
 The `generate` command takes these options:
 
-- **(int) `--term_depth=500`** - The number of terms to include in the network. For now, Textplot takes the top N most frequent terms, after stopwords are removed.
+- **`--term_depth=1000` (int)** - The number of terms to include in the network. For now, Textplot takes the top N most frequent terms, after stopwords are removed.
 
-- **(int) `--skim_depth=10`** - The number of connections (edges) to skim off the top of the "topics" computed for each word.
+- **`--skim_depth=10` (int)** - The number of connections (edges) to skim off the top of the "topics" computed for each word.
 
-- **(flag) `--d_weights`** - By default, terms that appear in similar locations in the document will be connected by "heavy" edge weights, the semantic expected by layout algorithms like Force Atlas 2 in Gephi. If this flag is passed, though, the weights will be inverted, turning them into measurements of _distance_, not _similarity_ - similar words are connected with "short" distances. Use this if you want to run pathfinding algorithms.
+- **`--d_weights` (flag)** - By default, terms that appear in similar locations in the document will be connected by edges with "heavy" weights, the semantic expected by force-directed layout algorithms like Force Atlas 2 in Gephi. If this flag is passed, the weights will be inverted - use this if you want to do any kind of pathfinding analysis on the graph, where it's generally assumed that edge weights represent _distance_ or _cost_.
 
-- **(int) `--bandwidth=2000`** - The [bandwidth](http://en.wikipedia.org/wiki/Kernel_density_estimation#Bandwidth_selection) for the kernel density estimation. This controls how "smoothness" of the curve. 2000 is a sensible default for long novels, but bump it down if you're working with shorter texts.
+- **`--bandwidth=2000` (int)** - The [bandwidth](http://en.wikipedia.org/wiki/Kernel_density_estimation#Bandwidth_selection) for the kernel density estimation. This controls how "smoothness" of the curve. 2000 is a sensible default for long novels, but bump it down if you're working with shorter texts.
 
-- **(int) `--samples=1000`** - The number of equally-spaced points on the X-axis where the kernel density is sampled. 1000 is almost always enough, unless you're working with a huge document.
+- **`--samples=1000` (int)** - The number of equally-spaced points on the X-axis where the kernel density is sampled. 1000 is almost always enough, unless you're working with a huge document.
 
-- **(str) `--kernel=gaussian`** - The kernel function. The scikit-learn implementation also supports `tophat`, `epanechnikov`, `exponential`, `linear`, and `cosine`.
+- **`--kernel=gaussian` (str)** - The kernel function. The [scikit-learn implementation](http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KernelDensity.html) also supports `tophat`, `epanechnikov`, `exponential`, `linear`, and `cosine`.
 
 ### From a Python shell
 
@@ -101,7 +101,7 @@ Generating graph:
 [################################] 500/500 - 00:00:03
 ```
 
-Then, you can do whatever with the graph. Eg, computing degree centralities:
+`build_graph()` returns an instance of `textplot.graphs.Skimmer`, which gives access to an instance of `networkx.Graph`. Eg, to get degree centralities:
 
 ```bash
 In [3]: import networkx as nx
