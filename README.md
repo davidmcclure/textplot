@@ -6,7 +6,7 @@
 
 Textplot is a little program that tries to model the internal topic structure of a document - each word is added to a network, and then connected to other words with similar patterns of distribution.
 
-For each term:
+It's really, really simple. For each term:
 
 1. Get the set of offsets in the document where the term appears.
 
