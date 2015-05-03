@@ -43,13 +43,11 @@ Texplot is a little program that turns a document into a network of terms that a
 
 ## Generating graphs
 
-The easiest way to build out a graph is to use the `textplot` executable, which wraps up all the intermediate steps of tokenizing the text, estimating probability densities for the words, and indexing the distance matrix.
-
-First, install Textplot via PyPI:
+First, intall Textplot, either via PyPI:
 
 `pip3 install textplot`
 
-Or, clone the repo and install the package manually:
+Or clone the repo and install the package manually:
 
 ```bash
 pyvenv env
@@ -58,20 +56,32 @@ pip3 install -r requirements.txt
 python3 setup.py install
 ```
 
-Then, generate graphs with:
+Then, from the command line, generate graphs with:
 
-`texplot generate [] []`
+`texplot generate [IN_PATH - .txt] [OUT_PATH - .gml] [OPTIONS]`
 
+So, if you're working with _War and Peace_:
 
+`texplot generate war-and-peace.txt war-and-peace.gml`
 
+`textplot` takes these options:
 
+- **(int) `--term_depth=500`** - The number of terms to include in the network. For now, Textplot takes the top N most frequent terms, after stopwords are removed.
 
-Then, fire up an IPython terminal and build a network:
+- **(int) `--skim_depth=10`** - The number of connections (edges) to skim off the top of the "topics" computed for each word.
+
+- **(int) `--bandwidth=2000`** - The [bandwidth](http://en.wikipedia.org/wiki/Kernel_density_estimation#Bandwidth_selection) for the kernel density estimation. This controls how "smoothness" of the curve. 2000 is a sensible default for long novels, but bump it down if you're working with shorter texts.
+
+- **(int) `--samples=1000`** - The number of equally-spaced points on the X-axis where the kernel density is sampled. 1000 is almost always enough, unless you're working with a huge document.
+
+- **(str) `--kernel=gaussian`** - The kernel function. The scikit-learn implementation also supports `tophat`, `epanechnikov`, `exponential`, `linear`, and `cosine`.
+
+Or, if you want to work with the NetworkX graph instance directly, fire up a Python shell and import `build_graph()`:
 
 ```bash
 In [1]: from textplot.helpers import build_graph
 
-In [2]: g = build_graph('../texts/war-and-peace.txt')
+In [2]: g = build_graph('war-and-peace.txt')
 
 Tokenizing text...
 Extracted 573064 tokens
@@ -80,24 +90,10 @@ Indexing terms:
 [################################] 124750/124750 - 00:00:06
 
 Generating graph:
-[################################] 500/500 - 00:00:04
-
-In [3]: g.write_gml('war-and-peace.gml')
+[################################] 500/500 - 00:00:03
 ```
 
-The `build_graph` function takes these arguments:
-
-- **(int) `term_depth=500`** - The number of terms to include in the network. Right now, the code just rakes the top X most frequent terms, after stopwords are removed.
-
-- **(int) `skim_depth=10`** - The number of connections to skim off the top of the "topics" computed for each of the words and added to the network as edges.
-
-- **(bool) `d_weights=False`** - Should the edge weights be treated as measures of "similarity" (similar terms have "heavy" weights) or "distance" (similar terms have "short" distances)?
-
-- **(int) `bandwidth=2000`** - The [bandwidth](http://en.wikipedia.org/wiki/Kernel_density_estimation#Bandwidth_selection) for the kernel density estimation. This controls how "smoothness" of the curve. 2000 is a sensible default for long novels, but bump it down if you're working with shorter texts.
-
-- **(int) `samples=1000`** - The number of equally-spaced points on the X-axis where the kernel density is sampled. 1000 is almost always enough, unless you're working with a huge document.
-
-- **(str) `kernel="gaussian"`** - The kernel function. The scikit-learn implementation also supports `tophat`, `epanechnikov`, `exponential`, `linear`, and `cosine`.
+`build_graph()` takes all the same options as `textplot generate`.
 
 ---
 

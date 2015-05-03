@@ -31,7 +31,7 @@ def textplot():
 @click.option(
     '--d_weights',
     is_flag=True,
-    help='If true, connect "close" terms with low edge weights.'
+    help='If set, connect "close" terms with low edge weights.'
 )
 
 @click.option(
