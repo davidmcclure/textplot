@@ -1,10 +1,10 @@
 # Textplot
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">**_War and Peace_**</a> (click to zoom)
-
 <a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](notes/mental-maps/networks/war-and-peace.jpg)</a>
 
-Texplot is a little program that converts a document into a network of terms that are connected to each other depending on the extent to which they appear in the same parts of the document. For each term:
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">**_War and Peace_**</a> (click to zoom)
+
+Textplot is a little program that tries to model the internal topic structure of a document - each word is added to a network and connected with other words that show up in similar patterns of distribution inside the text. For each term:
 
 1. Get the set of offsets in the document where the term appears.
 
