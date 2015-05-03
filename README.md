@@ -74,7 +74,7 @@ The `generate` command takes these options:
 
 - **(int) `--skim_depth=10`** - The number of connections (edges) to skim off the top of the "topics" computed for each word.
 
-- **(flag) `--d_weights`** - By default, terms that appear in similar locations in the document will be connected by "heavy" edge weights, the semantic expected by layout algorithms like Force Atlas 2 in Gephi. If this flag is passed, the weights will be inverted, so that "close" words are connected with "short" weights, as is expected by pathfinding algorithms.
+- **(flag) `--d_weights`** - By default, terms that appear in similar locations in the document will be connected by "heavy" edge weights, the semantic expected by layout algorithms like Force Atlas 2 in Gephi. If this flag is passed, though, the weights will be inverted, turning them into measurements of _distance_, not _similarity_ - similar words are connected with "short" distances. Use this if you want to run pathfinding algorithms.
 
 - **(int) `--bandwidth=2000`** - The [bandwidth](http://en.wikipedia.org/wiki/Kernel_density_estimation#Bandwidth_selection) for the kernel density estimation. This controls how "smoothness" of the curve. 2000 is a sensible default for long novels, but bump it down if you're working with shorter texts.
 
