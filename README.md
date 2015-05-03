@@ -1,8 +1,8 @@
 # Textplot
 
-<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](notes/mental-maps/networks/war-and-peace.jpg)</a>
-
 <sup><a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">**_War and Peace_**</a> (click to zoom)</sup>
+
+<a href="http://textplot.s3-website-us-west-1.amazonaws.com/#mental-maps/war-and-peace" target="_new">![War and Peace](notes/mental-maps/networks/war-and-peace.jpg)</a>
 
 Textplot is a little program that converts a document into a network of terms, with the goal of teasing out the internal topic structure of the text. For each term:
 
@@ -84,7 +84,7 @@ The `generate` command takes these options:
 
 ### From a Python shell
 
-Or, if you want to work with the NetworkX graph instance directly, fire up a Python shell and import `build_graph()`:
+Or, fire up a Python shell and import `build_graph()` directly:
 
 ```bash
 In [1]: from textplot.helpers import build_graph
