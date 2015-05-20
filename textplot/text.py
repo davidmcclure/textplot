@@ -7,6 +7,7 @@ import textplot.utils as utils
 import numpy as np
 import pkgutil
 
+from matplotlib.ticker import FuncFormatter
 from nltk.stem import PorterStemmer
 from sklearn.neighbors import KernelDensity
 from collections import OrderedDict, Counter
@@ -277,3 +278,33 @@ class Text:
             plt.plot(kde)
 
         plt.show()
+
+
+    def bw(self, b):
+
+        """
+        Bandwidths
+        """
+
+        stem = PorterStemmer().stem
+
+        kde = self.kde(stem('napoleon'), bandwidth=b)
+        plt.plot(kde, label=b, color='#0067a2')
+
+        plt.xlabel('Word Offset')
+        plt.ylabel('Density')
+        plt.title('"napoleon" - '+str(b)+'-word bandwidth')
+
+        ax = plt.axes()
+
+        def format_tick(x, pos):
+            return int((x*len(self.tokens))/1000)
+
+        fmt = FuncFormatter(format_tick)
+        ax.xaxis.set_major_formatter(fmt)
+
+        fig = plt.gcf()
+        fig.set_size_inches(10, 3)
+        fig.tight_layout()
+
+        return plt
