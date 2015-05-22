@@ -266,8 +266,8 @@ class Text:
         """
         Plot kernel density estimates for multiple words.
 
-        :param words: The words to query.
-        :param bandwidth: The kernel width.
+        Args:
+            words (list): A list of unstemmed terms.
         """
 
         stem = PorterStemmer().stem
