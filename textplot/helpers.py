@@ -7,7 +7,7 @@ from textplot.graphs import Skimmer
 from textplot.matrix import Matrix
 
 
-def build_graph(path, term_depth=500, skim_depth=10,
+def build_graph(path, term_depth=1000, skim_depth=10,
                 d_weights=False, **kwargs):
 
     """
