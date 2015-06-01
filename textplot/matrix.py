@@ -44,7 +44,7 @@ class Matrix:
             str: The dictionary key.
         """
 
-        return '_'.join(sorted((term1, term2)))
+        return tuple(sorted((term1, term2)))
 
 
     def set_pair(self, term1, term2, value, **kwargs):
