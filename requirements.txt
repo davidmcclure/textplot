@@ -8,3 +8,4 @@ networkx
 clint
 pytest
 click
+regex

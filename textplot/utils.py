@@ -1,6 +1,6 @@
 
 
-import re
+import regex
 import numpy as np
 import functools
 
@@ -22,7 +22,7 @@ def tokenize(text):
     """
 
     stem = PorterStemmer().stem
-    tokens = re.finditer('[a-z]+', text.lower())
+    tokens = regex.finditer('\p{L}+', text.lower())
 
     for offset, match in enumerate(tokens):
 
